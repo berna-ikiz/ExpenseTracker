@@ -1,6 +1,5 @@
 import {
   FlatList,
-  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -12,26 +11,33 @@ import { useNavigation } from "@react-navigation/native";
 import { formatCurrency, formDateOnlyHours } from "../utils/GlobalFunctions";
 import colors from "../theme/colors";
 
+type ExpenseItemType = {
+  id: string;
+  category: string;
+  coast: number;
+  date: string;
+};
+
 const Home = () => {
   const navigation = useNavigation();
 
+  const renderItem = ({ item }: { item: ExpenseItemType }) => (
+    <View style={styles.expenseCard}>
+      <Text style={styles.category}>{item.category}</Text>
+      <Text style={styles.coast}>{formatCurrency(item.coast, "TRY")}</Text>
+      <Text style={styles.date}>{formDateOnlyHours(item.date)}</Text>
+    </View>
+  );
+
   return (
     <View style={styles.container}>
-      <ScrollView contentContainerStyle={styles.scrollView}>
-        <FlatList
-          data={ExpenseData}
-          renderItem={({ item }) => (
-            <View style={styles.expenseList}>
-              <Text style={styles.category}>{item.category}</Text>
-              <Text style={styles.coast}>
-                {formatCurrency(item.coast, "TRY")}
-              </Text>
-              <Text style={styles.date}>{formDateOnlyHours(item.date)}</Text>
-            </View>
-          )}
-          keyExtractor={(item) => item.id}
-        />
-      </ScrollView>
+      <Text style={styles.titleText}>Expenses</Text>
+      <FlatList
+        data={ExpenseData}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.id}
+        contentContainerStyle={{ paddingBottom: "20%" }}
+      />
       <TouchableOpacity
         onPress={() => navigation.navigate("Expense")}
         style={styles.addExpenseButtom}
@@ -49,7 +55,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
   },
-  expenseList: {
+  expenseCard: {
     backgroundColor: colors.white,
     borderRadius: 16,
     padding: 20,
@@ -81,7 +87,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     right: "10%",
     bottom: "5%",
-    backgroundColor: colors.silver,
+    backgroundColor: colors.dimGray,
     width: "20%",
     height: "8%",
     borderRadius: 28,
@@ -94,7 +100,11 @@ const styles = StyleSheet.create({
     color: colors.white,
     marginBottom: "5%",
   },
-  scrollView: {
-    paddingBottom: "20%",
+  titleText: {
+    fontSize: 28,
+    color: colors.silver,
+    fontWeight: "bold",
+    textAlign: "center",
+    marginBottom: "4%",
   },
 });
