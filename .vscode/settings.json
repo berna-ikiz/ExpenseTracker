@@ -50,5 +50,8 @@
     "**/os/**": true,
     "**/android/**": true,
     "**/dist/**": true
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
   }
 }
