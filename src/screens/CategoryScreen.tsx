@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+
 import React from "react";
 import categoryData from "../data/CategoryData";
 import colors from "../theme/colors";
@@ -100,7 +101,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     right: "10%",
     bottom: "5%",
-    backgroundColor: colors.dimGray,
+    backgroundColor: colors.gray,
     width: "20%",
     height: "8%",
     borderRadius: 28,

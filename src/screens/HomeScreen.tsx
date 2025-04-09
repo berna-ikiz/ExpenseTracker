@@ -53,7 +53,7 @@ export default Home;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
+    padding: 20,
   },
   expenseCard: {
     backgroundColor: colors.white,
@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     right: "10%",
     bottom: "5%",
-    backgroundColor: colors.dimGray,
+    backgroundColor: colors.gray,
     width: "20%",
     height: "8%",
     borderRadius: 28,
