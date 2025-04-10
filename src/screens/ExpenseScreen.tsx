@@ -1,8 +1,15 @@
-import { StyleSheet, Text, TextInput, View } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  TextInput,
+  Touchable,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import React, { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import colors from "../theme/colors";
-import Calender from "../components/Calender";
+import Calendar from "../components/Calendar";
 
 const Expense = () => {
   const navigation = useNavigation();
@@ -32,7 +39,11 @@ const Expense = () => {
         style={styles.input}
         keyboardType="numeric"
       />
-      <Calender onSelectDate={onSelectDate} selectedDate={selectedDate} />
+      <Calendar
+        onSelectDate={onSelectDate}
+        selectedDate={selectedDate}
+        title={"Date"}
+      />
     </View>
   );
 };
@@ -61,5 +72,11 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: colors.ivory,
     color: colors.slateGray,
+    shadowColor: colors.slateGray,
+    shadowOpacity: 0.7,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
   },
 });
