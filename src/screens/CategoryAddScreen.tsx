@@ -1,4 +1,5 @@
 import {
+  Alert,
   StyleSheet,
   Text,
   TextInput,
@@ -8,6 +9,7 @@ import {
 import React, { useState } from "react";
 import colors from "../theme/colors";
 import EmojiPickerSheet from "../components/EmojiPickerSheet";
+import { saveCategoryData } from "../utils/Storage";
 
 const CategoryAddScreen = () => {
   const [selectedEmoji, setSelectedEmoji] = useState("");
@@ -18,6 +20,21 @@ const CategoryAddScreen = () => {
     setSelectedEmoji(emoji);
     console.log(selectedEmoji);
     setShowEmojiSheet(false);
+  };
+
+  const handleSaveCategory = async () => {
+    if (selectedEmoji && categoryName) {
+      const newCategory = {
+        id: Date.now().toString(),
+        title: categoryName.trim(),
+        icon: selectedEmoji,
+      };
+      await saveCategoryData(newCategory);
+    } else if (!selectedEmoji) {
+      Alert.alert("Please Add Emoji");
+    } else if (!categoryName) {
+      Alert.alert("Please add category name.");
+    }
   };
 
   return (
@@ -35,7 +52,7 @@ const CategoryAddScreen = () => {
             setCategoryName(text);
           }}
         />
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity style={styles.button} onPress={handleSaveCategory}>
           <Text style={styles.buttonText}>Add Category</Text>
         </TouchableOpacity>
       </View>
