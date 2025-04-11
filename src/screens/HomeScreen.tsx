@@ -10,6 +10,7 @@ import ExpenseData from "../data/ExpenseData";
 import { StaticScreenProps, useNavigation } from "@react-navigation/native";
 import { formatCurrency, formDateOnlyHours } from "../utils/GlobalFunctions";
 import colors from "../theme/colors";
+import HomeButtonList from "../components/HomeButtonList";
 
 type ExpenseItemType = {
   id: string;
@@ -25,7 +26,7 @@ type Props = StaticScreenProps<{
 //TODO : Add types for navigation and route
 const Home = ({ route }: Props) => {
   const navigation = useNavigation();
-  const [expenses, setExpenses] = useState<ExpenseItemType[]>([]);
+  const [expenses, setExpenses] = useState<ExpenseItemType[]>(ExpenseData);
 
   useEffect(() => {
     if (route.params?.expense) {
@@ -61,12 +62,7 @@ const Home = ({ route }: Props) => {
         keyExtractor={(item) => item.id}
         contentContainerStyle={{ paddingBottom: "20%" }}
       />
-      <TouchableOpacity
-        onPress={() => navigation.navigate("Expense")}
-        style={styles.addExpenseButtom}
-      >
-        <Text style={styles.addExpenseButtomText}> + </Text>
-      </TouchableOpacity>
+      <HomeButtonList snapPoints={["100%", "100%"]} />
     </View>
   );
 };
@@ -105,23 +101,6 @@ const styles = StyleSheet.create({
   date: {
     fontSize: 14,
     color: colors.lightGray,
-  },
-  addExpenseButtom: {
-    position: "absolute",
-    right: "10%",
-    bottom: "5%",
-    backgroundColor: colors.gray,
-    width: "20%",
-    height: "8%",
-    borderRadius: 28,
-    alignItems: "center",
-    justifyContent: "center",
-    elevation: 3,
-  },
-  addExpenseButtomText: {
-    fontSize: 18,
-    color: colors.white,
-    marginBottom: "5%",
   },
   titleText: {
     fontSize: 28,

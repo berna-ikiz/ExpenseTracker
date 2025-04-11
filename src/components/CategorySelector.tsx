@@ -59,7 +59,7 @@ const CategorySelector = ({
     );
   };
   return (
-    <View style={{ flex: 1 }}>
+    <View style={styles.container}>
       <TouchableOpacity style={styles.selectorButton} onPress={onPress}>
         <Text style={styles.selectorText}>
           {selectedCategory
@@ -96,6 +96,9 @@ const CategorySelector = ({
 export default CategorySelector;
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
   sheetContent: {
     padding: 8,
   },
