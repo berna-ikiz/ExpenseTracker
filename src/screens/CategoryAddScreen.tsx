@@ -6,12 +6,21 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import colors from "../theme/colors";
 import EmojiPickerSheet from "../components/EmojiPickerSheet";
-import { StackActions, useNavigation } from "@react-navigation/native";
+import {
+  StackActions,
+  StaticScreenProps,
+  useNavigation,
+} from "@react-navigation/native";
+import { CategoryItemType, ExpenseItemType } from "../types";
 
-const CategoryAddScreen = () => {
+type Props = StaticScreenProps<{
+  data: { categories: CategoryItemType[]; expenses: ExpenseItemType[] };
+}>;
+
+const CategoryAddScreen = ({ route }: Props) => {
   const navigation = useNavigation();
   const [selectedEmoji, setSelectedEmoji] = useState("");
   const [categoryName, setCategoryName] = useState("");
@@ -19,7 +28,6 @@ const CategoryAddScreen = () => {
 
   const handleEmojiSelect = (emoji: string) => {
     setSelectedEmoji(emoji);
-    console.log(selectedEmoji);
     setShowEmojiSheet(false);
   };
 

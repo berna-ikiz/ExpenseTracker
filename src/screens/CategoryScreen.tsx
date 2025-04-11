@@ -7,28 +7,52 @@ import {
 } from "react-native";
 
 import React, { useEffect, useState } from "react";
-import categoryData from "../data/CategoryData";
 import colors from "../theme/colors";
 import { StaticScreenProps, useNavigation } from "@react-navigation/native";
-import { Categories } from "react-native-emoji-selector";
+import { CategoryItemType, ExpenseItemType } from "../types";
 
-type CategoryItemType = {
-  id: string;
-  title: string;
-  icon: string;
-};
 type Props = StaticScreenProps<{
-  category: CategoryItemType;
+  category?: CategoryItemType;
+  data: { categories: CategoryItemType[]; expenses: ExpenseItemType[] };
 }>;
 
 const category = ({ route }: Props) => {
   const navigation = useNavigation();
-  const [categories, setCategories] =
-    useState<CategoryItemType[]>(categoryData);
+  const [categories, setCategories] = useState<CategoryItemType[]>(
+    route.params?.data?.categories
+  );
+  const [expenses, setExpenses] = useState<ExpenseItemType[]>(
+    route.params?.data?.expenses
+  );
 
   useEffect(() => {
-    if (route.params?.category) {
-      setCategories((prev) => [...prev, route.params.category]);
+    navigation.setOptions({
+      headerLeft: () => (
+        <TouchableOpacity
+          onPress={() =>
+            navigation.navigate("Home", {
+              data: {
+                expenses: expenses,
+                categories: categories,
+              },
+            })
+          }
+          style={{ paddingLeft: 15 }}
+        >
+          <Text style={{ fontSize: 18, color: colors.silver }}>
+            {"<- Back"}
+          </Text>
+        </TouchableOpacity>
+      ),
+      headerTitleAlign: "center",
+    });
+  }, [categories]);
+
+  useEffect(() => {
+    if (route.params && route.params.category) {
+      setCategories((prev) =>
+        route.params.category ? [...prev, route.params.category] : prev
+      );
     }
   }, [route.params && route.params.category]);
 
@@ -58,7 +82,9 @@ const category = ({ route }: Props) => {
         contentContainerStyle={{ paddingBottom: "20%" }}
       />
       <TouchableOpacity
-        onPress={() => navigation.navigate("CategoryAdd")}
+        onPress={() =>
+          navigation.navigate("CategoryAdd", { data: route.params.data })
+        }
         style={styles.addCategoryButton}
       >
         <Text style={styles.addCategoryButtomText}> + </Text>

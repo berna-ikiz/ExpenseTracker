@@ -1,8 +1,21 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
 import colors from "../theme/colors";
 import { useNavigation } from "@react-navigation/native";
+
+type CategoryItemType = {
+  id: string;
+  title: string;
+  icon: string;
+};
+
+type ExpenseItemType = {
+  id: string;
+  category: string;
+  coast: number;
+  date: string;
+};
 
 type Props = {
   snapPoints:
@@ -12,11 +25,15 @@ type Props = {
     | [number, string]
     | [string, number]
     | [string, string];
+  data: { categories: CategoryItemType[]; expenses: ExpenseItemType[] };
 };
 
-const HomeButtonList = ({ snapPoints }: Props) => {
+const HomeButtonList = ({ snapPoints, data }: Props) => {
   const navigation = useNavigation();
   const bottomSheetRef = useRef<BottomSheet>(null);
+  const [categories, setCategories] = useState<CategoryItemType[]>(
+    data.categories
+  );
 
   const openSheet = () => {
     bottomSheetRef.current?.expand();
@@ -24,7 +41,6 @@ const HomeButtonList = ({ snapPoints }: Props) => {
 
   //When return is called from navigated page, home funtion was opened before called this func. before navigating other pages
   const closeSheet = () => {
-    console.log("opensheet", bottomSheetRef.current);
     bottomSheetRef.current?.expand();
   };
 
@@ -45,7 +61,13 @@ const HomeButtonList = ({ snapPoints }: Props) => {
           <TouchableOpacity onPress={() => navigation.navigate("Expense")}>
             <Text style={styles.input}>Add Expense</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate("Category")}>
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate("Category", {
+                data: { categories: data.categories, expenses: data.expenses },
+              })
+            }
+          >
             <Text style={styles.input}>Categories</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => navigation.navigate("CategoryAdd")}>

@@ -9,8 +9,22 @@ import {
   createStaticNavigation,
   StaticParamList,
 } from "@react-navigation/native";
+import colors from "../theme/colors";
 
 const RootStack = createNativeStackNavigator({
+  screenOptions: {
+    headerTitleAlign: "center",
+    headerStyle: {
+      backgroundColor: colors.whiteSmoke,
+    },
+    headerTitleStyle: {
+      fontSize: 24,
+      fontWeight: "600",
+      color: colors.slateGray,
+    },
+    headerTintColor: colors.slateGray,
+    headerBackVisible: false,
+  },
   screens: {
     Home: HomeScreen,
     Category: CategoryScreen,

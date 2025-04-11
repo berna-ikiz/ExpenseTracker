@@ -13,12 +13,7 @@ import Calendar from "../components/Calendar";
 import CategorySelector from "../components/CategorySelector";
 import categoryData from "../data/CategoryData";
 import BottomSheet from "@gorhom/bottom-sheet";
-
-type Category = {
-  id: string;
-  title: string;
-  icon: string;
-};
+import { Category } from "../types";
 
 const Expense = () => {
   const navigation = useNavigation();

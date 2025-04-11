@@ -1,32 +1,35 @@
 import { FlatList, StyleSheet, Text, View } from "react-native";
 import React, { useEffect, useState } from "react";
-import ExpenseData from "../data/ExpenseData";
 import { StaticScreenProps } from "@react-navigation/native";
 import { formatCurrency, formDateOnlyHours } from "../utils/GlobalFunctions";
 import colors from "../theme/colors";
 import HomeButtonList from "../components/HomeButtonList";
-
-type ExpenseItemType = {
-  id: string;
-  category: string;
-  coast: number;
-  date: string;
-};
+import ExpenseData from "../data/ExpenseData";
+import CategoryData from "../data/CategoryData";
+import { CategoryItemType, ExpenseItemType } from "../types";
 
 type Props = StaticScreenProps<{
-  expense: ExpenseItemType;
+  expense?: ExpenseItemType;
+  data: { categories: CategoryItemType[]; expenses: ExpenseItemType[] };
 }>;
 
 //TODO : Add types for navigation and route
 const Home = ({ route }: Props) => {
   const [expenses, setExpenses] = useState<ExpenseItemType[]>(ExpenseData);
+  const [categories, setCategories] =
+    useState<CategoryItemType[]>(CategoryData);
+
+  useEffect(() => {
+    if (route.params?.data) {
+      setExpenses(route.params.data.expenses || []);
+      setCategories(route.params.data.categories || []);
+    }
+  }, [route.params?.data]);
 
   useEffect(() => {
     if (route.params?.expense) {
-      console.log(route.params.expense);
       setExpenses((prev) => {
-        console.log("prev", prev);
-        return [...prev, route.params.expense];
+        return route.params.expense ? [...prev, route.params.expense] : prev;
       });
     }
   }, [route.params && route.params.expense]);
@@ -55,7 +58,10 @@ const Home = ({ route }: Props) => {
         keyExtractor={(item) => item.id}
         contentContainerStyle={{ paddingBottom: "20%" }}
       />
-      <HomeButtonList snapPoints={["100%", "100%"]} />
+      <HomeButtonList
+        snapPoints={["100%", "100%"]}
+        data={{ categories: categories, expenses: expenses }}
+      />
     </View>
   );
 };
