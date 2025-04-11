@@ -7,36 +7,44 @@ type Props = {
   onSelectDate: (date: string) => void;
   selectedDate?: string;
   title?: string;
+  isVisible: boolean;
+  onToggle: () => void;
 };
-const Calender = ({ onSelectDate, selectedDate = "", title }: Props) => {
+const Calender = ({
+  onSelectDate,
+  selectedDate = "",
+  title,
+  isVisible,
+  onToggle,
+}: Props) => {
   const [currentSelectedDate, setCurrentSelectedDate] = useState(selectedDate);
-  const [isCalendarVisible, setIsCalendarVisible] = useState(false);
-
-  const toggleCalender = () => {
-    setIsCalendarVisible(!isCalendarVisible);
-  };
 
   useEffect(() => {
     setCurrentSelectedDate(selectedDate);
   }, [selectedDate]);
+
   return (
     <View style={styles.container}>
       <View style={styles.titleContainer}>
         <Text style={styles.title}>{title}</Text>
         <TouchableOpacity
           style={styles.calenderButton}
-          onPress={() => toggleCalender()}
+          onPress={() => onToggle()}
         >
-          <Text style={styles.calenderButtonTitle}> 🗓️ </Text>
+          <Text style={styles.calenderButtonTitle}>
+            {selectedDate ? selectedDate : "🗓️"}
+          </Text>
         </TouchableOpacity>
       </View>
-      {isCalendarVisible && (
+      {isVisible && (
         <Calendar
           onDayPress={(day) => {
             onSelectDate(day.dateString);
+            onToggle();
           }}
           onDayLongPress={(day) => {
             console.log("selected day", day);
+            onToggle();
           }}
           monthFormat={"yyyy MM"}
           hideArrows={true}
@@ -63,7 +71,6 @@ export default Calender;
 
 const styles = StyleSheet.create({
   container: {
-    width: "100%",
     gap: 10,
   },
   titleContainer: {

@@ -1,21 +1,34 @@
-import {
-  StyleSheet,
-  Text,
-  TextInput,
-  Touchable,
-  TouchableOpacity,
-  View,
-} from "react-native";
-import React, { useState } from "react";
+import { StyleSheet, Text, TextInput, View } from "react-native";
+import React, { useRef, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import colors from "../theme/colors";
 import Calendar from "../components/Calendar";
+import CategorySelector from "../components/CategorySelector";
+import categoryData from "../data/CategoryData";
+import BottomSheet from "@gorhom/bottom-sheet";
+
+type Category = {
+  id: string;
+  title: string;
+  icon: string;
+};
 
 const Expense = () => {
   const navigation = useNavigation();
   const [title, setTitle] = useState("");
   const [coast, setCoast] = useState("");
   const [selectedDate, onSelectDate] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState<Category | null>(
+    null
+  );
+  const [isCalenderVisible, setCalenderVisible] = useState(false);
+
+  const bottomSheetRef = useRef<BottomSheet>(null!);
+
+  const openSheet = () => {
+    bottomSheetRef.current?.expand();
+    setCalenderVisible(false);
+  };
 
   const handleCoastChange = (text: string) => {
     const numericText = text.replace(/[^0-9]/g, "");
@@ -43,6 +56,23 @@ const Expense = () => {
         onSelectDate={onSelectDate}
         selectedDate={selectedDate}
         title={"Date"}
+        isVisible={isCalenderVisible}
+        onToggle={() => {
+          setCalenderVisible((prev) => !prev);
+          bottomSheetRef.current?.close();
+        }}
+      />
+      <CategorySelector
+        selectedCategory={selectedCategory}
+        snapPoints={["60%", "90%"]}
+        onSelect={(emoji: string) => {
+          const category =
+            categoryData.find((cat) => cat.icon === emoji) || null;
+          setSelectedCategory(category);
+        }}
+        categoriesData={categoryData}
+        onPress={openSheet}
+        bottomSheetRef={bottomSheetRef}
       />
     </View>
   );
