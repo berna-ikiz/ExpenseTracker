@@ -9,9 +9,10 @@ import {
 import React, { useState } from "react";
 import colors from "../theme/colors";
 import EmojiPickerSheet from "../components/EmojiPickerSheet";
-import { saveCategoryData } from "../utils/Storage";
+import { StackActions, useNavigation } from "@react-navigation/native";
 
 const CategoryAddScreen = () => {
+  const navigation = useNavigation();
   const [selectedEmoji, setSelectedEmoji] = useState("");
   const [categoryName, setCategoryName] = useState("");
   const [showEmojiSheet, setShowEmojiSheet] = useState(false);
@@ -22,14 +23,14 @@ const CategoryAddScreen = () => {
     setShowEmojiSheet(false);
   };
 
-  const handleSaveCategory = async () => {
+  const handleSaveCategory = () => {
     if (selectedEmoji && categoryName) {
-      const newCategory = {
+      const category = {
         id: Date.now().toString(),
         title: categoryName.trim(),
         icon: selectedEmoji,
       };
-      await saveCategoryData(newCategory);
+      navigation.dispatch(StackActions.popTo("Category", { category }));
     } else if (!selectedEmoji) {
       Alert.alert("Please Add Emoji");
     } else if (!categoryName) {
@@ -66,7 +67,7 @@ const CategoryAddScreen = () => {
         visible={showEmojiSheet}
         onClose={() => setShowEmojiSheet(false)}
         onSelect={handleEmojiSelect}
-        snapPoints={["50%", "100%"]}
+        snapPoints={["50%", "50%"]}
       />
     </View>
   );

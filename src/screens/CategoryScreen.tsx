@@ -6,19 +6,31 @@ import {
   View,
 } from "react-native";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import categoryData from "../data/CategoryData";
 import colors from "../theme/colors";
-import { useNavigation } from "@react-navigation/native";
+import { StaticScreenProps, useNavigation } from "@react-navigation/native";
+import { Categories } from "react-native-emoji-selector";
 
 type CategoryItemType = {
   id: string;
   title: string;
   icon: string;
 };
+type Props = StaticScreenProps<{
+  category: CategoryItemType;
+}>;
 
-const category = () => {
+const category = ({ route }: Props) => {
   const navigation = useNavigation();
+  const [categories, setCategories] =
+    useState<CategoryItemType[]>(categoryData);
+
+  useEffect(() => {
+    if (route.params?.category) {
+      setCategories((prev) => [...prev, route.params.category]);
+    }
+  }, [route.params && route.params.category]);
 
   const renderItem = ({ item }: { item: CategoryItemType }) => (
     <View style={styles.ListCard}>
@@ -32,8 +44,15 @@ const category = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.titleText}>Categories</Text>
+      {categories?.length === 0 && (
+        <Text
+          style={{ textAlign: "center", fontSize: 18, color: colors.silver }}
+        >
+          No categories found. Please add a category.
+        </Text>
+      )}
       <FlatList
-        data={categoryData}
+        data={categories}
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
         contentContainerStyle={{ paddingBottom: "20%" }}
