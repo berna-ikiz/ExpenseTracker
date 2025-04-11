@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, SafeAreaView, StyleSheet } from "react-native";
+import { SafeAreaView, StyleSheet } from "react-native";
 import StackNavigator from "../ExpenseTracker/src/navigation/StackNavigator";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
