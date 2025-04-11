@@ -82,9 +82,8 @@ const CategorySelector = ({
             keyExtractor={(item) => item.id}
             contentContainerStyle={{
               paddingBottom: "20%",
-              flexGrow: 1,
             }}
-            style={{ flex: 1, paddingBottom: "30%" }}
+            style={{ flex: 1 }}
             nestedScrollEnabled
             showsVerticalScrollIndicator={true}
           />

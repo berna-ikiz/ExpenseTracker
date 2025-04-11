@@ -14,5 +14,13 @@ const categoryData = [
   { id: "13", title: "Education", icon: "📚" },
   { id: "14", title: "Pets", icon: "🐶" },
   { id: "15", title: "Other", icon: "📦" },
+  { id: "16", title: "Snacks", icon: "🍫" },
+  { id: "17", title: "Coffe", icon: "☕️" },
+  { id: "18", title: "Beauty", icon: "💄" },
+  { id: "19", title: "Sports", icon: "⚽️" },
+  { id: "20", title: "Travel", icon: "✈️" },
+  { id: "21", title: "Fitness", icon: "🏋️‍♂️" },
+  { id: "22", title: "Subscriptions", icon: "📅" },
+  { id: "23", title: "Charity", icon: "❤️" },
 ];
 export default categoryData;

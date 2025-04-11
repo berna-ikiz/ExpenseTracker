@@ -1,6 +1,13 @@
-import { StyleSheet, Text, TextInput, View } from "react-native";
+import {
+  Alert,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import React, { useRef, useState } from "react";
-import { useNavigation } from "@react-navigation/native";
+import { StackActions, useNavigation } from "@react-navigation/native";
 import colors from "../theme/colors";
 import Calendar from "../components/Calendar";
 import CategorySelector from "../components/CategorySelector";
@@ -33,6 +40,22 @@ const Expense = () => {
   const handleCoastChange = (text: string) => {
     const numericText = text.replace(/[^0-9]/g, "");
     setCoast(numericText);
+  };
+
+  const handleAddExpense = () => {
+    if (!title || !coast || !selectedDate || !selectedCategory) {
+      Alert.alert("Please fill all fields");
+      return;
+    }
+
+    const expense = {
+      id: Date.now().toString(),
+      title,
+      coast,
+      date: selectedDate,
+      category: `${selectedCategory.icon}${selectedCategory.title}`,
+    };
+    navigation.dispatch(StackActions.popTo("Home", { expense }));
   };
 
   return (
@@ -74,6 +97,12 @@ const Expense = () => {
         onPress={openSheet}
         bottomSheetRef={bottomSheetRef}
       />
+      <TouchableOpacity
+        onPress={handleAddExpense}
+        style={styles.addCategoryButton}
+      >
+        <Text style={styles.addCategoryButtomText}> + </Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -108,5 +137,22 @@ const styles = StyleSheet.create({
       width: 0,
       height: 2,
     },
+  },
+  addCategoryButton: {
+    position: "absolute",
+    right: "10%",
+    bottom: "5%",
+    backgroundColor: colors.gray,
+    width: "20%",
+    height: "8%",
+    borderRadius: 28,
+    alignItems: "center",
+    justifyContent: "center",
+    elevation: 3,
+  },
+  addCategoryButtomText: {
+    fontSize: 18,
+    color: colors.white,
+    marginBottom: "5%",
   },
 });

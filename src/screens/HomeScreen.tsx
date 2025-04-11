@@ -5,9 +5,9 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ExpenseData from "../data/ExpenseData";
-import { useNavigation } from "@react-navigation/native";
+import { StaticScreenProps, useNavigation } from "@react-navigation/native";
 import { formatCurrency, formDateOnlyHours } from "../utils/GlobalFunctions";
 import colors from "../theme/colors";
 
@@ -18,8 +18,24 @@ type ExpenseItemType = {
   date: string;
 };
 
-const Home = () => {
+type Props = StaticScreenProps<{
+  expense: ExpenseItemType;
+}>;
+
+//TODO : Add types for navigation and route
+const Home = ({ route }: Props) => {
   const navigation = useNavigation();
+  const [expenses, setExpenses] = useState<ExpenseItemType[]>([]);
+
+  useEffect(() => {
+    if (route.params?.expense) {
+      console.log(route.params.expense);
+      setExpenses((prev) => {
+        console.log("prev", prev);
+        return [...prev, route.params.expense];
+      });
+    }
+  }, [route.params && route.params.expense]);
 
   const renderItem = ({ item }: { item: ExpenseItemType }) => (
     <View style={styles.expenseCard}>
@@ -32,8 +48,15 @@ const Home = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.titleText}>Expenses</Text>
+      {expenses?.length === 0 && (
+        <Text
+          style={{ textAlign: "center", fontSize: 18, color: colors.silver }}
+        >
+          No expenses found. Please add an expense.
+        </Text>
+      )}
       <FlatList
-        data={ExpenseData}
+        data={expenses}
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
         contentContainerStyle={{ paddingBottom: "20%" }}
