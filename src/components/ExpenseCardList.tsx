@@ -8,7 +8,11 @@ import {
 import React from "react";
 import colors from "../theme/colors";
 import { ExpenseItemType } from "../types";
-import { formatCurrency, formDateOnlyHours } from "../utils/GlobalFunctions";
+import {
+  formatCurrency,
+  formDate,
+  formDateOnlyHours,
+} from "../utils/GlobalFunctions";
 
 type Props = {
   list: ExpenseItemType[];
@@ -22,7 +26,10 @@ const ExpenseCardList = ({ list, onPress, emptyDataText }: Props) => {
       <TouchableOpacity onPress={onPress ? () => onPress(item) : undefined}>
         <Text style={styles.category}>{item.category}</Text>
         <Text style={styles.coast}>{formatCurrency(item.coast, "TRY")}</Text>
-        <Text style={styles.date}>{formDateOnlyHours(item.date)}</Text>
+        <View style={styles.expenseDateCard}>
+          <Text style={styles.date}>{formDateOnlyHours(item.date)}</Text>
+          <Text style={styles.date}>{formDate(item.date)}</Text>
+        </View>
       </TouchableOpacity>
     </View>
   );
@@ -86,5 +93,10 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
     marginBottom: "4%",
+  },
+  expenseDateCard: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    textAlign: "center",
   },
 });
