@@ -13,6 +13,7 @@ import HomeButtonList from "../components/HomeButtonList";
 import ExpenseData from "../data/ExpenseData";
 import CategoryData from "../data/CategoryData";
 import { CategoryItemType, ExpenseItemType } from "../types";
+import ExpenseCardList from "../components/ExpenseCardList";
 
 type Props = StaticScreenProps<{
   expense?: ExpenseItemType;
@@ -41,40 +42,17 @@ const Home = ({ route }: Props) => {
     }
   }, [route.params && route.params.expense]);
 
-  const renderItem = ({ item }: { item: ExpenseItemType }) => (
-    <View style={styles.expenseCard}>
-      <TouchableOpacity
-        onPress={() =>
+  return (
+    <View style={styles.container}>
+      <ExpenseCardList
+        list={expenses}
+        onPress={(item) =>
           navigation.navigate("ExpenseDetails", {
             item,
             data: { categories: categories, expenses: expenses },
           })
         }
-      >
-        <Text style={styles.category}>{item.category}</Text>
-        <Text style={styles.coast}>{formatCurrency(item.coast, "TRY")}</Text>
-        <Text style={styles.date}>{formDateOnlyHours(item.date)}</Text>
-      </TouchableOpacity>
-    </View>
-  );
-
-  return (
-    <View style={styles.container}>
-      {expenses?.length === 0 && (
-        <>
-          <Text style={styles.titleText}>Expenses</Text>
-          <Text
-            style={{ textAlign: "center", fontSize: 18, color: colors.silver }}
-          >
-            No expenses found. Please add an expense.
-          </Text>
-        </>
-      )}
-      <FlatList
-        data={expenses}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id}
-        contentContainerStyle={{ paddingBottom: "20%" }}
+        emptyDataText="No expenses found. Please add an expense."
       />
       <HomeButtonList
         snapPoints={["100%", "100%"]}
@@ -90,40 +68,5 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-  },
-  expenseCard: {
-    backgroundColor: colors.white,
-    borderRadius: 16,
-    padding: 20,
-    marginBottom: 12,
-    shadowColor: "black",
-    shadowOpacity: 0.08,
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowRadius: 8,
-    elevation: 3,
-  },
-  category: {
-    fontSize: 18,
-    color: colors.silver,
-  },
-  coast: {
-    fontSize: 20,
-    fontWeight: "bold",
-    marginVertical: 4,
-    color: colors.gray,
-  },
-  date: {
-    fontSize: 14,
-    color: colors.lightGray,
-  },
-  titleText: {
-    fontSize: 28,
-    color: colors.silver,
-    fontWeight: "bold",
-    textAlign: "center",
-    marginBottom: "4%",
   },
 });

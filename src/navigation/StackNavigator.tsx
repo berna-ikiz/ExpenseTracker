@@ -10,6 +10,7 @@ import {
   StaticParamList,
 } from "@react-navigation/native";
 import colors from "../theme/colors";
+import CategoryExpensesScreen from "../screens/CategoryExpensesScreen";
 
 const RootStack = createNativeStackNavigator({
   screenOptions: {
@@ -32,7 +33,7 @@ const RootStack = createNativeStackNavigator({
         title: "Home",
       },
     },
-    Category: {
+    CategoryList: {
       screen: CategoryListScreen,
       options: {
         title: "Categories",
@@ -55,6 +56,12 @@ const RootStack = createNativeStackNavigator({
       screen: CategoryAddScreen,
       options: {
         title: "Add Category",
+      },
+    },
+    CategoryExpensesScreen: {
+      screen: CategoryExpensesScreen,
+      options: {
+        title: "Category Details",
       },
     },
   },

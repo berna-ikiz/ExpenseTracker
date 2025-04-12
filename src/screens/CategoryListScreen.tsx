@@ -64,7 +64,15 @@ const CategoryList = ({ route }: Props) => {
 
   const renderItem = ({ item }: { item: CategoryItemType }) => (
     <View style={styles.ListCard}>
-      <TouchableOpacity style={styles.listCategoryItem}>
+      <TouchableOpacity
+        style={styles.listCategoryItem}
+        onPress={() =>
+          navigation.navigate("CategoryExpensesScreen", {
+            category: item,
+            data: { categories: categories, expenses: expenses },
+          })
+        }
+      >
         <Text style={styles.listIcon}>{item.icon}</Text>
         <Text style={styles.listTitle}>{item.title}</Text>
       </TouchableOpacity>
