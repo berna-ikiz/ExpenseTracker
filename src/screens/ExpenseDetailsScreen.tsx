@@ -1,14 +1,158 @@
-import { StyleSheet, Text, View } from "react-native";
-import React from "react";
+import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import React, { useEffect, useState } from "react";
+import { StaticScreenProps, useNavigation } from "@react-navigation/native";
+import { CategoryItemType, ExpenseItemType } from "../types";
+import colors from "../theme/colors";
 
-const ExpenseDetails = () => {
+type Props = StaticScreenProps<{
+  item: ExpenseItemType;
+  data: { categories: CategoryItemType[]; expenses: ExpenseItemType[] };
+}>;
+
+const ExpenseDetails = ({ route }: Props) => {
+  const navigation = useNavigation();
+  const expenseItem = route.params.item;
+  const [data, setData] = useState(route.params.data);
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerLeft: () => (
+        <TouchableOpacity
+          onPress={() =>
+            navigation.navigate("Home", {
+              data: {
+                expenses: data.expenses,
+                categories: data.categories,
+              },
+            })
+          }
+          style={{ paddingLeft: 15 }}
+        >
+          <Text style={{ fontSize: 18, color: colors.silver }}>
+            {"<- Back"}
+          </Text>
+        </TouchableOpacity>
+      ),
+      headerTitleAlign: "center",
+    });
+  }, [data]);
+
+  const handleDelete = () => {
+    Alert.alert(
+      "Delete Expense",
+      "Are you sure you want to delete this expense?",
+      [
+        {
+          text: "Cancel",
+          style: "cancel",
+        },
+        {
+          text: "Delete",
+          style: "destructive",
+          onPress: () => {
+            if (data) {
+              const updatedExpenses = data.expenses.filter(
+                (item) => item.id !== expenseItem.id
+              );
+              navigation.navigate("Home", {
+                data: {
+                  categories: data.categories,
+                  expenses: updatedExpenses,
+                },
+              });
+            }
+          },
+        },
+      ]
+    );
+  };
+
   return (
-    <View>
-      <Text>ExpenseDetails</Text>
+    <View style={styles.container}>
+      {expenseItem ? (
+        <>
+          <View style={styles.expenseCard}>
+            <Text style={styles.label}> Category </Text>
+            <Text style={styles.value}> {expenseItem.category}</Text>
+          </View>
+          <View style={styles.expenseCard}>
+            <Text style={styles.label}> Coast </Text>
+            <Text style={styles.value}> {expenseItem.coast}</Text>
+          </View>
+          <View style={styles.expenseCard}>
+            <Text style={styles.label}> Date </Text>
+            <Text style={styles.value}> {expenseItem.date}</Text>
+          </View>
+          <TouchableOpacity
+            onPress={handleDelete}
+            style={styles.addExpenseButton}
+          >
+            <Text style={styles.addExpenseButtonText}> - </Text>
+          </TouchableOpacity>
+        </>
+      ) : (
+        <>
+          <Text style={styles.header}>Expense Details</Text>
+          <Text>Expense not found</Text>
+        </>
+      )}
     </View>
   );
 };
 
 export default ExpenseDetails;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 20,
+    backgroundColor: colors.whiteSmoke,
+  },
+  header: {
+    fontSize: 24,
+    fontWeight: "bold",
+    marginBottom: 20,
+    textAlign: "center",
+  },
+  expenseCard: {
+    marginBottom: 16,
+    padding: 20,
+    backgroundColor: colors.white,
+    borderRadius: 10,
+    elevation: 2,
+    shadowColor: colors.slateGray,
+    shadowOpacity: 0.8,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    flexDirection: "row",
+  },
+  label: {
+    fontSize: 24,
+    color: colors.charcoal,
+    flex: 1,
+  },
+  value: {
+    flex: 1,
+    fontSize: 20,
+    color: colors.gray,
+  },
+  addExpenseButton: {
+    position: "absolute",
+    right: 20,
+    bottom: 20,
+    backgroundColor: colors.gray,
+    width: 70,
+    height: 70,
+    borderRadius: 35,
+    alignItems: "center",
+    justifyContent: "center",
+    elevation: 3,
+  },
+  addExpenseButtonText: {
+    fontSize: 18,
+    color: colors.white,
+    marginBottom: "5%",
+  },
+});

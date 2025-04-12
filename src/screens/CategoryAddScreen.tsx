@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useDebugValue, useEffect, useState } from "react";
 import colors from "../theme/colors";
 import EmojiPickerSheet from "../components/EmojiPickerSheet";
 import {
@@ -25,6 +25,7 @@ const CategoryAddScreen = ({ route }: Props) => {
   const [selectedEmoji, setSelectedEmoji] = useState("");
   const [categoryName, setCategoryName] = useState("");
   const [showEmojiSheet, setShowEmojiSheet] = useState(false);
+  const [data, setData] = useState(route.params.data);
 
   useEffect(() => {
     navigation.setOptions({
@@ -33,8 +34,8 @@ const CategoryAddScreen = ({ route }: Props) => {
           onPress={() =>
             navigation.navigate("Category", {
               data: {
-                expenses: route.params?.data?.expenses,
-                categories: route.params?.data?.categories,
+                expenses: data.expenses,
+                categories: data.categories,
               },
             })
           }
@@ -47,7 +48,7 @@ const CategoryAddScreen = ({ route }: Props) => {
       ),
       headerTitleAlign: "center",
     });
-  }, [route.params?.data]);
+  }, [data]);
 
   const handleEmojiSelect = (emoji: string) => {
     setSelectedEmoji(emoji);
@@ -62,7 +63,7 @@ const CategoryAddScreen = ({ route }: Props) => {
         icon: selectedEmoji,
       };
       navigation.dispatch(
-        StackActions.popTo("Category", { category, data: route.params.data })
+        StackActions.popTo("Category", { category, data: data })
       );
     } else if (!selectedEmoji) {
       Alert.alert("Please Add Emoji");

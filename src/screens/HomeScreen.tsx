@@ -1,6 +1,12 @@
-import { FlatList, StyleSheet, Text, View } from "react-native";
+import {
+  FlatList,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import React, { useEffect, useState } from "react";
-import { StaticScreenProps } from "@react-navigation/native";
+import { StaticScreenProps, useNavigation } from "@react-navigation/native";
 import { formatCurrency, formDateOnlyHours } from "../utils/GlobalFunctions";
 import colors from "../theme/colors";
 import HomeButtonList from "../components/HomeButtonList";
@@ -18,6 +24,7 @@ const Home = ({ route }: Props) => {
   const [expenses, setExpenses] = useState<ExpenseItemType[]>(ExpenseData);
   const [categories, setCategories] =
     useState<CategoryItemType[]>(CategoryData);
+  const navigation = useNavigation();
 
   useEffect(() => {
     if (route.params?.data) {
@@ -36,9 +43,18 @@ const Home = ({ route }: Props) => {
 
   const renderItem = ({ item }: { item: ExpenseItemType }) => (
     <View style={styles.expenseCard}>
-      <Text style={styles.category}>{item.category}</Text>
-      <Text style={styles.coast}>{formatCurrency(item.coast, "TRY")}</Text>
-      <Text style={styles.date}>{formDateOnlyHours(item.date)}</Text>
+      <TouchableOpacity
+        onPress={() =>
+          navigation.navigate("ExpenseDetails", {
+            item,
+            data: { categories: categories, expenses: expenses },
+          })
+        }
+      >
+        <Text style={styles.category}>{item.category}</Text>
+        <Text style={styles.coast}>{formatCurrency(item.coast, "TRY")}</Text>
+        <Text style={styles.date}>{formDateOnlyHours(item.date)}</Text>
+      </TouchableOpacity>
     </View>
   );
 
