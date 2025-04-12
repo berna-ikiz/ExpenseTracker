@@ -1,6 +1,6 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import HomeScreen from "../screens/HomeScreen";
-import CategoryScreen from "../screens/CategoryScreen";
+import CategoryListScreen from "../screens/CategoryListScreen";
 import ExpenseScreen from "../screens/ExpenseScreen";
 import ExpenseDetailsScreen from "../screens/ExpenseDetailsScreen";
 import CategoryAddScreen from "../screens/CategoryAddScreen";
@@ -33,7 +33,7 @@ const RootStack = createNativeStackNavigator({
       },
     },
     Category: {
-      screen: CategoryScreen,
+      screen: CategoryListScreen,
       options: {
         title: "Categories",
       },

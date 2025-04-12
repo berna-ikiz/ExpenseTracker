@@ -16,7 +16,7 @@ type Props = StaticScreenProps<{
   data: { categories: CategoryItemType[]; expenses: ExpenseItemType[] };
 }>;
 
-const category = ({ route }: Props) => {
+const CategoryList = ({ route }: Props) => {
   const navigation = useNavigation();
   const [categories, setCategories] = useState<CategoryItemType[]>(
     route.params?.data?.categories
@@ -101,7 +101,7 @@ const category = ({ route }: Props) => {
   );
 };
 
-export default category;
+export default CategoryList;
 
 const styles = StyleSheet.create({
   container: {
