@@ -16,7 +16,7 @@ type Props = StaticScreenProps<{
   data: { categories: CategoryItemType[]; expenses: ExpenseItemType[] };
 }>;
 
-const category = ({ route }: Props) => {
+const CategoryList = ({ route }: Props) => {
   const navigation = useNavigation();
   const [categories, setCategories] = useState<CategoryItemType[]>(
     route.params?.data?.categories
@@ -64,7 +64,15 @@ const category = ({ route }: Props) => {
 
   const renderItem = ({ item }: { item: CategoryItemType }) => (
     <View style={styles.ListCard}>
-      <TouchableOpacity style={styles.listCategoryItem}>
+      <TouchableOpacity
+        style={styles.listCategoryItem}
+        onPress={() =>
+          navigation.navigate("CategoryExpensesScreen", {
+            category: item,
+            data: { categories: categories, expenses: expenses },
+          })
+        }
+      >
         <Text style={styles.listIcon}>{item.icon}</Text>
         <Text style={styles.listTitle}>{item.title}</Text>
       </TouchableOpacity>
@@ -101,7 +109,7 @@ const category = ({ route }: Props) => {
   );
 };
 
-export default category;
+export default CategoryList;
 
 const styles = StyleSheet.create({
   container: {

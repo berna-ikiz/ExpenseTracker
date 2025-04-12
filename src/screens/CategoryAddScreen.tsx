@@ -32,7 +32,7 @@ const CategoryAddScreen = ({ route }: Props) => {
       headerLeft: () => (
         <TouchableOpacity
           onPress={() =>
-            navigation.navigate("Category", {
+            navigation.navigate("CategoryList", {
               data: {
                 expenses: data.expenses,
                 categories: data.categories,
@@ -69,7 +69,7 @@ const CategoryAddScreen = ({ route }: Props) => {
         icon: selectedEmoji,
       };
       navigation.dispatch(
-        StackActions.popTo("Category", { category, data: data })
+        StackActions.popTo("CategoryList", { category, data: data })
       );
     } else if (!selectedEmoji) {
       Alert.alert("Please Add Emoji");

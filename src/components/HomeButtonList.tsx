@@ -74,7 +74,7 @@ const HomeButtonList = ({ snapPoints, data }: Props) => {
           <TouchableOpacity
             onPress={() => {
               bottomSheetRef.current?.close();
-              navigation.navigate("Category", {
+              navigation.navigate("CategoryList", {
                 data: { categories: data.categories, expenses: data.expenses },
               });
             }}
@@ -91,7 +91,7 @@ const HomeButtonList = ({ snapPoints, data }: Props) => {
           >
             <Text style={styles.input}>Add Category</Text>
           </TouchableOpacity>
-          {/*<TouchableOpacity onPress={() => navigation.navigate("Category")}>
+          {/*<TouchableOpacity onPress={() => navigation.navigate("CategoryList")}>
             <Text style={styles.input}>Settings</Text>
           </TouchableOpacity>
           */}
