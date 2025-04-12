@@ -13,7 +13,6 @@ type Props = {
 const Calender = ({
   onSelectDate,
   selectedDate = "",
-  title,
   isVisible,
   onToggle,
 }: Props) => {
@@ -26,13 +25,18 @@ const Calender = ({
   return (
     <View style={styles.container}>
       <View style={styles.titleContainer}>
-        <Text style={styles.title}>{title}</Text>
         <TouchableOpacity
           style={styles.calenderButton}
           onPress={() => onToggle()}
         >
-          <Text style={styles.calenderButtonTitle}>
-            {selectedDate ? selectedDate : "🗓️"}
+          <Text
+            style={
+              selectedDate
+                ? [styles.calenderButtonTitle, { color: colors.slateGray }]
+                : styles.calenderButtonTitle
+            }
+          >
+            {selectedDate ? selectedDate : "Date 🗓️"}
           </Text>
         </TouchableOpacity>
       </View>
@@ -43,7 +47,6 @@ const Calender = ({
             onToggle();
           }}
           onDayLongPress={(day) => {
-            console.log("selected day", day);
             onToggle();
           }}
           monthFormat={"yyyy MM"}
@@ -81,7 +84,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 24,
-    color: colors.gray,
+    color: colors.silver,
     fontWeight: "bold",
     flex: 1,
     textAlign: "center",
@@ -104,5 +107,6 @@ const styles = StyleSheet.create({
   },
   calenderButtonTitle: {
     fontSize: 24,
+    color: colors.silver,
   },
 });

@@ -6,21 +6,24 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React, { useRef, useState } from "react";
-import { StackActions, useNavigation } from "@react-navigation/native";
+import React, { useEffect, useRef, useState } from "react";
+import {
+  StackActions,
+  StaticScreenProps,
+  useNavigation,
+} from "@react-navigation/native";
 import colors from "../theme/colors";
 import Calendar from "../components/Calendar";
 import CategorySelector from "../components/CategorySelector";
 import categoryData from "../data/CategoryData";
 import BottomSheet from "@gorhom/bottom-sheet";
+import { Category, CategoryItemType, ExpenseItemType } from "../types";
 
-type Category = {
-  id: string;
-  title: string;
-  icon: string;
-};
+type Props = StaticScreenProps<{
+  data: { categories: CategoryItemType[]; expenses: ExpenseItemType[] };
+}>;
 
-const Expense = () => {
+const Expense = ({ route }: Props) => {
   const navigation = useNavigation();
   const [title, setTitle] = useState("");
   const [coast, setCoast] = useState("");
@@ -31,6 +34,35 @@ const Expense = () => {
   const [isCalenderVisible, setCalenderVisible] = useState(false);
 
   const bottomSheetRef = useRef<BottomSheet>(null!);
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerLeft: () => (
+        <TouchableOpacity
+          onPress={() =>
+            navigation.navigate("Home", {
+              data: {
+                expenses: route.params?.data?.expenses,
+                categories: route.params?.data?.categories,
+              },
+            })
+          }
+          style={{ paddingLeft: 15 }}
+        >
+          <Text
+            style={{
+              fontSize: 22,
+              color: colors.silver,
+              fontWeight: "bold",
+            }}
+          >
+            {"Back"}
+          </Text>
+        </TouchableOpacity>
+      ),
+      headerTitleAlign: "center",
+    });
+  }, [route.params?.data]);
 
   const openSheet = () => {
     bottomSheetRef.current?.expand();
@@ -55,19 +87,19 @@ const Expense = () => {
       date: selectedDate,
       category: `${selectedCategory.icon}${selectedCategory.title}`,
     };
-    navigation.dispatch(StackActions.popTo("Home", { expense }));
+    navigation.dispatch(
+      StackActions.popTo("Home", { expense, data: route.params.data })
+    );
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Add Expense</Text>
       <TextInput
-        placeholder="title"
+        placeholder="Title"
         value={title}
         onChangeText={setTitle}
         style={styles.input}
       />
-
       <TextInput
         placeholder="Coast"
         value={coast}
@@ -114,13 +146,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 8,
     gap: 8,
-  },
-  title: {
-    fontSize: 24,
-    marginBottom: 24,
-    fontWeight: "bold",
-    color: colors.silver,
-    textAlign: "center",
+    marginTop: 32,
   },
   input: {
     borderWidth: 1,
@@ -137,6 +163,7 @@ const styles = StyleSheet.create({
       width: 0,
       height: 2,
     },
+    width: "100%",
   },
   addCategoryButton: {
     position: "absolute",

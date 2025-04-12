@@ -6,30 +6,71 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useDebugValue, useEffect, useState } from "react";
 import colors from "../theme/colors";
 import EmojiPickerSheet from "../components/EmojiPickerSheet";
-import { saveCategoryData } from "../utils/Storage";
+import {
+  StackActions,
+  StaticScreenProps,
+  useNavigation,
+} from "@react-navigation/native";
+import { CategoryItemType, ExpenseItemType } from "../types";
 
-const CategoryAddScreen = () => {
+type Props = StaticScreenProps<{
+  data: { categories: CategoryItemType[]; expenses: ExpenseItemType[] };
+}>;
+
+const CategoryAddScreen = ({ route }: Props) => {
+  const navigation = useNavigation();
   const [selectedEmoji, setSelectedEmoji] = useState("");
   const [categoryName, setCategoryName] = useState("");
   const [showEmojiSheet, setShowEmojiSheet] = useState(false);
+  const [data, setData] = useState(route.params.data);
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerLeft: () => (
+        <TouchableOpacity
+          onPress={() =>
+            navigation.navigate("Category", {
+              data: {
+                expenses: data.expenses,
+                categories: data.categories,
+              },
+            })
+          }
+          style={{ paddingLeft: 15 }}
+        >
+          <Text
+            style={{
+              fontSize: 22,
+              color: colors.silver,
+              fontWeight: "bold",
+            }}
+          >
+            {"Back"}
+          </Text>
+        </TouchableOpacity>
+      ),
+      headerTitleAlign: "center",
+    });
+  }, [data]);
 
   const handleEmojiSelect = (emoji: string) => {
     setSelectedEmoji(emoji);
-    console.log(selectedEmoji);
     setShowEmojiSheet(false);
   };
 
-  const handleSaveCategory = async () => {
+  const handleSaveCategory = () => {
     if (selectedEmoji && categoryName) {
-      const newCategory = {
+      const category = {
         id: Date.now().toString(),
         title: categoryName.trim(),
         icon: selectedEmoji,
       };
-      await saveCategoryData(newCategory);
+      navigation.dispatch(
+        StackActions.popTo("Category", { category, data: data })
+      );
     } else if (!selectedEmoji) {
       Alert.alert("Please Add Emoji");
     } else if (!categoryName) {
@@ -40,7 +81,7 @@ const CategoryAddScreen = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>
-        {categoryName ? categoryName : "Add Category"}
+        {categoryName ? categoryName : "Choose a category name"}
         {selectedEmoji && selectedEmoji}
       </Text>
       <View style={styles.categoryAddLayout}>
@@ -66,7 +107,7 @@ const CategoryAddScreen = () => {
         visible={showEmojiSheet}
         onClose={() => setShowEmojiSheet(false)}
         onSelect={handleEmojiSelect}
-        snapPoints={["50%", "100%"]}
+        snapPoints={["50%", "50%"]}
       />
     </View>
   );

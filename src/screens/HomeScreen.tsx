@@ -6,55 +6,69 @@ import {
   View,
 } from "react-native";
 import React, { useEffect, useState } from "react";
-import ExpenseData from "../data/ExpenseData";
 import { StaticScreenProps, useNavigation } from "@react-navigation/native";
 import { formatCurrency, formDateOnlyHours } from "../utils/GlobalFunctions";
 import colors from "../theme/colors";
 import HomeButtonList from "../components/HomeButtonList";
-
-type ExpenseItemType = {
-  id: string;
-  category: string;
-  coast: number;
-  date: string;
-};
+import ExpenseData from "../data/ExpenseData";
+import CategoryData from "../data/CategoryData";
+import { CategoryItemType, ExpenseItemType } from "../types";
 
 type Props = StaticScreenProps<{
-  expense: ExpenseItemType;
+  expense?: ExpenseItemType;
+  data: { categories: CategoryItemType[]; expenses: ExpenseItemType[] };
 }>;
 
 //TODO : Add types for navigation and route
 const Home = ({ route }: Props) => {
-  const navigation = useNavigation();
   const [expenses, setExpenses] = useState<ExpenseItemType[]>(ExpenseData);
+  const [categories, setCategories] =
+    useState<CategoryItemType[]>(CategoryData);
+  const navigation = useNavigation();
+
+  useEffect(() => {
+    if (route.params?.data) {
+      setExpenses(route.params.data.expenses || []);
+      setCategories(route.params.data.categories || []);
+    }
+  }, [route.params?.data]);
 
   useEffect(() => {
     if (route.params?.expense) {
-      console.log(route.params.expense);
       setExpenses((prev) => {
-        console.log("prev", prev);
-        return [...prev, route.params.expense];
+        return route.params.expense ? [...prev, route.params.expense] : prev;
       });
     }
   }, [route.params && route.params.expense]);
 
   const renderItem = ({ item }: { item: ExpenseItemType }) => (
     <View style={styles.expenseCard}>
-      <Text style={styles.category}>{item.category}</Text>
-      <Text style={styles.coast}>{formatCurrency(item.coast, "TRY")}</Text>
-      <Text style={styles.date}>{formDateOnlyHours(item.date)}</Text>
+      <TouchableOpacity
+        onPress={() =>
+          navigation.navigate("ExpenseDetails", {
+            item,
+            data: { categories: categories, expenses: expenses },
+          })
+        }
+      >
+        <Text style={styles.category}>{item.category}</Text>
+        <Text style={styles.coast}>{formatCurrency(item.coast, "TRY")}</Text>
+        <Text style={styles.date}>{formDateOnlyHours(item.date)}</Text>
+      </TouchableOpacity>
     </View>
   );
 
   return (
     <View style={styles.container}>
-      <Text style={styles.titleText}>Expenses</Text>
       {expenses?.length === 0 && (
-        <Text
-          style={{ textAlign: "center", fontSize: 18, color: colors.silver }}
-        >
-          No expenses found. Please add an expense.
-        </Text>
+        <>
+          <Text style={styles.titleText}>Expenses</Text>
+          <Text
+            style={{ textAlign: "center", fontSize: 18, color: colors.silver }}
+          >
+            No expenses found. Please add an expense.
+          </Text>
+        </>
       )}
       <FlatList
         data={expenses}
@@ -62,7 +76,10 @@ const Home = ({ route }: Props) => {
         keyExtractor={(item) => item.id}
         contentContainerStyle={{ paddingBottom: "20%" }}
       />
-      <HomeButtonList snapPoints={["100%", "100%"]} />
+      <HomeButtonList
+        snapPoints={["100%", "100%"]}
+        data={{ categories: categories, expenses: expenses }}
+      />
     </View>
   );
 };
