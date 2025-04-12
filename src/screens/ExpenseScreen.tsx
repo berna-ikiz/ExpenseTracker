@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   StackActions,
   StaticScreenProps,
@@ -34,6 +34,29 @@ const Expense = ({ route }: Props) => {
   const [isCalenderVisible, setCalenderVisible] = useState(false);
 
   const bottomSheetRef = useRef<BottomSheet>(null!);
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerLeft: () => (
+        <TouchableOpacity
+          onPress={() =>
+            navigation.navigate("Home", {
+              data: {
+                expenses: route.params?.data?.expenses,
+                categories: route.params?.data?.categories,
+              },
+            })
+          }
+          style={{ paddingLeft: 15 }}
+        >
+          <Text style={{ fontSize: 18, color: colors.silver }}>
+            {"<- Back"}
+          </Text>
+        </TouchableOpacity>
+      ),
+      headerTitleAlign: "center",
+    });
+  }, [route.params?.data]);
 
   const openSheet = () => {
     bottomSheetRef.current?.expand();

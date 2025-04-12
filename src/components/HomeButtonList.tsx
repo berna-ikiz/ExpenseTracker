@@ -59,27 +59,36 @@ const HomeButtonList = ({ snapPoints, data }: Props) => {
       >
         <BottomSheetView style={styles.sheetContainer}>
           <TouchableOpacity
-            onPress={() =>
+            onPress={() => {
+              bottomSheetRef.current?.close();
               navigation.navigate("Expense", {
                 data: {
                   categories: data.categories,
                   expenses: data.expenses,
                 },
-              })
-            }
+              });
+            }}
           >
             <Text style={styles.input}>Add Expense</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() =>
+            onPress={() => {
+              bottomSheetRef.current?.close();
               navigation.navigate("Category", {
                 data: { categories: data.categories, expenses: data.expenses },
-              })
-            }
+              });
+            }}
           >
             <Text style={styles.input}>Categories</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate("CategoryAdd")}>
+          <TouchableOpacity
+            onPress={() => {
+              bottomSheetRef.current?.close();
+              navigation.navigate("CategoryAdd", {
+                data: { categories: data.categories, expenses: data.expenses },
+              });
+            }}
+          >
             <Text style={styles.input}>Add Category</Text>
           </TouchableOpacity>
           {/*<TouchableOpacity onPress={() => navigation.navigate("Category")}>
