@@ -7,15 +7,23 @@ import {
   View,
 } from "react-native";
 import React, { useRef, useState } from "react";
-import { StackActions, useNavigation } from "@react-navigation/native";
+import {
+  StackActions,
+  StaticScreenProps,
+  useNavigation,
+} from "@react-navigation/native";
 import colors from "../theme/colors";
 import Calendar from "../components/Calendar";
 import CategorySelector from "../components/CategorySelector";
 import categoryData from "../data/CategoryData";
 import BottomSheet from "@gorhom/bottom-sheet";
-import { Category } from "../types";
+import { Category, CategoryItemType, ExpenseItemType } from "../types";
 
-const Expense = () => {
+type Props = StaticScreenProps<{
+  data: { categories: CategoryItemType[]; expenses: ExpenseItemType[] };
+}>;
+
+const Expense = ({ route }: Props) => {
   const navigation = useNavigation();
   const [title, setTitle] = useState("");
   const [coast, setCoast] = useState("");
@@ -50,7 +58,9 @@ const Expense = () => {
       date: selectedDate,
       category: `${selectedCategory.icon}${selectedCategory.title}`,
     };
-    navigation.dispatch(StackActions.popTo("Home", { expense }));
+    navigation.dispatch(
+      StackActions.popTo("Home", { expense, data: route.params.data })
+    );
   };
 
   return (

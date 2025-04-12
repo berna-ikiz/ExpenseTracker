@@ -58,7 +58,16 @@ const HomeButtonList = ({ snapPoints, data }: Props) => {
         index={-1}
       >
         <BottomSheetView style={styles.sheetContainer}>
-          <TouchableOpacity onPress={() => navigation.navigate("Expense")}>
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate("Expense", {
+                data: {
+                  categories: data.categories,
+                  expenses: data.expenses,
+                },
+              })
+            }
+          >
             <Text style={styles.input}>Add Expense</Text>
           </TouchableOpacity>
           <TouchableOpacity

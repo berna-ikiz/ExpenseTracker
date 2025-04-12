@@ -26,6 +26,29 @@ const CategoryAddScreen = ({ route }: Props) => {
   const [categoryName, setCategoryName] = useState("");
   const [showEmojiSheet, setShowEmojiSheet] = useState(false);
 
+  useEffect(() => {
+    navigation.setOptions({
+      headerLeft: () => (
+        <TouchableOpacity
+          onPress={() =>
+            navigation.navigate("Category", {
+              data: {
+                expenses: route.params?.data?.expenses,
+                categories: route.params?.data?.categories,
+              },
+            })
+          }
+          style={{ paddingLeft: 15 }}
+        >
+          <Text style={{ fontSize: 18, color: colors.silver }}>
+            {"<- Back"}
+          </Text>
+        </TouchableOpacity>
+      ),
+      headerTitleAlign: "center",
+    });
+  }, [route.params?.data]);
+
   const handleEmojiSelect = (emoji: string) => {
     setSelectedEmoji(emoji);
     setShowEmojiSheet(false);
@@ -38,7 +61,9 @@ const CategoryAddScreen = ({ route }: Props) => {
         title: categoryName.trim(),
         icon: selectedEmoji,
       };
-      navigation.dispatch(StackActions.popTo("Category", { category }));
+      navigation.dispatch(
+        StackActions.popTo("Category", { category, data: route.params.data })
+      );
     } else if (!selectedEmoji) {
       Alert.alert("Please Add Emoji");
     } else if (!categoryName) {
