@@ -49,8 +49,14 @@ const Expense = ({ route }: Props) => {
           }
           style={{ paddingLeft: 15 }}
         >
-          <Text style={{ fontSize: 18, color: colors.silver }}>
-            {"<- Back"}
+          <Text
+            style={{
+              fontSize: 22,
+              color: colors.silver,
+              fontWeight: "bold",
+            }}
+          >
+            {"Back"}
           </Text>
         </TouchableOpacity>
       ),
@@ -88,14 +94,12 @@ const Expense = ({ route }: Props) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Add Expense</Text>
       <TextInput
-        placeholder="title"
+        placeholder="Title"
         value={title}
         onChangeText={setTitle}
         style={styles.input}
       />
-
       <TextInput
         placeholder="Coast"
         value={coast}
@@ -142,13 +146,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 8,
     gap: 8,
-  },
-  title: {
-    fontSize: 24,
-    marginBottom: 24,
-    fontWeight: "bold",
-    color: colors.silver,
-    textAlign: "center",
+    marginTop: 32,
   },
   input: {
     borderWidth: 1,
@@ -165,6 +163,7 @@ const styles = StyleSheet.create({
       width: 0,
       height: 2,
     },
+    width: "100%",
   },
   addCategoryButton: {
     position: "absolute",

@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
   },
   selectorText: {
     fontSize: 24,
-    color: colors.slateGray,
+    color: colors.silver,
   },
   bottomSheet: {
     marginBottom: 0,

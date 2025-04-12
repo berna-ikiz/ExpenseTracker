@@ -41,8 +41,14 @@ const CategoryAddScreen = ({ route }: Props) => {
           }
           style={{ paddingLeft: 15 }}
         >
-          <Text style={{ fontSize: 18, color: colors.silver }}>
-            {"<- Back"}
+          <Text
+            style={{
+              fontSize: 22,
+              color: colors.silver,
+              fontWeight: "bold",
+            }}
+          >
+            {"Back"}
           </Text>
         </TouchableOpacity>
       ),
@@ -75,7 +81,7 @@ const CategoryAddScreen = ({ route }: Props) => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>
-        {categoryName ? categoryName : "Add Category"}
+        {categoryName ? categoryName : "Choose a category name"}
         {selectedEmoji && selectedEmoji}
       </Text>
       <View style={styles.categoryAddLayout}>

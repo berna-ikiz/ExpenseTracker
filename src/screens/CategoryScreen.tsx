@@ -39,8 +39,14 @@ const category = ({ route }: Props) => {
           }
           style={{ paddingLeft: 15 }}
         >
-          <Text style={{ fontSize: 18, color: colors.silver }}>
-            {"<- Back"}
+          <Text
+            style={{
+              fontSize: 22,
+              color: colors.silver,
+              fontWeight: "bold",
+            }}
+          >
+            {"Back"}
           </Text>
         </TouchableOpacity>
       ),
@@ -67,13 +73,15 @@ const category = ({ route }: Props) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.titleText}>Categories</Text>
       {categories?.length === 0 && (
-        <Text
-          style={{ textAlign: "center", fontSize: 18, color: colors.silver }}
-        >
-          No categories found. Please add a category.
-        </Text>
+        <>
+          <Text style={styles.titleText}>Categories</Text>
+          <Text
+            style={{ textAlign: "center", fontSize: 18, color: colors.silver }}
+          >
+            No categories found. Please add a category.
+          </Text>
+        </>
       )}
       <FlatList
         data={categories}

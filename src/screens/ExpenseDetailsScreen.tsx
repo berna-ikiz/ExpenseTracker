@@ -28,8 +28,14 @@ const ExpenseDetails = ({ route }: Props) => {
           }
           style={{ paddingLeft: 15 }}
         >
-          <Text style={{ fontSize: 18, color: colors.silver }}>
-            {"<- Back"}
+          <Text
+            style={{
+              fontSize: 22,
+              color: colors.silver,
+              fontWeight: "bold",
+            }}
+          >
+            {"Back"}
           </Text>
         </TouchableOpacity>
       ),
@@ -107,6 +113,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
     backgroundColor: colors.whiteSmoke,
+    marginTop: 32,
   },
   header: {
     fontSize: 24,

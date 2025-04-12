@@ -60,13 +60,15 @@ const Home = ({ route }: Props) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.titleText}>Expenses</Text>
       {expenses?.length === 0 && (
-        <Text
-          style={{ textAlign: "center", fontSize: 18, color: colors.silver }}
-        >
-          No expenses found. Please add an expense.
-        </Text>
+        <>
+          <Text style={styles.titleText}>Expenses</Text>
+          <Text
+            style={{ textAlign: "center", fontSize: 18, color: colors.silver }}
+          >
+            No expenses found. Please add an expense.
+          </Text>
+        </>
       )}
       <FlatList
         data={expenses}
