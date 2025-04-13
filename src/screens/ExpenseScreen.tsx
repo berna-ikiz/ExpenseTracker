@@ -19,7 +19,7 @@ import categoryData from "../data/CategoryData";
 import BottomSheet from "@gorhom/bottom-sheet";
 import { Category, CategoryItemType, ExpenseItemType } from "../types";
 import { AddIcon } from "../utils/Icons";
-import { formatCurrencyInput } from "../utils/GlobalFunctions";
+import { formatCurrency, formatCurrencyInput } from "../utils/GlobalFunctions";
 
 type Props = StaticScreenProps<{
   data: { categories: CategoryItemType[]; expenses: ExpenseItemType[] };
@@ -72,8 +72,10 @@ const Expense = ({ route }: Props) => {
   };
 
   const handleCoastChange = (text: string) => {
-    const numericText = text.replace(/[^0-9]/g, "");
-    setCoast(numericText);
+    const numeric = text.replace(/\D/g, "");
+    const formatted = (parseInt(numeric) / 100).toFixed(2);
+    const normalizedText = formatted.replace(",", ".");
+    setCoast(normalizedText);
   };
 
   const handleAddExpense = () => {
@@ -85,7 +87,7 @@ const Expense = ({ route }: Props) => {
     const expense = {
       id: Date.now().toString(),
       title,
-      coast,
+      coast: parseFloat(coast),
       date: selectedDate,
       category: `${selectedCategory.icon}${selectedCategory.title}`,
     };

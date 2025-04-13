@@ -7,6 +7,7 @@ import CategoryData from "../data/CategoryData";
 import { CategoryItemType, ExpenseItemType } from "../types";
 import ExpenseCardList from "../components/ExpenseCardList";
 import colors from "../theme/colors";
+import { formatCurrency } from "../utils/GlobalFunctions";
 
 type Props = StaticScreenProps<{
   expense?: ExpenseItemType;
@@ -16,7 +17,8 @@ type Props = StaticScreenProps<{
 //TODO : Add types for navigation and route
 const Home = ({ route }: Props) => {
   const [expenses, setExpenses] = useState<ExpenseItemType[]>(ExpenseData);
-  const [categories, setCategories] = useState<CategoryItemType[]>([]);
+  const [categories, setCategories] =
+    useState<CategoryItemType[]>(CategoryData);
   const [totalExpense, setTotalExpense] = useState(0);
   const navigation = useNavigation();
 
@@ -25,10 +27,11 @@ const Home = ({ route }: Props) => {
       (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
     );
     setExpenses(sortedExpenses);
-    const calculatedTotal = sortedExpenses.reduce(
-      (sum, { coast }) => sum + coast,
-      0
-    );
+
+    const calculatedTotal = sortedExpenses.reduce((sum, expense) => {
+      const value = parseFloat(expense.coast.toString());
+      return sum + (isNaN(value) ? 0 : value);
+    }, 0);
     setTotalExpense(calculatedTotal);
   }, [expenses]);
 
@@ -50,7 +53,9 @@ const Home = ({ route }: Props) => {
   return (
     <View style={styles.container}>
       <View style={styles.totalContainer}>
-        <Text style={styles.totalText}>Total Expense: {totalExpense} TRY</Text>
+        <Text style={styles.totalText}>
+          Total Expense: {formatCurrency(totalExpense, "TRY")}
+        </Text>
       </View>
       <ExpenseCardList
         list={expenses}
