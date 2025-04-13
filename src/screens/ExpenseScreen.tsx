@@ -106,7 +106,7 @@ const Expense = ({ route }: Props) => {
           />
           <TextInput
             placeholder="Coast"
-            value={coast}
+            value={formatCurrencyInput(coast)}
             onChangeText={handleCoastChange}
             style={styles.input}
             keyboardType="numeric"
@@ -126,10 +126,10 @@ const Expense = ({ route }: Props) => {
             snapPoints={["60%", "90%"]}
             onSelect={(emoji: string) => {
               const category =
-                categoryData.find((cat) => cat.icon === emoji) || null;
+                data.categories.find((cat) => cat.icon === emoji) || null;
               setSelectedCategory(category);
             }}
-            categoriesData={categoryData}
+            categoriesData={data.categories}
             onPress={openSheet}
             bottomSheetRef={bottomSheetRef}
           />
