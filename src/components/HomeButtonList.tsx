@@ -32,9 +32,6 @@ type Props = {
 const HomeButtonList = ({ snapPoints, data }: Props) => {
   const navigation = useNavigation();
   const bottomSheetRef = useRef<BottomSheet>(null);
-  const [categories, setCategories] = useState<CategoryItemType[]>(
-    data.categories
-  );
 
   const openSheet = () => {
     bottomSheetRef.current?.expand();

@@ -2,6 +2,8 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import { Calendar } from "react-native-calendars";
 import colors from "../theme/colors";
+import { formDate } from "../utils/GlobalFunctions";
+import { CalendarIcon } from "../utils/Icons";
 
 type Props = {
   onSelectDate: (date: string) => void;

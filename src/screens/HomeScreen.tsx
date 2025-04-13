@@ -1,10 +1,4 @@
-import {
-  FlatList,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import { StaticScreenProps, useNavigation } from "@react-navigation/native";
 import HomeButtonList from "../components/HomeButtonList";
@@ -12,6 +6,8 @@ import ExpenseData from "../data/ExpenseData";
 import CategoryData from "../data/CategoryData";
 import { CategoryItemType, ExpenseItemType } from "../types";
 import ExpenseCardList from "../components/ExpenseCardList";
+import colors from "../theme/colors";
+import { formatCurrency } from "../utils/GlobalFunctions";
 
 type Props = StaticScreenProps<{
   expense?: ExpenseItemType;
@@ -23,7 +19,21 @@ const Home = ({ route }: Props) => {
   const [expenses, setExpenses] = useState<ExpenseItemType[]>(ExpenseData);
   const [categories, setCategories] =
     useState<CategoryItemType[]>(CategoryData);
+  const [totalExpense, setTotalExpense] = useState(0);
   const navigation = useNavigation();
+
+  useEffect(() => {
+    const sortedExpenses = expenses.sort(
+      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+    );
+    setExpenses(sortedExpenses);
+
+    const calculatedTotal = sortedExpenses.reduce((sum, expense) => {
+      const value = parseFloat(expense.coast.toString());
+      return sum + (isNaN(value) ? 0 : value);
+    }, 0);
+    setTotalExpense(calculatedTotal);
+  }, [expenses]);
 
   useEffect(() => {
     if (route.params?.data) {
@@ -42,6 +52,11 @@ const Home = ({ route }: Props) => {
 
   return (
     <View style={styles.container}>
+      <View style={styles.totalContainer}>
+        <Text style={styles.totalText}>
+          Total Expense: {formatCurrency(totalExpense, "TRY")}
+        </Text>
+      </View>
       <ExpenseCardList
         list={expenses}
         onPress={(item) =>
@@ -66,5 +81,17 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
+  },
+  totalContainer: {
+    padding: 10,
+    marginBottom: 10,
+    backgroundColor: colors.white,
+    borderRadius: 8,
+  },
+  totalText: {
+    fontSize: 20,
+    fontWeight: "500",
+    color: colors.slateGray,
+    textAlign: "center",
   },
 });
