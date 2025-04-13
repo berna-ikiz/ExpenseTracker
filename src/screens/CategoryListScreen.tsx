@@ -10,6 +10,7 @@ import React, { useEffect, useState } from "react";
 import colors from "../theme/colors";
 import { StaticScreenProps, useNavigation } from "@react-navigation/native";
 import { CategoryItemType, ExpenseItemType } from "../types";
+import { AddIcon } from "../utils/Icons";
 
 type Props = StaticScreenProps<{
   category?: CategoryItemType;
@@ -103,7 +104,9 @@ const CategoryList = ({ route }: Props) => {
         }
         style={styles.addCategoryButton}
       >
-        <Text style={styles.addCategoryButtomText}> + </Text>
+        <Text style={styles.addCategoryButtomText}>
+          <AddIcon color={colors.ghostWhite} size={20} />
+        </Text>
       </TouchableOpacity>
     </View>
   );

@@ -7,8 +7,6 @@ import {
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { StaticScreenProps, useNavigation } from "@react-navigation/native";
-import { formatCurrency, formDateOnlyHours } from "../utils/GlobalFunctions";
-import colors from "../theme/colors";
 import HomeButtonList from "../components/HomeButtonList";
 import ExpenseData from "../data/ExpenseData";
 import CategoryData from "../data/CategoryData";

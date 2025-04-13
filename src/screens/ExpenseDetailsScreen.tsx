@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { StaticScreenProps, useNavigation } from "@react-navigation/native";
 import { CategoryItemType, ExpenseItemType } from "../types";
 import colors from "../theme/colors";
+import { DeleteIcon } from "../utils/Icons";
 
 type Props = StaticScreenProps<{
   item: ExpenseItemType;
@@ -93,7 +94,10 @@ const ExpenseDetails = ({ route }: Props) => {
             onPress={handleDelete}
             style={styles.addExpenseButton}
           >
-            <Text style={styles.addExpenseButtonText}> - </Text>
+            <Text style={styles.addExpenseButtonText}>
+              {" "}
+              <DeleteIcon color={colors.ghostWhite} size={20} />{" "}
+            </Text>
           </TouchableOpacity>
         </>
       ) : (

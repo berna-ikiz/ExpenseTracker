@@ -18,6 +18,7 @@ import CategorySelector from "../components/CategorySelector";
 import categoryData from "../data/CategoryData";
 import BottomSheet from "@gorhom/bottom-sheet";
 import { Category, CategoryItemType, ExpenseItemType } from "../types";
+import { AddIcon } from "../utils/Icons";
 
 type Props = StaticScreenProps<{
   data: { categories: CategoryItemType[]; expenses: ExpenseItemType[] };
@@ -133,7 +134,9 @@ const Expense = ({ route }: Props) => {
         onPress={handleAddExpense}
         style={styles.addCategoryButton}
       >
-        <Text style={styles.addCategoryButtomText}> + </Text>
+        <Text style={styles.addCategoryButtomText}>
+          <AddIcon color={colors.ghostWhite} size={20} />
+        </Text>
       </TouchableOpacity>
     </View>
   );
