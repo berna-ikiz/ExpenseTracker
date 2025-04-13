@@ -4,6 +4,7 @@ import { CategoryItemType, ExpenseItemType } from "../types";
 import { StaticScreenProps, useNavigation } from "@react-navigation/native";
 import colors from "../theme/colors";
 import ExpenseCardList from "../components/ExpenseCardList";
+import { HomeIcon } from "../utils/Icons";
 
 type Params = StaticScreenProps<{
   category: CategoryItemType;
@@ -68,7 +69,9 @@ const CategoryExpensesScreen = ({ route }: Params) => {
           })
         }
       >
-        <Text style={styles.addEmojiButtomText}>Home</Text>
+        <Text style={styles.addEmojiButtomText}>
+          <HomeIcon color={colors.ghostWhite} size={20} />
+        </Text>
       </TouchableOpacity>
     </View>
   );
