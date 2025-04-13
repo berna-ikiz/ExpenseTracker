@@ -1,10 +1,4 @@
-import {
-  FlatList,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import { StaticScreenProps, useNavigation } from "@react-navigation/native";
 import HomeButtonList from "../components/HomeButtonList";
@@ -22,8 +16,7 @@ type Props = StaticScreenProps<{
 //TODO : Add types for navigation and route
 const Home = ({ route }: Props) => {
   const [expenses, setExpenses] = useState<ExpenseItemType[]>(ExpenseData);
-  const [categories, setCategories] =
-    useState<CategoryItemType[]>(CategoryData);
+  const [categories, setCategories] = useState<CategoryItemType[]>([]);
   const [totalExpense, setTotalExpense] = useState(0);
   const navigation = useNavigation();
 

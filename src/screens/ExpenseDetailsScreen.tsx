@@ -4,6 +4,7 @@ import { StaticScreenProps, useNavigation } from "@react-navigation/native";
 import { CategoryItemType, ExpenseItemType } from "../types";
 import colors from "../theme/colors";
 import { DeleteIcon } from "../utils/Icons";
+import { formatCurrency, formDate } from "../utils/GlobalFunctions";
 
 type Props = StaticScreenProps<{
   item: ExpenseItemType;
@@ -84,11 +85,13 @@ const ExpenseDetails = ({ route }: Props) => {
           </View>
           <View style={styles.expenseCard}>
             <Text style={styles.label}> Coast </Text>
-            <Text style={styles.value}> {expenseItem.coast}</Text>
+            <Text style={styles.value}>
+              {formatCurrency(expenseItem.coast, "TRY")}
+            </Text>
           </View>
           <View style={styles.expenseCard}>
             <Text style={styles.label}> Date </Text>
-            <Text style={styles.value}> {expenseItem.date}</Text>
+            <Text style={styles.value}> {formDate(expenseItem.date)}</Text>
           </View>
           <TouchableOpacity
             onPress={handleDelete}

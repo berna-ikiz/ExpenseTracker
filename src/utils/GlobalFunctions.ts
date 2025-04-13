@@ -23,3 +23,20 @@ export const formatCurrency = (coast: number, currency: string): string => {
     currency,
   });
 };
+
+export const formatCurrencyInput = (value: string): string => {
+  if (!value) return "";
+
+  const numeric = value.replace(/\D/g, "");
+
+  if (!numeric) return "";
+
+  const number = parseFloat(numeric) / 100;
+
+  return number.toLocaleString("tr-TR", {
+    style: "currency",
+    currency: "TRY",
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+};

@@ -62,20 +62,34 @@ const CategoryAddScreen = ({ route }: Props) => {
   };
 
   const handleSaveCategory = () => {
-    if (selectedEmoji && categoryName) {
-      const category = {
-        id: Date.now().toString(),
-        title: categoryName.trim(),
-        icon: selectedEmoji,
-      };
-      navigation.dispatch(
-        StackActions.popTo("CategoryList", { category, data: data })
-      );
-    } else if (!selectedEmoji) {
+    if (!selectedEmoji) {
       Alert.alert("Please Add Emoji");
-    } else if (!categoryName) {
-      Alert.alert("Please add category name.");
+      return;
     }
+
+    if (!categoryName.trim()) {
+      Alert.alert("Please add category name.");
+      return;
+    }
+
+    const isDuplicate = data.categories.some(
+      (cat) => cat.title.toLowerCase() === categoryName.trim().toLowerCase()
+    );
+
+    if (isDuplicate) {
+      Alert.alert("This category already exists.");
+      return;
+    }
+
+    const category = {
+      id: Date.now().toString(),
+      title: categoryName.trim(),
+      icon: selectedEmoji,
+    };
+
+    navigation.dispatch(
+      StackActions.popTo("CategoryList", { category, data: data })
+    );
   };
 
   return (

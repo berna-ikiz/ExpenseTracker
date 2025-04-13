@@ -19,6 +19,7 @@ import categoryData from "../data/CategoryData";
 import BottomSheet from "@gorhom/bottom-sheet";
 import { Category, CategoryItemType, ExpenseItemType } from "../types";
 import { AddIcon } from "../utils/Icons";
+import { formatCurrencyInput } from "../utils/GlobalFunctions";
 
 type Props = StaticScreenProps<{
   data: { categories: CategoryItemType[]; expenses: ExpenseItemType[] };
@@ -33,7 +34,7 @@ const Expense = ({ route }: Props) => {
     null
   );
   const [isCalenderVisible, setCalenderVisible] = useState(false);
-
+  const [data, setData] = useState(route.params.data);
   const bottomSheetRef = useRef<BottomSheet>(null!);
 
   useEffect(() => {
@@ -95,49 +96,62 @@ const Expense = ({ route }: Props) => {
 
   return (
     <View style={styles.container}>
-      <TextInput
-        placeholder="Title"
-        value={title}
-        onChangeText={setTitle}
-        style={styles.input}
-      />
-      <TextInput
-        placeholder="Coast"
-        value={coast}
-        onChangeText={handleCoastChange}
-        style={styles.input}
-        keyboardType="numeric"
-      />
-      <Calendar
-        onSelectDate={onSelectDate}
-        selectedDate={selectedDate}
-        title={"Date"}
-        isVisible={isCalenderVisible}
-        onToggle={() => {
-          setCalenderVisible((prev) => !prev);
-          bottomSheetRef.current?.close();
-        }}
-      />
-      <CategorySelector
-        selectedCategory={selectedCategory}
-        snapPoints={["60%", "90%"]}
-        onSelect={(emoji: string) => {
-          const category =
-            categoryData.find((cat) => cat.icon === emoji) || null;
-          setSelectedCategory(category);
-        }}
-        categoriesData={categoryData}
-        onPress={openSheet}
-        bottomSheetRef={bottomSheetRef}
-      />
-      <TouchableOpacity
-        onPress={handleAddExpense}
-        style={styles.addCategoryButton}
-      >
-        <Text style={styles.addCategoryButtomText}>
-          <AddIcon color={colors.ghostWhite} size={20} />
-        </Text>
-      </TouchableOpacity>
+      {data.categories.length > 0 ? (
+        <>
+          <TextInput
+            placeholder="Title"
+            value={title}
+            onChangeText={setTitle}
+            style={styles.input}
+          />
+          <TextInput
+            placeholder="Coast"
+            value={coast}
+            onChangeText={handleCoastChange}
+            style={styles.input}
+            keyboardType="numeric"
+          />
+          <Calendar
+            onSelectDate={onSelectDate}
+            selectedDate={selectedDate}
+            title={"Date"}
+            isVisible={isCalenderVisible}
+            onToggle={() => {
+              setCalenderVisible((prev) => !prev);
+              bottomSheetRef.current?.close();
+            }}
+          />
+          <CategorySelector
+            selectedCategory={selectedCategory}
+            snapPoints={["60%", "90%"]}
+            onSelect={(emoji: string) => {
+              const category =
+                categoryData.find((cat) => cat.icon === emoji) || null;
+              setSelectedCategory(category);
+            }}
+            categoriesData={categoryData}
+            onPress={openSheet}
+            bottomSheetRef={bottomSheetRef}
+          />
+          <TouchableOpacity
+            onPress={handleAddExpense}
+            style={styles.addExpenseButton}
+          >
+            <Text style={styles.addExpenseButtomText}>
+              <AddIcon color={colors.ghostWhite} size={20} />
+            </Text>
+          </TouchableOpacity>
+        </>
+      ) : (
+        <>
+          <Text style={styles.titleText}>Add Expense</Text>
+          <Text
+            style={{ textAlign: "center", fontSize: 18, color: colors.silver }}
+          >
+            No categories found. Please add a category.
+          </Text>
+        </>
+      )}
     </View>
   );
 };
@@ -168,7 +182,14 @@ const styles = StyleSheet.create({
     },
     width: "100%",
   },
-  addCategoryButton: {
+  titleText: {
+    fontSize: 28,
+    color: colors.silver,
+    fontWeight: "bold",
+    textAlign: "center",
+    marginBottom: "4%",
+  },
+  addExpenseButton: {
     position: "absolute",
     right: "10%",
     bottom: "5%",
@@ -180,7 +201,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     elevation: 3,
   },
-  addCategoryButtomText: {
+  addExpenseButtomText: {
     fontSize: 18,
     color: colors.white,
     marginBottom: "5%",

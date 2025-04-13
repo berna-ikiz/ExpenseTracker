@@ -5,7 +5,7 @@ import {
   View,
   FlatList,
 } from "react-native";
-import React, { useRef } from "react";
+import React from "react";
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
 import colors from "../theme/colors";
 
