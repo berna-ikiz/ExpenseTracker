@@ -26,6 +26,13 @@ const Home = ({ route }: Props) => {
   const navigation = useNavigation();
 
   useEffect(() => {
+    const sortedExpenses = expenses.sort(
+      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+    );
+    setExpenses(sortedExpenses);
+  }, [expenses]);
+
+  useEffect(() => {
     if (route.params?.data) {
       setExpenses(route.params.data.expenses || []);
       setCategories(route.params.data.categories || []);
