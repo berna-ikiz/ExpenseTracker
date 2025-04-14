@@ -12,7 +12,7 @@ export const formDateOnlyHours = (
   return new Intl.DateTimeFormat(locale, {
     hour: "2-digit",
     minute: "2-digit",
-    hour12: true, // This will use AM/PM format
+    hour12: true,
   }).format(date);
 };
 
