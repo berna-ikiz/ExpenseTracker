@@ -14,16 +14,7 @@ import CategoryExpensesScreen from "../screens/CategoryExpensesScreen";
 
 const RootStack = createNativeStackNavigator({
   screenOptions: {
-    headerTitleAlign: "center",
-    headerStyle: {
-      backgroundColor: colors.whiteSmoke,
-    },
-    headerTitleStyle: {
-      fontSize: 24,
-      fontWeight: "600",
-      color: colors.slateGray,
-    },
-    headerTintColor: colors.slateGray,
+    headerShown: false,
     headerBackVisible: false,
   },
   screens: {
