@@ -21,7 +21,7 @@ const ExpenseData = [
     id: "4",
     coast: 500,
     date: "2025-03-05",
-    category: "💄Beautiy",
+    category: "💄Beauty",
   },
   {
     id: "5",

@@ -37,7 +37,6 @@ const ExpenseCardList = ({ list, onPress, emptyDataText }: Props) => {
     <>
       {list?.length === 0 && (
         <>
-          <Text style={styles.titleText}>Expenses</Text>
           <Text
             style={{ textAlign: "center", fontSize: 18, color: colors.silver }}
           >
@@ -89,10 +88,17 @@ const styles = StyleSheet.create({
   },
   titleText: {
     fontSize: 28,
-    color: colors.silver,
+    color: colors.dimGray,
     fontWeight: "bold",
     textAlign: "center",
     marginBottom: "4%",
+    shadowColor: colors.dimGray,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.6,
+    shadowRadius: 2,
   },
   expenseDateCard: {
     flexDirection: "row",

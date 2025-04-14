@@ -5,6 +5,7 @@ import { CategoryItemType, ExpenseItemType } from "../types";
 import colors from "../theme/colors";
 import { DeleteIcon } from "../utils/Icons";
 import { formatCurrency, formDate } from "../utils/GlobalFunctions";
+import Header from "../components/Header";
 
 type Props = StaticScreenProps<{
   item: ExpenseItemType;
@@ -77,6 +78,7 @@ const ExpenseDetails = ({ route }: Props) => {
 
   return (
     <View style={styles.container}>
+      <Header title="Expense Summary" />
       {expenseItem ? (
         <>
           <View style={styles.expenseCard}>
@@ -105,7 +107,6 @@ const ExpenseDetails = ({ route }: Props) => {
         </>
       ) : (
         <>
-          <Text style={styles.header}>Expense Details</Text>
           <Text>Expense not found</Text>
         </>
       )}
@@ -121,12 +122,6 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: colors.whiteSmoke,
     marginTop: 32,
-  },
-  header: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 20,
-    textAlign: "center",
   },
   expenseCard: {
     marginBottom: 16,

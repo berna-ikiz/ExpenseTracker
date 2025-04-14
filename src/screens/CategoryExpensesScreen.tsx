@@ -5,6 +5,7 @@ import { StaticScreenProps, useNavigation } from "@react-navigation/native";
 import colors from "../theme/colors";
 import ExpenseCardList from "../components/ExpenseCardList";
 import { HomeIcon } from "../utils/Icons";
+import Header from "../components/Header";
 
 type Params = StaticScreenProps<{
   category: CategoryItemType;

@@ -11,6 +11,7 @@ import colors from "../theme/colors";
 import { StaticScreenProps, useNavigation } from "@react-navigation/native";
 import { CategoryItemType, ExpenseItemType } from "../types";
 import { AddIcon } from "../utils/Icons";
+import { Header } from "@react-navigation/elements";
 
 type Props = StaticScreenProps<{
   category?: CategoryItemType;
@@ -82,9 +83,9 @@ const CategoryList = ({ route }: Props) => {
 
   return (
     <View style={styles.container}>
+      <Header title="Categories" />
       {categories?.length === 0 && (
         <>
-          <Text style={styles.titleText}>Categories</Text>
           <Text
             style={{ textAlign: "center", fontSize: 18, color: colors.silver }}
           >
@@ -118,11 +119,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: "8%",
-  },
-  title: {
-    fontSize: 24,
-    marginBottom: 16,
-    fontWeight: "bold",
+    gap: 10,
   },
   ListCard: {
     backgroundColor: colors.white,
@@ -153,13 +150,6 @@ const styles = StyleSheet.create({
   listIcon: {
     fontSize: 24,
     marginRight: "10%",
-  },
-  titleText: {
-    fontSize: 28,
-    color: colors.silver,
-    fontWeight: "bold",
-    textAlign: "center",
-    marginBottom: "4%",
   },
   addCategoryButton: {
     position: "absolute",

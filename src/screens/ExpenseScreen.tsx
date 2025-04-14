@@ -20,6 +20,7 @@ import BottomSheet from "@gorhom/bottom-sheet";
 import { Category, CategoryItemType, ExpenseItemType } from "../types";
 import { AddIcon } from "../utils/Icons";
 import { formatCurrency, formatCurrencyInput } from "../utils/GlobalFunctions";
+import Header from "../components/Header";
 
 type Props = StaticScreenProps<{
   data: { categories: CategoryItemType[]; expenses: ExpenseItemType[] };
@@ -98,6 +99,7 @@ const Expense = ({ route }: Props) => {
 
   return (
     <View style={styles.container}>
+      <Header title="Expense" />
       {data.categories.length > 0 ? (
         <>
           <TextInput
@@ -146,7 +148,6 @@ const Expense = ({ route }: Props) => {
         </>
       ) : (
         <>
-          <Text style={styles.titleText}>Add Expense</Text>
           <Text
             style={{ textAlign: "center", fontSize: 18, color: colors.silver }}
           >
@@ -183,13 +184,6 @@ const styles = StyleSheet.create({
       height: 2,
     },
     width: "100%",
-  },
-  titleText: {
-    fontSize: 28,
-    color: colors.silver,
-    fontWeight: "bold",
-    textAlign: "center",
-    marginBottom: "4%",
   },
   addExpenseButton: {
     position: "absolute",
