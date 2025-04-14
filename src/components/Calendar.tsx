@@ -38,7 +38,7 @@ const Calender = ({
                 : styles.calenderButtonTitle
             }
           >
-            {selectedDate ? selectedDate : "Date 🗓️"}
+            {selectedDate ? formDate(selectedDate) : "Date 🗓️"}
           </Text>
         </TouchableOpacity>
       </View>
