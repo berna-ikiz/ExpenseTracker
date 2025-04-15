@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React, { useDebugValue, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import colors from "../theme/colors";
 import EmojiPickerSheet from "../components/EmojiPickerSheet";
 import {
@@ -17,6 +17,7 @@ import {
 import { CategoryItemType, ExpenseItemType } from "../types";
 import BackButton from "../components/BackButton";
 import { AddIcon, EmojiIcon } from "../utils/Icons";
+import EmojiInput from "../components/EmojiInput";
 
 type Props = StaticScreenProps<{
   data: { categories: CategoryItemType[]; expenses: ExpenseItemType[] };
@@ -28,11 +29,6 @@ const CategoryAddScreen = ({ route }: Props) => {
   const [categoryName, setCategoryName] = useState("");
   const [showEmojiSheet, setShowEmojiSheet] = useState(false);
   const [data, setData] = useState(route.params.data);
-
-  const handleEmojiSelect = (emoji: string) => {
-    setSelectedEmoji(emoji);
-    setShowEmojiSheet(false);
-  };
 
   const handleSaveCategory = () => {
     if (!selectedEmoji) {
@@ -73,7 +69,6 @@ const CategoryAddScreen = ({ route }: Props) => {
   };
 
   const handleBack = () => {
-    console.log(data);
     navigation.navigate("CategoryList", {
       data: {
         expenses: data.expenses,
@@ -82,24 +77,34 @@ const CategoryAddScreen = ({ route }: Props) => {
     });
   };
 
+  const handleEmojiSelect = (emoji: string) => {
+    console.log(emoji);
+    setSelectedEmoji(emoji);
+    setShowEmojiSheet(false);
+  };
+
+  const handleCloseEmojiSheet = () => {
+    setShowEmojiSheet(false);
+  };
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>
-        {categoryName ? categoryName : "Choose a category name"}
-        {selectedEmoji && selectedEmoji}
-      </Text>
-      <View style={styles.categoryAddLayout}>
-        <TextInput
-          style={styles.input}
-          placeholder="Category name"
-          value={categoryName}
-          onChangeText={(text) => {
-            setCategoryName(text);
-          }}
-        />
-        <TouchableOpacity style={styles.button} onPress={handleSaveCategory}>
-          <Text style={styles.buttonText}>Add </Text>
-        </TouchableOpacity>
+      <View style={styles.categoryAddCard}>
+        <Text style={styles.subHeader}>
+          Track your spending easily and stay in control.
+        </Text>
+        <View style={styles.categoryAddLayout}>
+          <EmojiInput
+            emoji={selectedEmoji}
+            value={categoryName}
+            setChange={setCategoryName}
+          />
+          <TouchableOpacity style={styles.button} onPress={handleSaveCategory}>
+            <Text style={styles.buttonText}>
+              <AddIcon size={24} color={colors.white} />
+            </Text>
+          </TouchableOpacity>
+        </View>
       </View>
       <TouchableOpacity
         style={styles.addButton}
@@ -107,12 +112,14 @@ const CategoryAddScreen = ({ route }: Props) => {
       >
         <EmojiIcon size={24} color={colors.ghostWhite} />
       </TouchableOpacity>
-      <EmojiPickerSheet
-        visible={showEmojiSheet}
-        onClose={() => setShowEmojiSheet(false)}
-        onSelect={handleEmojiSelect}
-        snapPoints={["50%", "50%"]}
-      />
+      {showEmojiSheet && (
+        <EmojiPickerSheet
+          visible={showEmojiSheet}
+          onClose={handleCloseEmojiSheet}
+          onSelect={handleEmojiSelect}
+          snapPoints={["50%", "50%"]}
+        />
+      )}
       <BackButton onPress={handleBack} zIndex={-1} />
     </View>
   );
@@ -123,8 +130,9 @@ export default CategoryAddScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 8,
+    padding: "1%",
     paddingTop: "40%",
+    zIndex: -1,
   },
   title: {
     fontSize: 22,
@@ -133,34 +141,34 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     color: colors.silver,
   },
+  categoryAddCard: {
+    marginVertical: "15%",
+  },
+  subHeader: {
+    textAlign: "center",
+    fontSize: 16,
+    color: colors.slateGray300,
+    marginBottom: 8,
+  },
   categoryAddLayout: {
-    backgroundColor: colors.white,
     flexDirection: "row",
     alignItems: "center",
     gap: 10,
-    padding: 16,
+    padding: "2%",
+    marginHorizontal: "1%",
     borderRadius: 10,
-  },
-  input: {
-    flex: 2,
-    borderColor: colors.slateGray,
-    paddingHorizontal: 15,
-    paddingVertical: 10,
-    fontSize: 22,
-    borderRadius: 10,
-    backgroundColor: colors.ivory,
-    color: colors.slateGray,
     shadowColor: colors.slateGray,
-    shadowOpacity: 0.7,
+    shadowOpacity: 0.2,
     shadowOffset: {
       width: 0,
       height: 2,
     },
-    width: "50%",
+    shadowRadius: 8,
+    elevation: 3,
   },
   button: {
     flex: 1,
-    backgroundColor: colors.slateGray,
+    backgroundColor: colors.slateGray500,
     paddingHorizontal: 15,
     paddingVertical: 10,
     borderRadius: 10,
@@ -174,6 +182,7 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 22,
     color: colors.white,
+    textAlign: "center",
   },
   addButton: {
     position: "absolute",
@@ -183,7 +192,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     paddingVertical: 10,
     paddingHorizontal: 16,
-    backgroundColor: colors.slateGray,
+    backgroundColor: colors.slateGray500,
     shadowColor: colors.slateGray,
     shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.2,

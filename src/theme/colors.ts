@@ -10,8 +10,11 @@ const colors = {
 
   // Slate Gray Tones
   slateGray10: "#E8ECF1",
-  slateGray90: "#B8BCC5", // Lightest slate gray
+  slateGray20: "#D5D9E1", // Soft slate gray, biraz daha koyu
+  slateGray30: "#C9D1D8", // Orta tonlu slate gray
+  slateGray40: "#BDC5CF", // Daha koyu bir slate gray
   slateGray50: "#DCE0E5", // Very light slate gray
+  slateGray90: "#B8BCC5", // Lightest slate gray
   slateGray100: "#C2C8D0", // Light slate gray
   slateGray200: "#A8AFBA", // Soft grayish slate
   slateGray300: "#8E96A5", // Medium grayish slate

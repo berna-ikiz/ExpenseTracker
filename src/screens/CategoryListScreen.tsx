@@ -112,7 +112,7 @@ const styles = StyleSheet.create({
     padding: "4%",
   },
   ListCard: {
-    backgroundColor: colors.slateGray50,
+    backgroundColor: colors.slateGray20,
     borderRadius: 16,
     padding: 20,
     marginBottom: 12,
@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     padding: 12,
-    backgroundColor: colors.white,
+    backgroundColor: colors.offWhite,
     borderRadius: 12,
   },
   iconWrapper: {
@@ -166,7 +166,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     paddingVertical: 10,
     paddingHorizontal: 16,
-    backgroundColor: colors.slateGray,
+    backgroundColor: colors.slateGray500,
     shadowColor: "#2F4F4F",
     shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.2,
