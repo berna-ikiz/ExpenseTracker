@@ -1,7 +1,6 @@
 import { StyleSheet, Text, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import { StaticScreenProps, useNavigation } from "@react-navigation/native";
-import HomeButtonList from "../components/HomeButtonList";
 import ExpenseData from "../data/ExpenseData";
 import CategoryData from "../data/CategoryData";
 import { CategoryItemType, ExpenseItemType } from "../types";
@@ -82,27 +81,27 @@ export default Home;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
+    padding: "4%",
   },
   totalContainer: {
     padding: 10,
     marginBottom: 10,
-    backgroundColor: colors.white, // Slightly light gray for the background
+    backgroundColor: colors.white,
     borderRadius: 12,
     shadowColor: colors.slateGray500,
     shadowOffset: { width: 0, height: 5 },
     shadowOpacity: 0.3,
     shadowRadius: 6,
-    elevation: 5, // Adding shadow for a lift effect
-    alignItems: "center", // Center the text
+    elevation: 5,
+    alignItems: "center",
   },
   totalText: {
-    fontSize: 20, // Larger font for better visibility
-    fontWeight: "bold", // Bolder to make it stand out more
-    color: colors.slateGray400, // Slightly dark gray text color
+    fontSize: 20,
+    fontWeight: "bold",
+    color: colors.slateGray400,
     textAlign: "center",
     paddingVertical: 10,
-    textShadowColor: colors.slateGray600, // Subtle shadow for a lift effect
+    textShadowColor: colors.slateGray600,
     textShadowOffset: { width: 0, height: 1 },
     textShadowRadius: 1,
   },

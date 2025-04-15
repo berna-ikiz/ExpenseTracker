@@ -1,5 +1,6 @@
 import {
   FlatList,
+  LayoutAnimation,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -45,6 +46,13 @@ const CategoryList = ({ route }: Props) => {
     });
   };
 
+  const calculateTotalByCategory = (category: CategoryItemType) => {
+    const total = expenses
+      .filter((e) => e.category === `${category.icon}${category.title}`)
+      .reduce((sum, e) => sum + Number(e.coast), 0);
+    return total.toFixed(2);
+  };
+
   const renderItem = ({ item }: { item: CategoryItemType }) => (
     <View style={styles.ListCard}>
       <TouchableOpacity
@@ -56,8 +64,17 @@ const CategoryList = ({ route }: Props) => {
           })
         }
       >
-        <Text style={styles.listIcon}>{item.icon}</Text>
-        <Text style={styles.listTitle}>{item.title}</Text>
+        <View style={styles.iconWrapper}>
+          <Text style={styles.listIcon}>{item.icon}</Text>
+        </View>
+        <View style={styles.categoryTextGroup}>
+          <Text style={styles.listTitle} numberOfLines={1}>
+            {item.title}
+          </Text>
+          <Text style={styles.categoryAmountText}>
+            ₺{calculateTotalByCategory(item)} spent
+          </Text>
+        </View>
       </TouchableOpacity>
     </View>
   );
@@ -65,21 +82,14 @@ const CategoryList = ({ route }: Props) => {
   return (
     <View style={styles.container}>
       <Header title="Categories" />
-      {categories?.length === 0 && (
-        <>
-          <Text
-            style={{ textAlign: "center", fontSize: 18, color: colors.silver }}
-          >
-            No categories found. Please add a category.
-          </Text>
-        </>
-      )}
+
       <FlatList
         data={categories}
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
         contentContainerStyle={{ paddingBottom: "20%" }}
       />
+
       <TouchableOpacity
         onPress={() =>
           navigation.navigate("CategoryAdd", { data: route.params.data })
@@ -88,6 +98,7 @@ const CategoryList = ({ route }: Props) => {
       >
         <AddIcon color={colors.ghostWhite} size={20} />
       </TouchableOpacity>
+
       <BackButton onPress={handleBack} />
     </View>
   );
@@ -98,15 +109,14 @@ export default CategoryList;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: "8%",
-    gap: 10,
+    padding: "4%",
   },
   ListCard: {
-    backgroundColor: colors.white,
+    backgroundColor: colors.slateGray50,
     borderRadius: 16,
     padding: 20,
     marginBottom: 12,
-    shadowColor: "black",
+    shadowColor: colors.slateGray600,
     shadowOpacity: 0.08,
     shadowOffset: {
       width: 0,
@@ -119,17 +129,34 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     padding: 12,
-    backgroundColor: colors.ivory,
+    backgroundColor: colors.white,
     borderRadius: 12,
+  },
+  iconWrapper: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: colors.slateGray50,
+    alignItems: "center",
+    justifyContent: "center",
+    marginRight: 12,
+  },
+  listIcon: {
+    fontSize: 20,
+    color: colors.slateGray200,
+  },
+  categoryTextGroup: {
+    flex: 1,
   },
   listTitle: {
     fontSize: 20,
     fontWeight: "500",
-    color: colors.dimGray,
+    color: "#2E3A59",
   },
-  listIcon: {
-    fontSize: 24,
-    marginRight: "10%",
+  categoryAmountText: {
+    fontSize: 14,
+    color: "#6E7B8B",
+    marginTop: 4,
   },
   addButton: {
     position: "absolute",
@@ -140,7 +167,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 16,
     backgroundColor: colors.slateGray,
-    shadowColor: colors.slateGray,
+    shadowColor: "#2F4F4F",
     shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.2,
     shadowRadius: 4,
@@ -148,5 +175,20 @@ const styles = StyleSheet.create({
     width: 56,
     height: 56,
     elevation: 5,
+  },
+  emptyState: {
+    alignItems: "center",
+    marginTop: 60,
+  },
+  emptyStateText: {
+    fontSize: 20,
+    fontWeight: "600",
+    color: colors.slateGray,
+    marginTop: 8,
+  },
+  emptyStateHint: {
+    fontSize: 14,
+    color: "#7A8B99",
+    marginTop: 4,
   },
 });
