@@ -47,6 +47,7 @@ const ExpenseDetails = ({ route }: Props) => {
       ]
     );
   };
+
   const handleBack = () => {
     navigation.navigate("Home", {
       data: {

@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
     alignItems: "flex-end",
   },
   fab: {
-    backgroundColor: colors.slateGray,
+    backgroundColor: colors.slateGray600,
     borderRadius: 28,
     width: 56,
     height: 56,
@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
   optionButton: {
     position: "absolute",
     right: 0,
-    backgroundColor: colors.whiteSmoke,
+    backgroundColor: colors.slateGray,
     padding: 10,
     borderRadius: 20,
     flexDirection: "row",
@@ -102,12 +102,13 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.3,
     shadowRadius: 5,
-    minWidth: 180,
+    width: 180,
+    height: 56,
     marginBottom: 24,
   },
   optionText: {
     marginLeft: 10,
-    color: colors.gray,
+    color: colors.offWhite,
     fontSize: 20,
   },
 });

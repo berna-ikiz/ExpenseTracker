@@ -69,6 +69,7 @@ const Expense = ({ route }: Props) => {
       StackActions.popTo("Home", { expense, data: route.params.data })
     );
   };
+
   const handleBack = () => {
     navigation.navigate("Home", {
       data: {

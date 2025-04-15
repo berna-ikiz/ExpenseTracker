@@ -11,7 +11,7 @@ import colors from "../theme/colors";
 import { StaticScreenProps, useNavigation } from "@react-navigation/native";
 import { CategoryItemType, ExpenseItemType } from "../types";
 import { AddIcon } from "../utils/Icons";
-import { Header } from "@react-navigation/elements";
+import Header from "../components/Header";
 import BackButton from "../components/BackButton";
 
 type Props = StaticScreenProps<{

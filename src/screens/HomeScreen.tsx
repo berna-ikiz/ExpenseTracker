@@ -9,7 +9,7 @@ import ExpenseCardList from "../components/ExpenseCardList";
 import colors from "../theme/colors";
 import { formatCurrency } from "../utils/GlobalFunctions";
 import FloatingActionButton from "../components/FloatingActionButton";
-import BackButton from "../components/BackButton";
+import Header from "../components/Header";
 
 type Props = StaticScreenProps<{
   expense?: ExpenseItemType;
@@ -55,6 +55,7 @@ const Home = ({ route }: Props) => {
   return (
     <>
       <View style={styles.container}>
+        <Header title="Expenses" />
         <View style={styles.totalContainer}>
           <Text style={styles.totalText}>
             Total Expense: {formatCurrency(totalExpense, "TRY")}

@@ -6,8 +6,16 @@ const colors = {
   gray: "#808080", // Neutral gray
   dimGray: "#696969", // Dark gray
   darkGray: "#A9A9A9", // Medium-dark gray
-  slateGray: "#708090", // Slightly bluish gray
   charcoal: "#36454F", // Almost black, dark gray
+
+  // Slate Gray Tones
+  slateGray50: "#DCE0E5", // Very light slate gray
+  slateGray100: "#C2C8D0", // Light slate gray
+  slateGray200: "#A8AFBA", // Soft grayish slate
+  slateGray300: "#8E96A5", // Medium grayish slate
+  slateGray: "#708090", // Original slate gray
+  slateGray500: "#5A6A7A", // Darker slate gray
+  slateGray600: "#434E5A", // Very dark slate gray
 
   // White Tones
   white: "#FFFFFF", // White

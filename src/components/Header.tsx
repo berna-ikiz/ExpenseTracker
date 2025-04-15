@@ -8,33 +8,46 @@ type Props = {
 
 const Header = ({ title }: Props) => {
   return (
-    <View style={styles.header}>
-      <Text style={styles.headerText}>{title}</Text>
+    <View style={styles.headerWrapper}>
+      <View style={styles.header}>
+        <Text style={styles.headerText}>{title}</Text>
+      </View>
     </View>
   );
 };
 
 export default Header;
-
 const styles = StyleSheet.create({
+  headerWrapper: {
+    paddingVertical: 20,
+    paddingHorizontal: 16,
+    backgroundColor: colors.white,
+    elevation: 4,
+    shadowColor: colors.white,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
+    marginBottom: 20,
+  },
   header: {
-    color: colors.dimGray,
-    fontWeight: "bold",
-    textAlign: "center",
-    marginBottom: "4%",
-    shadowColor: colors.lightGray,
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.6,
+    backgroundColor: colors.slateGray600,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 12,
+    shadowColor: colors.slateGray,
+    shadowOpacity: 0.2,
+    shadowOffset: { width: 0, height: 1 },
     shadowRadius: 2,
-    justifyContent: "center",
     alignItems: "center",
+    justifyContent: "center",
   },
   headerText: {
-    color: colors.dimGray,
-    fontSize: 28,
+    color: colors.ghostWhite,
+    fontSize: 26,
     fontWeight: "bold",
+    textTransform: "uppercase",
+    letterSpacing: 1,
   },
 });
