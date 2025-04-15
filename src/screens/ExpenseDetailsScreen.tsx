@@ -78,7 +78,7 @@ const ExpenseDetails = ({ route }: Props) => {
 
   return (
     <View style={styles.container}>
-      <Header title="Expense Summary" />
+      <Header title="Expense" />
       {expenseItem ? (
         <>
           <View style={styles.expenseCard}>

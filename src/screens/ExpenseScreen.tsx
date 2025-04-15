@@ -21,6 +21,8 @@ import { Category, CategoryItemType, ExpenseItemType } from "../types";
 import { AddIcon } from "../utils/Icons";
 import { formatCurrency, formatCurrencyInput } from "../utils/GlobalFunctions";
 import Header from "../components/Header";
+import CustomFooter from "../components/CustomFooter";
+import BackButton from "../components/BackButton";
 
 type Props = StaticScreenProps<{
   data: { categories: CategoryItemType[]; expenses: ExpenseItemType[] };
@@ -37,6 +39,8 @@ const Expense = ({ route }: Props) => {
   const [isCalenderVisible, setCalenderVisible] = useState(false);
   const [data, setData] = useState(route.params.data);
   const bottomSheetRef = useRef<BottomSheet>(null!);
+  const [expenses, setExpenses] = useState(route.params.data.expenses);
+  const [categories, setCategories] = useState(route.params.data.categories);
 
   useEffect(() => {
     navigation.setOptions({
@@ -141,10 +145,19 @@ const Expense = ({ route }: Props) => {
             onPress={handleAddExpense}
             style={styles.addExpenseButton}
           >
-            <Text style={styles.addExpenseButtomText}>
+            <Text style={styles.addExpenseButtonText}>
               <AddIcon color={colors.ghostWhite} size={20} />
             </Text>
           </TouchableOpacity>
+          <BackButton
+            data={{
+              data: {
+                expenses: expenses,
+                categories: categories,
+              },
+            }}
+            backTarget="Home"
+          />
         </>
       ) : (
         <>
@@ -187,17 +200,23 @@ const styles = StyleSheet.create({
   },
   addExpenseButton: {
     position: "absolute",
-    right: "10%",
-    bottom: "5%",
-    backgroundColor: colors.gray,
-    width: "20%",
-    height: "8%",
-    borderRadius: 28,
+    right: 24,
+    bottom: 24,
     alignItems: "center",
     justifyContent: "center",
-    elevation: 3,
+    paddingVertical: 10,
+    paddingHorizontal: 16,
+    backgroundColor: colors.slateGray,
+    shadowColor: colors.slateGray,
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    borderRadius: 28,
+    width: 56,
+    height: 56,
+    elevation: 5,
   },
-  addExpenseButtomText: {
+  addExpenseButtonText: {
     fontSize: 18,
     color: colors.white,
     marginBottom: "5%",

@@ -15,6 +15,8 @@ import {
   useNavigation,
 } from "@react-navigation/native";
 import { CategoryItemType, ExpenseItemType } from "../types";
+import BackButton from "../components/BackButton";
+import { AddIcon, EmojiIcon } from "../utils/Icons";
 
 type Props = StaticScreenProps<{
   data: { categories: CategoryItemType[]; expenses: ExpenseItemType[] };
@@ -112,16 +114,24 @@ const CategoryAddScreen = ({ route }: Props) => {
         </TouchableOpacity>
       </View>
       <TouchableOpacity
-        style={styles.addEmojiButtom}
+        style={styles.addEmojiButton}
         onPress={() => setShowEmojiSheet(true)}
       >
-        <Text style={styles.addEmojiButtomText}>+</Text>
+        <EmojiIcon size={24} color={colors.ghostWhite} />
       </TouchableOpacity>
       <EmojiPickerSheet
         visible={showEmojiSheet}
         onClose={() => setShowEmojiSheet(false)}
         onSelect={handleEmojiSelect}
         snapPoints={["50%", "50%"]}
+      />
+      <BackButton
+        data={{
+          expenses: data.expenses,
+          categories: data.categories,
+        }}
+        backTarget="CategoryList"
+        zIndex={-1}
       />
     </View>
   );
@@ -182,21 +192,22 @@ const styles = StyleSheet.create({
     fontSize: 22,
     color: colors.white,
   },
-  addEmojiButtom: {
+  addEmojiButton: {
     position: "absolute",
-    right: "10%",
-    bottom: "5%",
-    backgroundColor: colors.gray,
-    width: "20%",
-    height: "8%",
-    borderRadius: 28,
+    right: 24,
+    bottom: 24,
     alignItems: "center",
     justifyContent: "center",
-    elevation: 3,
-  },
-  addEmojiButtomText: {
-    fontSize: 18,
-    color: colors.white,
-    marginBottom: "5%",
+    paddingVertical: 10,
+    paddingHorizontal: 16,
+    backgroundColor: colors.slateGray,
+    shadowColor: colors.slateGray,
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    borderRadius: 28,
+    width: 56,
+    height: 56,
+    elevation: 5,
   },
 });

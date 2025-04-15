@@ -8,6 +8,8 @@ import { CategoryItemType, ExpenseItemType } from "../types";
 import ExpenseCardList from "../components/ExpenseCardList";
 import colors from "../theme/colors";
 import { formatCurrency } from "../utils/GlobalFunctions";
+import FloatingActionButton from "../components/FloatingActionButton";
+import BackButton from "../components/BackButton";
 
 type Props = StaticScreenProps<{
   expense?: ExpenseItemType;
@@ -51,27 +53,26 @@ const Home = ({ route }: Props) => {
   }, [route.params && route.params.expense]);
 
   return (
-    <View style={styles.container}>
-      <View style={styles.totalContainer}>
-        <Text style={styles.totalText}>
-          Total Expense: {formatCurrency(totalExpense, "TRY")}
-        </Text>
+    <>
+      <View style={styles.container}>
+        <View style={styles.totalContainer}>
+          <Text style={styles.totalText}>
+            Total Expense: {formatCurrency(totalExpense, "TRY")}
+          </Text>
+        </View>
+        <ExpenseCardList
+          list={expenses}
+          onPress={(item) =>
+            navigation.navigate("ExpenseDetails", {
+              item,
+              data: { categories: categories, expenses: expenses },
+            })
+          }
+          emptyDataText="No expenses found. Please add an expense."
+        />
+        <FloatingActionButton data={{ categories, expenses }} />
       </View>
-      <ExpenseCardList
-        list={expenses}
-        onPress={(item) =>
-          navigation.navigate("ExpenseDetails", {
-            item,
-            data: { categories: categories, expenses: expenses },
-          })
-        }
-        emptyDataText="No expenses found. Please add an expense."
-      />
-      <HomeButtonList
-        snapPoints={["100%", "100%"]}
-        data={{ categories: categories, expenses: expenses }}
-      />
-    </View>
+    </>
   );
 };
 

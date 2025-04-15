@@ -55,5 +55,7 @@ export default EmojiPickerSheet;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    zIndex: 10,
+    elevation: 5,
   },
 });

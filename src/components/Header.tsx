@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
     marginBottom: "4%",
-    shadowColor: colors.dimGray,
+    shadowColor: colors.lightGray,
     shadowOffset: {
       width: 0,
       height: 2,

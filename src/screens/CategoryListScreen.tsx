@@ -12,6 +12,7 @@ import { StaticScreenProps, useNavigation } from "@react-navigation/native";
 import { CategoryItemType, ExpenseItemType } from "../types";
 import { AddIcon } from "../utils/Icons";
 import { Header } from "@react-navigation/elements";
+import BackButton from "../components/BackButton";
 
 type Props = StaticScreenProps<{
   category?: CategoryItemType;
@@ -26,35 +27,6 @@ const CategoryList = ({ route }: Props) => {
   const [expenses, setExpenses] = useState<ExpenseItemType[]>(
     route.params?.data?.expenses
   );
-
-  useEffect(() => {
-    navigation.setOptions({
-      headerLeft: () => (
-        <TouchableOpacity
-          onPress={() =>
-            navigation.navigate("Home", {
-              data: {
-                expenses: expenses,
-                categories: categories,
-              },
-            })
-          }
-          style={{ paddingLeft: 15 }}
-        >
-          <Text
-            style={{
-              fontSize: 22,
-              color: colors.silver,
-              fontWeight: "bold",
-            }}
-          >
-            {"Back"}
-          </Text>
-        </TouchableOpacity>
-      ),
-      headerTitleAlign: "center",
-    });
-  }, [categories]);
 
   useEffect(() => {
     if (route.params && route.params.category) {
@@ -109,6 +81,15 @@ const CategoryList = ({ route }: Props) => {
           <AddIcon color={colors.ghostWhite} size={20} />
         </Text>
       </TouchableOpacity>
+      <BackButton
+        data={{
+          data: {
+            expenses: expenses,
+            categories: categories,
+          },
+        }}
+        backTarget="Home"
+      />
     </View>
   );
 };
@@ -153,15 +134,21 @@ const styles = StyleSheet.create({
   },
   addCategoryButton: {
     position: "absolute",
-    right: "10%",
-    bottom: "5%",
-    backgroundColor: colors.gray,
-    width: "20%",
-    height: "8%",
-    borderRadius: 28,
+    right: 24,
+    bottom: 24,
     alignItems: "center",
     justifyContent: "center",
-    elevation: 3,
+    paddingVertical: 10,
+    paddingHorizontal: 16,
+    backgroundColor: colors.slateGray,
+    shadowColor: colors.slateGray,
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    borderRadius: 28,
+    width: 56,
+    height: 56,
+    elevation: 5,
   },
   addCategoryButtomText: {
     fontSize: 18,

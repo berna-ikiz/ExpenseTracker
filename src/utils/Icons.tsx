@@ -25,3 +25,11 @@ export const HomeIcon = ({ color = colors.white, size }: IconProps) => (
 export const CalendarIcon = ({ color = colors.white, size }: IconProps) => (
   <FontAwesome name="calendar-o" size={size} color={color} />
 );
+
+export const BackIcon = ({ color = colors.white, size }: IconProps) => (
+  <FontAwesome name="arrow-left" size={size} color={color} />
+);
+
+export const EmojiIcon = ({ color = colors.white, size }: IconProps) => (
+  <FontAwesome name="smile-o" size={size} color={color} />
+);

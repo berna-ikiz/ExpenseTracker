@@ -3,7 +3,6 @@ import React, { useRef, useState } from "react";
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
 import colors from "../theme/colors";
 import { useNavigation } from "@react-navigation/native";
-import { AddIcon } from "../utils/Icons";
 
 type CategoryItemType = {
   id: string;
@@ -44,11 +43,6 @@ const HomeButtonList = ({ snapPoints, data }: Props) => {
 
   return (
     <>
-      <TouchableOpacity onPress={openSheet} style={styles.addExpenseButton}>
-        <Text style={styles.addExpenseButtonText}>
-          <AddIcon color={colors.ghostWhite} size={20} />
-        </Text>
-      </TouchableOpacity>
       <BottomSheet
         snapPoints={snapPoints}
         enablePanDownToClose={true}
