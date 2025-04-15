@@ -4,8 +4,7 @@ import { useNavigation } from "@react-navigation/native";
 import colors from "../theme/colors";
 import { BackIcon } from "../utils/Icons";
 type Props = {
-  backTarget?: string;
-  data?: any;
+  onPress: () => void;
   zIndex?: number;
 };
 
@@ -18,19 +17,11 @@ type ScreenName =
   | "CategoryList"
   | "CategoryExpensesScreen";
 
-const BackButton = ({ data, backTarget, zIndex }: Props) => {
-  const navigation = useNavigation();
-
-  const handleBack = () => {
-    navigation.navigate(backTarget as ScreenName, {
-      ...(data && { data }),
-    });
-  };
-
+const BackButton = ({ onPress, zIndex }: Props) => {
   return (
     <TouchableOpacity
       style={[styles.backButton, { zIndex: zIndex }]}
-      onPress={handleBack}
+      onPress={onPress}
     >
       <BackIcon size={24} color={colors.ghostWhite} />
     </TouchableOpacity>

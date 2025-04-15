@@ -62,7 +62,6 @@ const FloatingActionButton = ({ data }: Props) => {
           </TouchableOpacity>
         </>
       )}
-
       <TouchableOpacity style={styles.fab} onPress={toggleMenu}>
         <AddIcon size={24} />
       </TouchableOpacity>

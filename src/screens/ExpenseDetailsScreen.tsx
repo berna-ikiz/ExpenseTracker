@@ -6,6 +6,7 @@ import colors from "../theme/colors";
 import { DeleteIcon } from "../utils/Icons";
 import { formatCurrency, formDate } from "../utils/GlobalFunctions";
 import Header from "../components/Header";
+import BackButton from "../components/BackButton";
 
 type Props = StaticScreenProps<{
   item: ExpenseItemType;
@@ -16,35 +17,6 @@ const ExpenseDetails = ({ route }: Props) => {
   const navigation = useNavigation();
   const expenseItem = route.params.item;
   const [data, setData] = useState(route.params.data);
-
-  useEffect(() => {
-    navigation.setOptions({
-      headerLeft: () => (
-        <TouchableOpacity
-          onPress={() =>
-            navigation.navigate("Home", {
-              data: {
-                expenses: data.expenses,
-                categories: data.categories,
-              },
-            })
-          }
-          style={{ paddingLeft: 15 }}
-        >
-          <Text
-            style={{
-              fontSize: 22,
-              color: colors.silver,
-              fontWeight: "bold",
-            }}
-          >
-            {"Back"}
-          </Text>
-        </TouchableOpacity>
-      ),
-      headerTitleAlign: "center",
-    });
-  }, [data]);
 
   const handleDelete = () => {
     Alert.alert(
@@ -75,7 +47,14 @@ const ExpenseDetails = ({ route }: Props) => {
       ]
     );
   };
-
+  const handleBack = () => {
+    navigation.navigate("Home", {
+      data: {
+        expenses: data.expenses,
+        categories: data.categories,
+      },
+    });
+  };
   return (
     <View style={styles.container}>
       <Header title="Expense" />
@@ -95,15 +74,10 @@ const ExpenseDetails = ({ route }: Props) => {
             <Text style={styles.label}> Date </Text>
             <Text style={styles.value}> {formDate(expenseItem.date)}</Text>
           </View>
-          <TouchableOpacity
-            onPress={handleDelete}
-            style={styles.addExpenseButton}
-          >
-            <Text style={styles.addExpenseButtonText}>
-              {" "}
-              <DeleteIcon color={colors.ghostWhite} size={20} />{" "}
-            </Text>
+          <TouchableOpacity onPress={handleDelete} style={styles.addButton}>
+            <DeleteIcon color={colors.ghostWhite} size={20} />{" "}
           </TouchableOpacity>
+          <BackButton onPress={handleBack} />
         </>
       ) : (
         <>
@@ -147,21 +121,22 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: colors.gray,
   },
-  addExpenseButton: {
+  addButton: {
     position: "absolute",
-    right: 20,
-    bottom: 20,
-    backgroundColor: colors.gray,
-    width: 70,
-    height: 70,
-    borderRadius: 35,
+    right: 24,
+    bottom: 24,
     alignItems: "center",
     justifyContent: "center",
-    elevation: 3,
-  },
-  addExpenseButtonText: {
-    fontSize: 18,
-    color: colors.white,
-    marginBottom: "5%",
+    paddingVertical: 10,
+    paddingHorizontal: 16,
+    backgroundColor: colors.slateGray,
+    shadowColor: colors.slateGray,
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    borderRadius: 28,
+    width: 56,
+    height: 56,
+    elevation: 5,
   },
 });

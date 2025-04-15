@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import {
   StackActions,
   StaticScreenProps,
@@ -15,13 +15,11 @@ import {
 import colors from "../theme/colors";
 import Calendar from "../components/Calendar";
 import CategorySelector from "../components/CategorySelector";
-import categoryData from "../data/CategoryData";
 import BottomSheet from "@gorhom/bottom-sheet";
 import { Category, CategoryItemType, ExpenseItemType } from "../types";
 import { AddIcon } from "../utils/Icons";
-import { formatCurrency, formatCurrencyInput } from "../utils/GlobalFunctions";
+import { formatCurrencyInput } from "../utils/GlobalFunctions";
 import Header from "../components/Header";
-import CustomFooter from "../components/CustomFooter";
 import BackButton from "../components/BackButton";
 
 type Props = StaticScreenProps<{
@@ -41,35 +39,6 @@ const Expense = ({ route }: Props) => {
   const bottomSheetRef = useRef<BottomSheet>(null!);
   const [expenses, setExpenses] = useState(route.params.data.expenses);
   const [categories, setCategories] = useState(route.params.data.categories);
-
-  useEffect(() => {
-    navigation.setOptions({
-      headerLeft: () => (
-        <TouchableOpacity
-          onPress={() =>
-            navigation.navigate("Home", {
-              data: {
-                expenses: route.params?.data?.expenses,
-                categories: route.params?.data?.categories,
-              },
-            })
-          }
-          style={{ paddingLeft: 15 }}
-        >
-          <Text
-            style={{
-              fontSize: 22,
-              color: colors.silver,
-              fontWeight: "bold",
-            }}
-          >
-            {"Back"}
-          </Text>
-        </TouchableOpacity>
-      ),
-      headerTitleAlign: "center",
-    });
-  }, [route.params?.data]);
 
   const openSheet = () => {
     bottomSheetRef.current?.expand();
@@ -99,6 +68,14 @@ const Expense = ({ route }: Props) => {
     navigation.dispatch(
       StackActions.popTo("Home", { expense, data: route.params.data })
     );
+  };
+  const handleBack = () => {
+    navigation.navigate("Home", {
+      data: {
+        expenses: expenses,
+        categories: categories,
+      },
+    });
   };
 
   return (
@@ -141,23 +118,10 @@ const Expense = ({ route }: Props) => {
             onPress={openSheet}
             bottomSheetRef={bottomSheetRef}
           />
-          <TouchableOpacity
-            onPress={handleAddExpense}
-            style={styles.addExpenseButton}
-          >
-            <Text style={styles.addExpenseButtonText}>
-              <AddIcon color={colors.ghostWhite} size={20} />
-            </Text>
+          <TouchableOpacity onPress={handleAddExpense} style={styles.addButton}>
+            <AddIcon color={colors.ghostWhite} size={20} />
           </TouchableOpacity>
-          <BackButton
-            data={{
-              data: {
-                expenses: expenses,
-                categories: categories,
-              },
-            }}
-            backTarget="Home"
-          />
+          <BackButton onPress={handleBack} />
         </>
       ) : (
         <>
@@ -198,7 +162,7 @@ const styles = StyleSheet.create({
     },
     width: "100%",
   },
-  addExpenseButton: {
+  addButton: {
     position: "absolute",
     right: 24,
     bottom: 24,
@@ -215,10 +179,5 @@ const styles = StyleSheet.create({
     width: 56,
     height: 56,
     elevation: 5,
-  },
-  addExpenseButtonText: {
-    fontSize: 18,
-    color: colors.white,
-    marginBottom: "5%",
   },
 });

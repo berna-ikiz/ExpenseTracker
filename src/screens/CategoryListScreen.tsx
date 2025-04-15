@@ -36,6 +36,15 @@ const CategoryList = ({ route }: Props) => {
     }
   }, [route.params && route.params.category]);
 
+  const handleBack = () => {
+    navigation.navigate("Home", {
+      data: {
+        expenses: expenses,
+        categories: categories,
+      },
+    });
+  };
+
   const renderItem = ({ item }: { item: CategoryItemType }) => (
     <View style={styles.ListCard}>
       <TouchableOpacity
@@ -75,21 +84,11 @@ const CategoryList = ({ route }: Props) => {
         onPress={() =>
           navigation.navigate("CategoryAdd", { data: route.params.data })
         }
-        style={styles.addCategoryButton}
+        style={styles.addButton}
       >
-        <Text style={styles.addCategoryButtomText}>
-          <AddIcon color={colors.ghostWhite} size={20} />
-        </Text>
+        <AddIcon color={colors.ghostWhite} size={20} />
       </TouchableOpacity>
-      <BackButton
-        data={{
-          data: {
-            expenses: expenses,
-            categories: categories,
-          },
-        }}
-        backTarget="Home"
-      />
+      <BackButton onPress={handleBack} />
     </View>
   );
 };
@@ -132,7 +131,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     marginRight: "10%",
   },
-  addCategoryButton: {
+  addButton: {
     position: "absolute",
     right: 24,
     bottom: 24,
@@ -149,10 +148,5 @@ const styles = StyleSheet.create({
     width: 56,
     height: 56,
     elevation: 5,
-  },
-  addCategoryButtomText: {
-    fontSize: 18,
-    color: colors.white,
-    marginBottom: "5%",
   },
 });

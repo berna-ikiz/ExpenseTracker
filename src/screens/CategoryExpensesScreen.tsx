@@ -6,6 +6,7 @@ import colors from "../theme/colors";
 import ExpenseCardList from "../components/ExpenseCardList";
 import { HomeIcon } from "../utils/Icons";
 import Header from "../components/Header";
+import BackButton from "../components/BackButton";
 
 type Params = StaticScreenProps<{
   category: CategoryItemType;
@@ -13,6 +14,7 @@ type Params = StaticScreenProps<{
 }>;
 
 const CategoryExpensesScreen = ({ route }: Params) => {
+  const navigation = useNavigation();
   const [category] = useState(route.params.category);
   const [expenses] = useState(route.params.data.expenses);
   const [categories] = useState(route.params.data.categories);
@@ -22,45 +24,24 @@ const CategoryExpensesScreen = ({ route }: Params) => {
     })
   );
 
-  useEffect(() => {
-    navigation.setOptions({
-      headerLeft: () => (
-        <TouchableOpacity
-          onPress={() =>
-            navigation.navigate("CategoryList", {
-              data: {
-                expenses: expenses,
-                categories: categories,
-              },
-            })
-          }
-          style={{ paddingLeft: 15 }}
-        >
-          <Text
-            style={{
-              fontSize: 22,
-              color: colors.silver,
-              fontWeight: "bold",
-            }}
-          >
-            {"Back"}
-          </Text>
-        </TouchableOpacity>
-      ),
-      headerTitleAlign: "center",
+  const handleBack = () => {
+    navigation.navigate("CategoryList", {
+      data: {
+        expenses: expenses,
+        categories: categories,
+      },
     });
-  }, [categories]);
-
-  const navigation = useNavigation();
+  };
 
   return (
     <View style={styles.container}>
+      <Header title="Expenses" />
       <ExpenseCardList
         list={expensesByCategory}
         emptyDataText={"No expenses found on this category!"}
       ></ExpenseCardList>
       <TouchableOpacity
-        style={styles.addEmojiButtom}
+        style={styles.addButton}
         onPress={() =>
           navigation.navigate("Home", {
             data: {
@@ -70,10 +51,9 @@ const CategoryExpensesScreen = ({ route }: Params) => {
           })
         }
       >
-        <Text style={styles.addEmojiButtomText}>
-          <HomeIcon color={colors.ghostWhite} size={20} />
-        </Text>
+        <HomeIcon color={colors.ghostWhite} size={24} />
       </TouchableOpacity>
+      <BackButton onPress={handleBack} />
     </View>
   );
 };
@@ -85,21 +65,22 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
   },
-  addEmojiButtom: {
+  addButton: {
     position: "absolute",
-    right: "10%",
-    bottom: "5%",
-    backgroundColor: colors.gray,
-    width: "20%",
-    height: "8%",
-    borderRadius: 28,
+    right: 24,
+    bottom: 24,
     alignItems: "center",
     justifyContent: "center",
-    elevation: 3,
-  },
-  addEmojiButtomText: {
-    fontSize: 18,
-    color: colors.white,
-    marginBottom: "5%",
+    paddingVertical: 10,
+    paddingHorizontal: 16,
+    backgroundColor: colors.slateGray,
+    shadowColor: colors.slateGray,
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    borderRadius: 28,
+    width: 56,
+    height: 56,
+    elevation: 5,
   },
 });

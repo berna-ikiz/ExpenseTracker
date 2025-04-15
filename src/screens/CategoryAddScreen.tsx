@@ -29,35 +29,6 @@ const CategoryAddScreen = ({ route }: Props) => {
   const [showEmojiSheet, setShowEmojiSheet] = useState(false);
   const [data, setData] = useState(route.params.data);
 
-  useEffect(() => {
-    navigation.setOptions({
-      headerLeft: () => (
-        <TouchableOpacity
-          onPress={() =>
-            navigation.navigate("CategoryList", {
-              data: {
-                expenses: data.expenses,
-                categories: data.categories,
-              },
-            })
-          }
-          style={{ paddingLeft: 15 }}
-        >
-          <Text
-            style={{
-              fontSize: 22,
-              color: colors.silver,
-              fontWeight: "bold",
-            }}
-          >
-            {"Back"}
-          </Text>
-        </TouchableOpacity>
-      ),
-      headerTitleAlign: "center",
-    });
-  }, [data]);
-
   const handleEmojiSelect = (emoji: string) => {
     setSelectedEmoji(emoji);
     setShowEmojiSheet(false);
@@ -89,9 +60,26 @@ const CategoryAddScreen = ({ route }: Props) => {
       icon: selectedEmoji,
     };
 
+    const updatedCategories = [...data.categories, category];
+
+    setData((prev) => ({
+      ...prev,
+      categories: updatedCategories,
+    }));
+
     navigation.dispatch(
       StackActions.popTo("CategoryList", { category, data: data })
     );
+  };
+
+  const handleBack = () => {
+    console.log(data);
+    navigation.navigate("CategoryList", {
+      data: {
+        expenses: data.expenses,
+        categories: data.categories,
+      },
+    });
   };
 
   return (
@@ -110,11 +98,11 @@ const CategoryAddScreen = ({ route }: Props) => {
           }}
         />
         <TouchableOpacity style={styles.button} onPress={handleSaveCategory}>
-          <Text style={styles.buttonText}>Add Category</Text>
+          <Text style={styles.buttonText}>Add </Text>
         </TouchableOpacity>
       </View>
       <TouchableOpacity
-        style={styles.addEmojiButton}
+        style={styles.addButton}
         onPress={() => setShowEmojiSheet(true)}
       >
         <EmojiIcon size={24} color={colors.ghostWhite} />
@@ -125,14 +113,7 @@ const CategoryAddScreen = ({ route }: Props) => {
         onSelect={handleEmojiSelect}
         snapPoints={["50%", "50%"]}
       />
-      <BackButton
-        data={{
-          expenses: data.expenses,
-          categories: data.categories,
-        }}
-        backTarget="CategoryList"
-        zIndex={-1}
-      />
+      <BackButton onPress={handleBack} zIndex={-1} />
     </View>
   );
 };
@@ -161,6 +142,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   input: {
+    flex: 2,
     borderColor: colors.slateGray,
     paddingHorizontal: 15,
     paddingVertical: 10,
@@ -177,6 +159,7 @@ const styles = StyleSheet.create({
     width: "50%",
   },
   button: {
+    flex: 1,
     backgroundColor: colors.slateGray,
     paddingHorizontal: 15,
     paddingVertical: 10,
@@ -192,7 +175,7 @@ const styles = StyleSheet.create({
     fontSize: 22,
     color: colors.white,
   },
-  addEmojiButton: {
+  addButton: {
     position: "absolute",
     right: 24,
     bottom: 24,
