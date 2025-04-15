@@ -9,10 +9,13 @@ const colors = {
   charcoal: "#36454F", // Almost black, dark gray
 
   // Slate Gray Tones
+  slateGray10: "#E8ECF1",
+  slateGray90: "#B8BCC5", // Lightest slate gray
   slateGray50: "#DCE0E5", // Very light slate gray
   slateGray100: "#C2C8D0", // Light slate gray
   slateGray200: "#A8AFBA", // Soft grayish slate
   slateGray300: "#8E96A5", // Medium grayish slate
+  slateGray400: "#6A7D8A",
   slateGray: "#708090", // Original slate gray
   slateGray500: "#5A6A7A", // Darker slate gray
   slateGray600: "#434E5A", // Very dark slate gray

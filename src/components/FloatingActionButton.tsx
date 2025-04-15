@@ -35,7 +35,7 @@ const FloatingActionButton = ({ data }: Props) => {
               navigation.navigate("Expense", { data });
             }}
           >
-            <AddIcon size={20} color={colors.slateGray} />
+            <AddIcon size={20} color={colors.slateGray10} />
             <Text style={styles.optionText}>Add Expense</Text>
           </TouchableOpacity>
 
@@ -46,7 +46,7 @@ const FloatingActionButton = ({ data }: Props) => {
               navigation.navigate("CategoryAdd", { data });
             }}
           >
-            <CategoryIcon size={20} color={colors.slateGray} />
+            <CategoryIcon size={20} color={colors.slateGray10} />
             <Text style={styles.optionText}>Add Category</Text>
           </TouchableOpacity>
 
@@ -57,7 +57,7 @@ const FloatingActionButton = ({ data }: Props) => {
               navigation.navigate("CategoryList", { data });
             }}
           >
-            <HomeIcon size={20} color={colors.slateGray} />
+            <HomeIcon size={20} color={colors.slateGray10} />
             <Text style={styles.optionText}>Categories</Text>
           </TouchableOpacity>
         </>
@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
   optionButton: {
     position: "absolute",
     right: 0,
-    backgroundColor: colors.slateGray,
+    backgroundColor: colors.slateGray500,
     padding: 10,
     borderRadius: 20,
     flexDirection: "row",
@@ -108,7 +108,8 @@ const styles = StyleSheet.create({
   },
   optionText: {
     marginLeft: 10,
-    color: colors.offWhite,
+    color: colors.slateGray10,
     fontSize: 20,
+    fontWeight: "600",
   },
 });

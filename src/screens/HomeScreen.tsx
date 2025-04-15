@@ -58,7 +58,7 @@ const Home = ({ route }: Props) => {
         <Header title="Expenses" />
         <View style={styles.totalContainer}>
           <Text style={styles.totalText}>
-            Total Expense: {formatCurrency(totalExpense, "TRY")}
+            Total: {formatCurrency(totalExpense, "TRY")}
           </Text>
         </View>
         <ExpenseCardList
@@ -87,13 +87,23 @@ const styles = StyleSheet.create({
   totalContainer: {
     padding: 10,
     marginBottom: 10,
-    backgroundColor: colors.white,
-    borderRadius: 8,
+    backgroundColor: colors.white, // Slightly light gray for the background
+    borderRadius: 12,
+    shadowColor: colors.slateGray500,
+    shadowOffset: { width: 0, height: 5 },
+    shadowOpacity: 0.3,
+    shadowRadius: 6,
+    elevation: 5, // Adding shadow for a lift effect
+    alignItems: "center", // Center the text
   },
   totalText: {
-    fontSize: 20,
-    fontWeight: "500",
-    color: colors.slateGray,
+    fontSize: 20, // Larger font for better visibility
+    fontWeight: "bold", // Bolder to make it stand out more
+    color: colors.slateGray400, // Slightly dark gray text color
     textAlign: "center",
+    paddingVertical: 10,
+    textShadowColor: colors.slateGray600, // Subtle shadow for a lift effect
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 1,
   },
 });

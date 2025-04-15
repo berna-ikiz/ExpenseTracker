@@ -92,10 +92,10 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   calenderButton: {
-    backgroundColor: colors.ivory,
+    backgroundColor: colors.white,
     padding: 10,
     borderRadius: 10,
-    borderColor: colors.slateGray,
+    borderColor: colors.slateGray400,
     borderWidth: 1,
     justifyContent: "center",
     alignItems: "center",
@@ -109,6 +109,6 @@ const styles = StyleSheet.create({
   },
   calenderButtonTitle: {
     fontSize: 24,
-    color: colors.silver,
+    color: colors.slateGray400,
   },
 });

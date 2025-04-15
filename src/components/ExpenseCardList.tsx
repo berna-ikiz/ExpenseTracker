@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     padding: 20,
     marginBottom: 12,
-    shadowColor: colors.slateGray,
+    shadowColor: colors.slateGray600,
     shadowOpacity: 0.2,
     shadowOffset: {
       width: 0,
@@ -84,17 +84,18 @@ const styles = StyleSheet.create({
   },
   category: {
     fontSize: 24,
-    color: colors.silver,
+    color: colors.slateGray400,
+    fontWeight: "600",
   },
   coast: {
     fontSize: 20,
     fontWeight: "bold",
     marginVertical: 4,
-    color: colors.gray,
+    color: colors.slateGray300,
   },
   date: {
     fontSize: 18,
-    color: colors.lightGray,
+    color: colors.slateGray200,
     right: 0,
     textAlign: "right",
   },

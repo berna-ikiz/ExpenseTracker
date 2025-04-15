@@ -49,5 +49,8 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textTransform: "uppercase",
     letterSpacing: 1,
+    textShadowRadius: 1,
+    textShadowColor: colors.white,
+    textShadowOffset: { width: 0, height: 1 },
   },
 });

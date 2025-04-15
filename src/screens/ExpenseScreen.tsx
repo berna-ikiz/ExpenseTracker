@@ -84,14 +84,20 @@ const Expense = ({ route }: Props) => {
       <Header title="Expense" />
       {data.categories.length > 0 ? (
         <>
+          <Text style={styles.subHeader}>
+            Track your spending easily and stay in control.
+          </Text>
+          ts Kodu kopyala
           <TextInput
             placeholder="Title"
+            placeholderTextColor={colors.slateGray200}
             value={title}
             onChangeText={setTitle}
             style={styles.input}
           />
           <TextInput
             placeholder="Coast"
+            placeholderTextColor={colors.slateGray200}
             value={formatCurrencyInput(coast)}
             onChangeText={handleCoastChange}
             style={styles.input}
@@ -146,15 +152,21 @@ const styles = StyleSheet.create({
     gap: 8,
     marginTop: 32,
   },
+  subHeader: {
+    textAlign: "center",
+    fontSize: 16,
+    color: colors.slateGray300,
+    marginBottom: 8,
+  },
   input: {
     borderWidth: 1,
-    borderColor: colors.slateGray,
+    borderColor: colors.slateGray600,
     paddingHorizontal: 15,
     paddingVertical: 10,
     fontSize: 24,
     borderRadius: 10,
-    backgroundColor: colors.ivory,
-    color: colors.slateGray,
+    backgroundColor: colors.white,
+    color: colors.slateGray400,
     shadowColor: colors.slateGray,
     shadowOpacity: 0.7,
     shadowOffset: {
