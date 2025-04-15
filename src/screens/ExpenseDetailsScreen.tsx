@@ -1,6 +1,10 @@
 import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React, { useEffect, useState } from "react";
-import { StaticScreenProps, useNavigation } from "@react-navigation/native";
+import {
+  StackActions,
+  StaticScreenProps,
+  useNavigation,
+} from "@react-navigation/native";
 import { CategoryItemType, ExpenseItemType } from "../types";
 import colors from "../theme/colors";
 import { DeleteIcon } from "../utils/Icons";
@@ -35,12 +39,14 @@ const ExpenseDetails = ({ route }: Props) => {
               const updatedExpenses = data.expenses.filter(
                 (item) => item.id !== expenseItem.id
               );
-              navigation.navigate("Home", {
-                data: {
-                  categories: data.categories,
-                  expenses: updatedExpenses,
-                },
-              });
+              navigation.dispatch(
+                StackActions.popTo("Home", {
+                  data: {
+                    expenses: data.categories,
+                    categories: updatedExpenses,
+                  },
+                })
+              );
             }
           },
         },
@@ -49,13 +55,16 @@ const ExpenseDetails = ({ route }: Props) => {
   };
 
   const handleBack = () => {
-    navigation.navigate("Home", {
-      data: {
-        expenses: data.expenses,
-        categories: data.categories,
-      },
-    });
+    navigation.dispatch(
+      StackActions.popTo("Home", {
+        data: {
+          expenses: data.expenses,
+          categories: data.categories,
+        },
+      })
+    );
   };
+
   return (
     <View style={styles.container}>
       <Header title="Expense" />
@@ -76,7 +85,7 @@ const ExpenseDetails = ({ route }: Props) => {
             <Text style={styles.value}> {formDate(expenseItem.date)}</Text>
           </View>
           <TouchableOpacity onPress={handleDelete} style={styles.addButton}>
-            <DeleteIcon color={colors.ghostWhite} size={20} />{" "}
+            <DeleteIcon color={colors.ghostWhite} size={20} />
           </TouchableOpacity>
           <BackButton onPress={handleBack} />
         </>

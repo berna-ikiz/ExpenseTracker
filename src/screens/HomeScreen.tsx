@@ -1,6 +1,10 @@
 import { StyleSheet, Text, View } from "react-native";
 import React, { useEffect, useState } from "react";
-import { StaticScreenProps, useNavigation } from "@react-navigation/native";
+import {
+  StackActions,
+  StaticScreenProps,
+  useNavigation,
+} from "@react-navigation/native";
 import ExpenseData from "../data/ExpenseData";
 import CategoryData from "../data/CategoryData";
 import { CategoryItemType, ExpenseItemType } from "../types";
@@ -63,10 +67,15 @@ const Home = ({ route }: Props) => {
         <ExpenseCardList
           list={expenses}
           onPress={(item) =>
-            navigation.navigate("ExpenseDetails", {
-              item,
-              data: { categories: categories, expenses: expenses },
-            })
+            navigation.dispatch(
+              StackActions.popTo("ExpenseDetails", {
+                item,
+                data: {
+                  expenses: expenses,
+                  categories: categories,
+                },
+              })
+            )
           }
           emptyDataText="No expenses found. Please add an expense."
         />

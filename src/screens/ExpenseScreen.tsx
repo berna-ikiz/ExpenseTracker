@@ -71,12 +71,14 @@ const Expense = ({ route }: Props) => {
   };
 
   const handleBack = () => {
-    navigation.navigate("Home", {
-      data: {
-        expenses: expenses,
-        categories: categories,
-      },
-    });
+    navigation.dispatch(
+      StackActions.popTo("Home", {
+        data: {
+          expenses: expenses,
+          categories: categories,
+        },
+      })
+    );
   };
 
   return (
@@ -87,7 +89,6 @@ const Expense = ({ route }: Props) => {
           <Text style={styles.subHeader}>
             Track your spending easily and stay in control.
           </Text>
-          ts Kodu kopyala
           <TextInput
             placeholder="Title"
             placeholderTextColor={colors.slateGray200}

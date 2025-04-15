@@ -1,7 +1,11 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import { CategoryItemType, ExpenseItemType } from "../types";
-import { StaticScreenProps, useNavigation } from "@react-navigation/native";
+import {
+  StackActions,
+  StaticScreenProps,
+  useNavigation,
+} from "@react-navigation/native";
 import colors from "../theme/colors";
 import ExpenseCardList from "../components/ExpenseCardList";
 import { HomeIcon } from "../utils/Icons";
@@ -43,12 +47,14 @@ const CategoryExpensesScreen = ({ route }: Params) => {
       <TouchableOpacity
         style={styles.addButton}
         onPress={() =>
-          navigation.navigate("Home", {
-            data: {
-              categories: categories,
-              expenses: expenses,
-            },
-          })
+          navigation.dispatch(
+            StackActions.popTo("Home", {
+              data: {
+                expenses: expenses,
+                categories: categories,
+              },
+            })
+          )
         }
       >
         <HomeIcon color={colors.ghostWhite} size={24} />

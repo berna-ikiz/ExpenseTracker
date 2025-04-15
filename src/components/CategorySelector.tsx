@@ -64,7 +64,7 @@ const CategorySelector = ({
         <Text style={styles.selectorText}>
           {selectedCategory
             ? `${selectedCategory.icon} ${selectedCategory.title}`
-            : "Select Category"}{" "}
+            : "Select Category"}
         </Text>
       </TouchableOpacity>
       <BottomSheet
@@ -123,14 +123,14 @@ const styles = StyleSheet.create({
   },
   selectorText: {
     fontSize: 24,
-    color: colors.silver,
+    color: colors.slateGray400,
   },
   bottomSheet: {
     marginBottom: 0,
   },
   sheetContainer: {
     flex: 1,
-    backgroundColor: colors.ivory,
+    backgroundColor: colors.white,
     height: "100%",
   },
 });

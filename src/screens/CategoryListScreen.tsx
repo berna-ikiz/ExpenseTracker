@@ -9,7 +9,11 @@ import {
 
 import React, { useEffect, useState } from "react";
 import colors from "../theme/colors";
-import { StaticScreenProps, useNavigation } from "@react-navigation/native";
+import {
+  StackActions,
+  StaticScreenProps,
+  useNavigation,
+} from "@react-navigation/native";
 import { CategoryItemType, ExpenseItemType } from "../types";
 import { AddIcon } from "../utils/Icons";
 import Header from "../components/Header";
@@ -92,7 +96,14 @@ const CategoryList = ({ route }: Props) => {
 
       <TouchableOpacity
         onPress={() =>
-          navigation.navigate("CategoryAdd", { data: route.params.data })
+          navigation.dispatch(
+            StackActions.popTo("CategoryAdd", {
+              data: {
+                expenses: expenses,
+                categories: categories,
+              },
+            })
+          )
         }
         style={styles.addButton}
       >

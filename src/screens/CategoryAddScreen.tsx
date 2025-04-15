@@ -69,12 +69,14 @@ const CategoryAddScreen = ({ route }: Props) => {
   };
 
   const handleBack = () => {
-    navigation.navigate("CategoryList", {
-      data: {
-        expenses: data.expenses,
-        categories: data.categories,
-      },
-    });
+    navigation.dispatch(
+      StackActions.popTo("CategoryList", {
+        data: {
+          expenses: data.expenses,
+          categories: data.categories,
+        },
+      })
+    );
   };
 
   const handleEmojiSelect = (emoji: string) => {
