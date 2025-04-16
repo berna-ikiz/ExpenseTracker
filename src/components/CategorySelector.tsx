@@ -30,6 +30,32 @@ type Props = {
   onPress: () => void;
 };
 
+type RenderItemProps = {
+  item: Category;
+  onSelect: (emoji: string) => void;
+  bottomSheetRef: React.RefObject<BottomSheet> | null;
+};
+
+const renderItem = ({ item, onSelect, bottomSheetRef }: RenderItemProps) => {
+  const handleSelect = (category: string) => {
+    onSelect(category);
+    if (bottomSheetRef?.current) {
+      bottomSheetRef.current.close();
+    }
+  };
+  return (
+    <TouchableOpacity
+      style={styles.sheetContent}
+      key={item.id}
+      onPress={() => handleSelect(item.icon)}
+    >
+      <Text style={styles.categoryText}>
+        {item.icon} {item.title}
+      </Text>
+    </TouchableOpacity>
+  );
+};
+
 const CategorySelector = ({
   selectedCategory,
   onSelect,
@@ -38,26 +64,6 @@ const CategorySelector = ({
   bottomSheetRef,
   onPress,
 }: Props) => {
-  const handleSelect = (category: string) => {
-    onSelect(category);
-    if (bottomSheetRef?.current) {
-      bottomSheetRef.current.close();
-    }
-  };
-
-  const renderItem = ({ item }: { item: Category }) => {
-    return (
-      <TouchableOpacity
-        style={styles.sheetContent}
-        key={item.id}
-        onPress={() => handleSelect(item.icon)}
-      >
-        <Text style={styles.categoryText}>
-          {item.icon} {item.title}
-        </Text>
-      </TouchableOpacity>
-    );
-  };
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.selectorButton} onPress={onPress}>
@@ -78,7 +84,9 @@ const CategorySelector = ({
         <BottomSheetView style={styles.sheetContainer}>
           <FlatList
             data={categoriesData}
-            renderItem={renderItem}
+            renderItem={({ item }) =>
+              renderItem({ item, onSelect, bottomSheetRef })
+            }
             keyExtractor={(item) => item.id}
             contentContainerStyle={{
               paddingBottom: "20%",

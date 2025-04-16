@@ -22,15 +22,16 @@ type Props = StaticScreenProps<{
   category?: CategoryItemType;
   data: { categories: CategoryItemType[]; expenses: ExpenseItemType[] };
 }>;
-type RenderProps = {
+
+type RenderItemProps = {
   item: CategoryItemType;
   data: { categories: CategoryItemType[]; expenses: ExpenseItemType[] };
   categories: CategoryItemType[];
   navigation: any;
 };
 
-const renderItem = (Props: RenderProps) => {
-  const { item, navigation, data, categories } = Props;
+const renderItem = (props: RenderItemProps) => {
+  const { item, navigation, data, categories } = props;
 
   const calculateTotalByCategory = (category: CategoryItemType) => {
     if (!data.expenses || !Array.isArray(data.expenses)) return "0.00";
@@ -68,6 +69,7 @@ const renderItem = (Props: RenderProps) => {
     </View>
   );
 };
+
 const CategoryList = ({ route }: Props) => {
   const navigation = useNavigation();
   const { data } = route.params;

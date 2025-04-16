@@ -19,9 +19,14 @@ type Props = {
   onPress?: (item: ExpenseItemType) => void;
   emptyDataText?: string;
 };
+type RenderItemProps = {
+  item: ExpenseItemType;
+  onPress?: (item: ExpenseItemType) => void;
+};
 
-const ExpenseCardList = ({ list, onPress, emptyDataText }: Props) => {
-  const renderItem = ({ item }: { item: ExpenseItemType }) => (
+const renderItem = (props: RenderItemProps) => {
+  const { item, onPress } = props;
+  return (
     <View style={styles.expenseCard}>
       <TouchableOpacity
         onPress={onPress ? () => onPress(item) : undefined}
@@ -38,6 +43,9 @@ const ExpenseCardList = ({ list, onPress, emptyDataText }: Props) => {
       </TouchableOpacity>
     </View>
   );
+};
+
+const ExpenseCardList = ({ list, onPress, emptyDataText }: Props) => {
   return (
     <>
       {list?.length === 0 && (
@@ -52,7 +60,7 @@ const ExpenseCardList = ({ list, onPress, emptyDataText }: Props) => {
       )}
       <FlatList
         data={list}
-        renderItem={renderItem}
+        renderItem={({ item }) => renderItem({ item, onPress })}
         keyExtractor={(item) => item.id}
         contentContainerStyle={{ paddingBottom: "20%" }}
         extraData={list}
