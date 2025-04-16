@@ -5,21 +5,16 @@ import colors from "../theme/colors";
 type Props = {
   emoji?: string;
   value?: string;
-  setChange?: (value: string) => void;
+  onEndEditing: (value: string) => void;
 };
 
-const EmojiInput = ({ emoji, value, setChange }: Props) => (
+const EmojiInput = ({ emoji, onEndEditing, value }: Props) => (
   <View style={styles.inputWrapper}>
     <TextInput
       style={styles.input}
       placeholder="Category name"
       value={value}
-      onChange={(e) => {
-        const value = e.nativeEvent.text;
-        if (setChange) {
-          setChange(value);
-        }
-      }}
+      onEndEditing={(e) => onEndEditing(e.nativeEvent.text)}
     />
     {emoji ? <Text style={styles.emoji}>{emoji}</Text> : null}
   </View>

@@ -1,12 +1,6 @@
 import React, { useState } from "react";
-import {
-  StyleSheet,
-  TouchableOpacity,
-  View,
-  Text,
-  Animated,
-} from "react-native";
-import { AddIcon, CategoryIcon, HomeIcon } from "../utils/Icons";
+import { StyleSheet, TouchableOpacity, View, Text } from "react-native";
+import { AddIcon, HomeIcon } from "../utils/Icons";
 
 import colors from "../theme/colors";
 import { useNavigation } from "@react-navigation/native";
@@ -29,7 +23,7 @@ const FloatingActionButton = ({ data }: Props) => {
       {isOpen && (
         <>
           <TouchableOpacity
-            style={[styles.optionButton, { bottom: 160 }]}
+            style={[styles.optionButton, { bottom: 100 }]}
             onPress={() => {
               setIsOpen(false);
               navigation.navigate("Expense", { data });
@@ -37,17 +31,6 @@ const FloatingActionButton = ({ data }: Props) => {
           >
             <AddIcon size={20} color={colors.slateGray10} />
             <Text style={styles.optionText}>Add Expense</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={[styles.optionButton, { bottom: 100 }]}
-            onPress={() => {
-              setIsOpen(false);
-              navigation.navigate("CategoryAdd", { data });
-            }}
-          >
-            <CategoryIcon size={20} color={colors.slateGray10} />
-            <Text style={styles.optionText}>Add Category</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -85,10 +68,6 @@ const styles = StyleSheet.create({
     height: 56,
     justifyContent: "center",
     alignItems: "center",
-    elevation: 5,
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
   },
   optionButton: {
     position: "absolute",
@@ -98,10 +77,6 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     flexDirection: "row",
     alignItems: "center",
-    shadowColor: colors.slateGray,
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.3,
-    shadowRadius: 5,
     width: 180,
     height: 56,
     marginBottom: 24,

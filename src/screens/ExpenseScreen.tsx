@@ -35,10 +35,8 @@ const Expense = ({ route }: Props) => {
     null
   );
   const [isCalenderVisible, setCalenderVisible] = useState(false);
-  const [data, setData] = useState(route.params.data);
   const bottomSheetRef = useRef<BottomSheet>(null!);
-  const [expenses, setExpenses] = useState(route.params.data.expenses);
-  const [categories, setCategories] = useState(route.params.data.categories);
+  const { expenses, categories } = route.params.data;
 
   const openSheet = () => {
     bottomSheetRef.current?.expand();
@@ -84,7 +82,7 @@ const Expense = ({ route }: Props) => {
   return (
     <View style={styles.container}>
       <Header title="Expense" />
-      {data.categories.length > 0 ? (
+      {categories.length > 0 ? (
         <>
           <Text style={styles.subHeader}>
             Track your spending easily and stay in control.
@@ -119,10 +117,10 @@ const Expense = ({ route }: Props) => {
             snapPoints={["60%", "90%"]}
             onSelect={(emoji: string) => {
               const category =
-                data.categories.find((cat) => cat.icon === emoji) || null;
+                categories.find((cat) => cat.icon === emoji) || null;
               setSelectedCategory(category);
             }}
-            categoriesData={data.categories}
+            categoriesData={categories}
             onPress={openSheet}
             bottomSheetRef={bottomSheetRef}
           />
@@ -168,12 +166,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: colors.white,
     color: colors.slateGray400,
-    shadowColor: colors.slateGray,
-    shadowOpacity: 0.7,
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
     width: "100%",
   },
   addButton: {
@@ -185,10 +177,6 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 16,
     backgroundColor: colors.slateGray500,
-    shadowColor: colors.slateGray,
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
     borderRadius: 28,
     width: 56,
     height: 56,

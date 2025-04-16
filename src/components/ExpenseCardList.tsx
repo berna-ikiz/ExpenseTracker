@@ -55,6 +55,7 @@ const ExpenseCardList = ({ list, onPress, emptyDataText }: Props) => {
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
         contentContainerStyle={{ paddingBottom: "20%" }}
+        extraData={list}
       />
     </>
   );
@@ -68,13 +69,8 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     padding: 20,
     marginBottom: 12,
-    shadowColor: colors.slateGray600,
-    shadowOpacity: 0.2,
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowRadius: 8,
+    borderColor: colors.slateGray50,
+    borderWidth: 2,
     elevation: 3,
   },
   expenseCardHeader: {

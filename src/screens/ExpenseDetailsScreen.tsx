@@ -1,5 +1,5 @@
 import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import {
   StackActions,
   StaticScreenProps,
@@ -20,7 +20,7 @@ type Props = StaticScreenProps<{
 const ExpenseDetails = ({ route }: Props) => {
   const navigation = useNavigation();
   const expenseItem = route.params.item;
-  const [data, setData] = useState(route.params.data);
+  const { data } = route.params;
 
   const handleDelete = () => {
     Alert.alert(
@@ -113,12 +113,8 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
     borderRadius: 10,
     elevation: 2,
-    shadowColor: colors.slateGray,
-    shadowOpacity: 0.8,
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
+    borderColor: colors.slateGray100,
+    borderWidth: 1,
     flexDirection: "row",
   },
   label: {
@@ -140,10 +136,6 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 16,
     backgroundColor: colors.slateGray500,
-    shadowColor: colors.slateGray,
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
     borderRadius: 28,
     width: 56,
     height: 56,

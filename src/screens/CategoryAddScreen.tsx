@@ -1,11 +1,4 @@
-import {
-  Alert,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React, { useCallback, useState } from "react";
 import colors from "../theme/colors";
 import EmojiPickerSheet from "../components/EmojiPickerSheet";
@@ -25,24 +18,27 @@ type Props = StaticScreenProps<{
 
 const CategoryAddScreen = ({ route }: Props) => {
   const navigation = useNavigation();
-  const [selectedEmoji, setSelectedEmoji] = useState("");
-  const [categoryName, setCategoryName] = useState("");
+  const [categoryData, setCategoryData] = useState({
+    name: "",
+    emoji: "",
+  });
   const [showEmojiSheet, setShowEmojiSheet] = useState(false);
-  const [data, setData] = useState(route.params.data);
+  const { expenses, categories } = route.params.data;
 
   const handleSaveCategory = () => {
-    if (!selectedEmoji) {
+    if (!categoryData.emoji) {
       Alert.alert("Please Add Emoji");
       return;
     }
 
-    if (!categoryName.trim()) {
+    if (!categoryData.name.trim()) {
       Alert.alert("Please add category name.");
       return;
     }
 
-    const isDuplicate = data.categories.some(
-      (cat) => cat.title.toLowerCase() === categoryName.trim().toLowerCase()
+    const isDuplicate = categories.some(
+      (cat) =>
+        cat.title.toLowerCase() === categoryData.name.trim().toLowerCase()
     );
 
     if (isDuplicate) {
@@ -52,19 +48,17 @@ const CategoryAddScreen = ({ route }: Props) => {
 
     const category = {
       id: Date.now().toString(),
-      title: categoryName.trim(),
-      icon: selectedEmoji,
+      title: categoryData.name.trim(),
+      icon: categoryData.emoji,
     };
 
-    const updatedCategories = [...data.categories, category];
-
-    setData((prev) => ({
-      ...prev,
-      categories: updatedCategories,
-    }));
+    const updatedCategories = [...categories, category];
 
     navigation.dispatch(
-      StackActions.popTo("CategoryList", { category, data: data })
+      StackActions.popTo("CategoryList", {
+        category: category,
+        data: { categories: updatedCategories, expenses: expenses },
+      })
     );
   };
 
@@ -72,16 +66,20 @@ const CategoryAddScreen = ({ route }: Props) => {
     navigation.dispatch(
       StackActions.popTo("CategoryList", {
         data: {
-          expenses: data.expenses,
-          categories: data.categories,
+          expenses: expenses,
+          categories: categories,
         },
       })
     );
   };
 
+  const handleEndEditing = (text: string) => {
+    console.log("here");
+    setCategoryData((prev) => ({ ...prev, name: text }));
+  };
+
   const handleEmojiSelect = (emoji: string) => {
-    console.log(emoji);
-    setSelectedEmoji(emoji);
+    categoryData.emoji = emoji;
     setShowEmojiSheet(false);
   };
 
@@ -97,9 +95,8 @@ const CategoryAddScreen = ({ route }: Props) => {
         </Text>
         <View style={styles.categoryAddLayout}>
           <EmojiInput
-            emoji={selectedEmoji}
-            value={categoryName}
-            setChange={setCategoryName}
+            emoji={categoryData.emoji}
+            onEndEditing={handleEndEditing}
           />
           <TouchableOpacity style={styles.button} onPress={handleSaveCategory}>
             <Text style={styles.buttonText}>
@@ -119,7 +116,6 @@ const CategoryAddScreen = ({ route }: Props) => {
           visible={showEmojiSheet}
           onClose={handleCloseEmojiSheet}
           onSelect={handleEmojiSelect}
-          snapPoints={["50%", "50%"]}
         />
       )}
       <BackButton onPress={handleBack} zIndex={-1} />
@@ -132,8 +128,8 @@ export default CategoryAddScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: "1%",
-    paddingTop: "40%",
+    padding: 5,
+    paddingTop: 100,
     zIndex: -1,
   },
   title: {
@@ -144,7 +140,7 @@ const styles = StyleSheet.create({
     color: colors.silver,
   },
   categoryAddCard: {
-    marginVertical: "15%",
+    marginVertical: 30,
   },
   subHeader: {
     textAlign: "center",
@@ -156,17 +152,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 10,
-    padding: "2%",
+    padding: 10,
     marginHorizontal: "1%",
     borderRadius: 10,
-    shadowColor: colors.slateGray,
-    shadowOpacity: 0.2,
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowRadius: 8,
-    elevation: 3,
   },
   button: {
     flex: 1,
@@ -174,12 +162,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     paddingVertical: 10,
     borderRadius: 10,
-    shadowColor: colors.slateGray,
-    shadowOpacity: 0.7,
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
   },
   buttonText: {
     fontSize: 22,
@@ -195,13 +177,8 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 16,
     backgroundColor: colors.slateGray500,
-    shadowColor: colors.slateGray,
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
     borderRadius: 28,
     width: 56,
     height: 56,
-    elevation: 5,
   },
 });

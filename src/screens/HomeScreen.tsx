@@ -1,10 +1,6 @@
 import { StyleSheet, Text, View } from "react-native";
 import React, { useEffect, useState } from "react";
-import {
-  StackActions,
-  StaticScreenProps,
-  useNavigation,
-} from "@react-navigation/native";
+import { StaticScreenProps, useNavigation } from "@react-navigation/native";
 import ExpenseData from "../data/ExpenseData";
 import CategoryData from "../data/CategoryData";
 import { CategoryItemType, ExpenseItemType } from "../types";
@@ -27,7 +23,7 @@ const Home = ({ route }: Props) => {
   const [totalExpense, setTotalExpense] = useState(0);
   const navigation = useNavigation();
 
-  useEffect(() => {
+  /*useEffect(() => {
     const sortedExpenses = expenses.sort(
       (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
     );
@@ -37,6 +33,25 @@ const Home = ({ route }: Props) => {
       const value = parseFloat(expense.coast.toString());
       return sum + (isNaN(value) ? 0 : value);
     }, 0);
+    setTotalExpense(calculatedTotal);
+  }, [expenses]);*/
+
+  useEffect(() => {
+    const sortedExpenses = [...expenses].sort(
+      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+    );
+
+    setExpenses((prev) => {
+      const prevIds = prev.map((e) => e.id).join(",");
+      const newIds = sortedExpenses.map((e) => e.id).join(",");
+      return prevIds !== newIds ? sortedExpenses : prev;
+    });
+
+    const calculatedTotal = sortedExpenses.reduce((sum, expense) => {
+      const value = parseFloat(expense.coast.toString());
+      return sum + (isNaN(value) ? 0 : value);
+    }, 0);
+
     setTotalExpense(calculatedTotal);
   }, [expenses]);
 
@@ -67,15 +82,10 @@ const Home = ({ route }: Props) => {
         <ExpenseCardList
           list={expenses}
           onPress={(item) =>
-            navigation.dispatch(
-              StackActions.popTo("ExpenseDetails", {
-                item,
-                data: {
-                  expenses: expenses,
-                  categories: categories,
-                },
-              })
-            )
+            navigation.navigate("ExpenseDetails", {
+              item,
+              data: { categories: categories, expenses: expenses },
+            })
           }
           emptyDataText="No expenses found. Please add an expense."
         />
@@ -97,11 +107,6 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     backgroundColor: colors.white,
     borderRadius: 12,
-    shadowColor: colors.slateGray500,
-    shadowOffset: { width: 0, height: 5 },
-    shadowOpacity: 0.3,
-    shadowRadius: 6,
-    elevation: 5,
     alignItems: "center",
   },
   totalText: {
@@ -110,8 +115,5 @@ const styles = StyleSheet.create({
     color: colors.slateGray400,
     textAlign: "center",
     paddingVertical: 10,
-    textShadowColor: colors.slateGray600,
-    textShadowOffset: { width: 0, height: 1 },
-    textShadowRadius: 1,
   },
 });

@@ -85,6 +85,7 @@ const CategorySelector = ({
             }}
             style={{ flex: 1 }}
             nestedScrollEnabled
+            extraData={categoriesData}
             showsVerticalScrollIndicator={true}
           />
         </BottomSheetView>
@@ -114,12 +115,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: colors.white,
     color: colors.slateGray,
-    shadowColor: colors.slateGray,
-    shadowOpacity: 0.7,
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
   },
   selectorText: {
     fontSize: 24,

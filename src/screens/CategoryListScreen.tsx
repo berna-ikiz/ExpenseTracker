@@ -1,6 +1,5 @@
 import {
   FlatList,
-  LayoutAnimation,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -23,49 +22,35 @@ type Props = StaticScreenProps<{
   category?: CategoryItemType;
   data: { categories: CategoryItemType[]; expenses: ExpenseItemType[] };
 }>;
+type RenderProps = {
+  item: CategoryItemType;
+  data: { categories: CategoryItemType[]; expenses: ExpenseItemType[] };
+  categories: CategoryItemType[];
+  navigation: any;
+};
 
-const CategoryList = ({ route }: Props) => {
-  const navigation = useNavigation();
-  const [categories, setCategories] = useState<CategoryItemType[]>(
-    route.params?.data?.categories
-  );
-  const [expenses, setExpenses] = useState<ExpenseItemType[]>(
-    route.params?.data?.expenses
-  );
-
-  useEffect(() => {
-    if (route.params && route.params.category) {
-      setCategories((prev) =>
-        route.params.category ? [...prev, route.params.category] : prev
-      );
-    }
-  }, [route.params && route.params.category]);
-
-  const handleBack = () => {
-    navigation.navigate("Home", {
-      data: {
-        expenses: expenses,
-        categories: categories,
-      },
-    });
-  };
+const renderItem = (Props: RenderProps) => {
+  const { item, navigation, data, categories } = Props;
 
   const calculateTotalByCategory = (category: CategoryItemType) => {
-    const total = expenses
+    if (!data.expenses || !Array.isArray(data.expenses)) return "0.00";
+    const total = data.expenses
       .filter((e) => e.category === `${category.icon}${category.title}`)
       .reduce((sum, e) => sum + Number(e.coast), 0);
     return total.toFixed(2);
   };
 
-  const renderItem = ({ item }: { item: CategoryItemType }) => (
+  return (
     <View style={styles.ListCard}>
       <TouchableOpacity
         style={styles.listCategoryItem}
         onPress={() =>
-          navigation.navigate("CategoryExpensesScreen", {
-            category: item,
-            data: { categories: categories, expenses: expenses },
-          })
+          navigation.dispatch(
+            StackActions.popTo("CategoryExpensesScreen", {
+              category: item,
+              data: { categories: categories, expenses: data.expenses },
+            })
+          )
         }
       >
         <View style={styles.iconWrapper}>
@@ -82,6 +67,32 @@ const CategoryList = ({ route }: Props) => {
       </TouchableOpacity>
     </View>
   );
+};
+const CategoryList = ({ route }: Props) => {
+  const navigation = useNavigation();
+  const { data } = route.params;
+  const [categories, setCategories] = useState<CategoryItemType[]>(
+    data.categories
+  );
+
+  useEffect(() => {
+    if (route.params && route.params.category) {
+      setCategories((prev) =>
+        route.params.category ? [...prev, route.params.category] : prev
+      );
+    }
+  }, [route.params && route.params.category]);
+
+  const handleBack = () => {
+    navigation.dispatch(
+      StackActions.popTo("Home", {
+        data: {
+          expenses: data.expenses,
+          categories: data.categories,
+        },
+      })
+    );
+  };
 
   return (
     <View style={styles.container}>
@@ -89,21 +100,22 @@ const CategoryList = ({ route }: Props) => {
 
       <FlatList
         data={categories}
-        renderItem={renderItem}
+        renderItem={({ item }) =>
+          renderItem({ item, navigation, data, categories })
+        }
         keyExtractor={(item) => item.id}
         contentContainerStyle={{ paddingBottom: "20%" }}
+        extraData={categories}
       />
 
       <TouchableOpacity
         onPress={() =>
-          navigation.dispatch(
-            StackActions.popTo("CategoryAdd", {
-              data: {
-                expenses: expenses,
-                categories: categories,
-              },
-            })
-          )
+          navigation.navigate("CategoryAdd", {
+            data: {
+              expenses: data.expenses,
+              categories: categories,
+            },
+          })
         }
         style={styles.addButton}
       >
@@ -127,14 +139,6 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     padding: 20,
     marginBottom: 12,
-    shadowColor: colors.slateGray600,
-    shadowOpacity: 0.08,
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowRadius: 8,
-    elevation: 3,
   },
   listCategoryItem: {
     flexDirection: "row",
@@ -178,10 +182,6 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 16,
     backgroundColor: colors.slateGray500,
-    shadowColor: "#2F4F4F",
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
     borderRadius: 28,
     width: 56,
     height: 56,

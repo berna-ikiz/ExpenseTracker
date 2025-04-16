@@ -1,5 +1,5 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import React, { useEffect, useState } from "react";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
+import React, { useState } from "react";
 import { CategoryItemType, ExpenseItemType } from "../types";
 import {
   StackActions,
@@ -20,8 +20,8 @@ type Params = StaticScreenProps<{
 const CategoryExpensesScreen = ({ route }: Params) => {
   const navigation = useNavigation();
   const [category] = useState(route.params.category);
-  const [expenses] = useState(route.params.data.expenses);
-  const [categories] = useState(route.params.data.categories);
+  const { expenses, categories } = route.params.data;
+
   const [expensesByCategory] = useState(
     expenses.filter((expense) => {
       return expense.category === `${category.icon}${category.title}`;
@@ -29,12 +29,14 @@ const CategoryExpensesScreen = ({ route }: Params) => {
   );
 
   const handleBack = () => {
-    navigation.navigate("CategoryList", {
-      data: {
-        expenses: expenses,
-        categories: categories,
-      },
-    });
+    navigation.dispatch(
+      StackActions.popTo("CategoryList", {
+        data: {
+          expenses: expenses,
+          categories: categories,
+        },
+      })
+    );
   };
 
   return (
@@ -80,10 +82,6 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 16,
     backgroundColor: colors.slateGray500,
-    shadowColor: colors.slateGray,
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
     borderRadius: 28,
     width: 56,
     height: 56,
