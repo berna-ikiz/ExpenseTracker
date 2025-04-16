@@ -90,8 +90,7 @@ const Expense = ({ route }: Props) => {
           <TextInput
             placeholder="Title"
             placeholderTextColor={colors.slateGray200}
-            value={title}
-            onChangeText={setTitle}
+            onEndEditing={(e) => setTitle(e.nativeEvent.text)}
             style={styles.input}
           />
           <TextInput
