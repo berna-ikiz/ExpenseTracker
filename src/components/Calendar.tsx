@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import { Calendar } from "react-native-calendars";
 import colors from "../theme/colors";
 import { formDate } from "../utils/GlobalFunctions";
-import { CalendarIcon } from "../utils/Icons";
 
 type Props = {
   onSelectDate: (date: string) => void;
@@ -92,23 +91,17 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   calenderButton: {
-    backgroundColor: colors.ivory,
+    backgroundColor: colors.white,
     padding: 10,
     borderRadius: 10,
-    borderColor: colors.slateGray,
+    borderColor: colors.slateGray400,
     borderWidth: 1,
     justifyContent: "center",
     alignItems: "center",
     flex: 2,
-    shadowColor: colors.slateGray,
-    shadowOpacity: 0.7,
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
   },
   calenderButtonTitle: {
     fontSize: 24,
-    color: colors.silver,
+    color: colors.slateGray400,
   },
 });

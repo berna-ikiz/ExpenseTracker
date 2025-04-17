@@ -1,13 +1,14 @@
 import { StyleSheet, Text, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import { StaticScreenProps, useNavigation } from "@react-navigation/native";
-import HomeButtonList from "../components/HomeButtonList";
 import ExpenseData from "../data/ExpenseData";
 import CategoryData from "../data/CategoryData";
 import { CategoryItemType, ExpenseItemType } from "../types";
 import ExpenseCardList from "../components/ExpenseCardList";
 import colors from "../theme/colors";
 import { formatCurrency } from "../utils/GlobalFunctions";
+import FloatingActionButton from "../components/FloatingActionButton";
+import Header from "../components/Header";
 
 type Props = StaticScreenProps<{
   expense?: ExpenseItemType;
@@ -22,7 +23,7 @@ const Home = ({ route }: Props) => {
   const [totalExpense, setTotalExpense] = useState(0);
   const navigation = useNavigation();
 
-  useEffect(() => {
+  /*useEffect(() => {
     const sortedExpenses = expenses.sort(
       (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
     );
@@ -32,6 +33,25 @@ const Home = ({ route }: Props) => {
       const value = parseFloat(expense.coast.toString());
       return sum + (isNaN(value) ? 0 : value);
     }, 0);
+    setTotalExpense(calculatedTotal);
+  }, [expenses]);*/
+
+  useEffect(() => {
+    const sortedExpenses = [...expenses].sort(
+      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+    );
+
+    setExpenses((prev) => {
+      const prevIds = prev.map((e) => e.id).join(",");
+      const newIds = sortedExpenses.map((e) => e.id).join(",");
+      return prevIds !== newIds ? sortedExpenses : prev;
+    });
+
+    const calculatedTotal = sortedExpenses.reduce((sum, expense) => {
+      const value = parseFloat(expense.coast.toString());
+      return sum + (isNaN(value) ? 0 : value);
+    }, 0);
+
     setTotalExpense(calculatedTotal);
   }, [expenses]);
 
@@ -51,27 +71,27 @@ const Home = ({ route }: Props) => {
   }, [route.params && route.params.expense]);
 
   return (
-    <View style={styles.container}>
-      <View style={styles.totalContainer}>
-        <Text style={styles.totalText}>
-          Total Expense: {formatCurrency(totalExpense, "TRY")}
-        </Text>
+    <>
+      <View style={styles.container}>
+        <Header title="Expenses" />
+        <View style={styles.totalContainer}>
+          <Text style={styles.totalText}>
+            Total: {formatCurrency(totalExpense, "TRY")}
+          </Text>
+        </View>
+        <ExpenseCardList
+          list={expenses}
+          onPress={(item) =>
+            navigation.navigate("ExpenseDetails", {
+              item,
+              data: { categories: categories, expenses: expenses },
+            })
+          }
+          emptyDataText="No expenses found. Please add an expense."
+        />
+        <FloatingActionButton data={{ categories, expenses }} />
       </View>
-      <ExpenseCardList
-        list={expenses}
-        onPress={(item) =>
-          navigation.navigate("ExpenseDetails", {
-            item,
-            data: { categories: categories, expenses: expenses },
-          })
-        }
-        emptyDataText="No expenses found. Please add an expense."
-      />
-      <HomeButtonList
-        snapPoints={["100%", "100%"]}
-        data={{ categories: categories, expenses: expenses }}
-      />
-    </View>
+    </>
   );
 };
 
@@ -80,18 +100,20 @@ export default Home;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
+    padding: "4%",
   },
   totalContainer: {
     padding: 10,
     marginBottom: 10,
     backgroundColor: colors.white,
-    borderRadius: 8,
+    borderRadius: 12,
+    alignItems: "center",
   },
   totalText: {
     fontSize: 20,
-    fontWeight: "500",
-    color: colors.slateGray,
+    fontWeight: "bold",
+    color: colors.slateGray400,
     textAlign: "center",
+    paddingVertical: 10,
   },
 });

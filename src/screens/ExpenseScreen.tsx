@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import {
   StackActions,
   StaticScreenProps,
@@ -15,11 +15,12 @@ import {
 import colors from "../theme/colors";
 import Calendar from "../components/Calendar";
 import CategorySelector from "../components/CategorySelector";
-import categoryData from "../data/CategoryData";
 import BottomSheet from "@gorhom/bottom-sheet";
 import { Category, CategoryItemType, ExpenseItemType } from "../types";
 import { AddIcon } from "../utils/Icons";
-import { formatCurrency, formatCurrencyInput } from "../utils/GlobalFunctions";
+import { formatCurrencyInput } from "../utils/GlobalFunctions";
+import Header from "../components/Header";
+import BackButton from "../components/BackButton";
 
 type Props = StaticScreenProps<{
   data: { categories: CategoryItemType[]; expenses: ExpenseItemType[] };
@@ -34,40 +35,12 @@ const Expense = ({ route }: Props) => {
     null
   );
   const [isCalenderVisible, setCalenderVisible] = useState(false);
-  const [data, setData] = useState(route.params.data);
-  const bottomSheetRef = useRef<BottomSheet>(null!);
+  const [isCategorySelectorVisible, setCategorySelectorVisible] =
+    useState(false);
+  const { expenses, categories } = route.params.data;
 
-  useEffect(() => {
-    navigation.setOptions({
-      headerLeft: () => (
-        <TouchableOpacity
-          onPress={() =>
-            navigation.navigate("Home", {
-              data: {
-                expenses: route.params?.data?.expenses,
-                categories: route.params?.data?.categories,
-              },
-            })
-          }
-          style={{ paddingLeft: 15 }}
-        >
-          <Text
-            style={{
-              fontSize: 22,
-              color: colors.silver,
-              fontWeight: "bold",
-            }}
-          >
-            {"Back"}
-          </Text>
-        </TouchableOpacity>
-      ),
-      headerTitleAlign: "center",
-    });
-  }, [route.params?.data]);
-
-  const openSheet = () => {
-    bottomSheetRef.current?.expand();
+  const openModal = () => {
+    setCategorySelectorVisible(true);
     setCalenderVisible(false);
   };
 
@@ -96,18 +69,38 @@ const Expense = ({ route }: Props) => {
     );
   };
 
+  const handleCloseCategorySelector = () => {
+    setCategorySelectorVisible(false);
+  };
+
+  const handleBack = () => {
+    navigation.dispatch(
+      StackActions.popTo("Home", {
+        data: {
+          expenses: expenses,
+          categories: categories,
+        },
+      })
+    );
+  };
+
   return (
     <View style={styles.container}>
-      {data.categories.length > 0 ? (
+      <Header title="Expense" />
+      {categories.length > 0 ? (
         <>
+          <Text style={styles.subHeader}>
+            Track your spending easily and stay in control.
+          </Text>
           <TextInput
             placeholder="Title"
-            value={title}
-            onChangeText={setTitle}
+            placeholderTextColor={colors.slateGray200}
+            onEndEditing={(e) => setTitle(e.nativeEvent.text)}
             style={styles.input}
           />
           <TextInput
             placeholder="Coast"
+            placeholderTextColor={colors.slateGray200}
             value={formatCurrencyInput(coast)}
             onChangeText={handleCoastChange}
             style={styles.input}
@@ -120,33 +113,28 @@ const Expense = ({ route }: Props) => {
             isVisible={isCalenderVisible}
             onToggle={() => {
               setCalenderVisible((prev) => !prev);
-              bottomSheetRef.current?.close();
+              //TODO    bottomSheetRef.current?.close();
             }}
           />
           <CategorySelector
             selectedCategory={selectedCategory}
-            snapPoints={["60%", "90%"]}
             onSelect={(emoji: string) => {
               const category =
-                data.categories.find((cat) => cat.icon === emoji) || null;
+                categories.find((cat) => cat.icon === emoji) || null;
               setSelectedCategory(category);
             }}
-            categoriesData={data.categories}
-            onPress={openSheet}
-            bottomSheetRef={bottomSheetRef}
+            categoriesData={categories}
+            onPress={openModal}
+            visible={isCategorySelectorVisible}
+            onClose={handleCloseCategorySelector}
           />
-          <TouchableOpacity
-            onPress={handleAddExpense}
-            style={styles.addExpenseButton}
-          >
-            <Text style={styles.addExpenseButtomText}>
-              <AddIcon color={colors.ghostWhite} size={20} />
-            </Text>
+          <TouchableOpacity onPress={handleAddExpense} style={styles.addButton}>
+            <AddIcon color={colors.ghostWhite} size={20} />
           </TouchableOpacity>
+          <BackButton onPress={handleBack} />
         </>
       ) : (
         <>
-          <Text style={styles.titleText}>Add Expense</Text>
           <Text
             style={{ textAlign: "center", fontSize: 18, color: colors.silver }}
           >
@@ -167,45 +155,35 @@ const styles = StyleSheet.create({
     gap: 8,
     marginTop: 32,
   },
+  subHeader: {
+    textAlign: "center",
+    fontSize: 16,
+    color: colors.slateGray300,
+    marginBottom: 8,
+  },
   input: {
     borderWidth: 1,
-    borderColor: colors.slateGray,
+    borderColor: colors.slateGray600,
     paddingHorizontal: 15,
     paddingVertical: 10,
     fontSize: 24,
     borderRadius: 10,
-    backgroundColor: colors.ivory,
-    color: colors.slateGray,
-    shadowColor: colors.slateGray,
-    shadowOpacity: 0.7,
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
+    backgroundColor: colors.white,
+    color: colors.slateGray400,
     width: "100%",
   },
-  titleText: {
-    fontSize: 28,
-    color: colors.silver,
-    fontWeight: "bold",
-    textAlign: "center",
-    marginBottom: "4%",
-  },
-  addExpenseButton: {
+  addButton: {
     position: "absolute",
-    right: "10%",
-    bottom: "5%",
-    backgroundColor: colors.gray,
-    width: "20%",
-    height: "8%",
-    borderRadius: 28,
+    right: 24,
+    bottom: 24,
     alignItems: "center",
     justifyContent: "center",
-    elevation: 3,
-  },
-  addExpenseButtomText: {
-    fontSize: 18,
-    color: colors.white,
-    marginBottom: "5%",
+    paddingVertical: 10,
+    paddingHorizontal: 16,
+    backgroundColor: colors.slateGray500,
+    borderRadius: 28,
+    width: 56,
+    height: 56,
+    elevation: 5,
   },
 });

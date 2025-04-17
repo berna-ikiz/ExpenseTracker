@@ -6,8 +6,22 @@ const colors = {
   gray: "#808080", // Neutral gray
   dimGray: "#696969", // Dark gray
   darkGray: "#A9A9A9", // Medium-dark gray
-  slateGray: "#708090", // Slightly bluish gray
   charcoal: "#36454F", // Almost black, dark gray
+
+  // Slate Gray Tones
+  slateGray10: "#E8ECF1",
+  slateGray20: "#D5D9E1", // Soft slate gray, biraz daha koyu
+  slateGray30: "#C9D1D8", // Orta tonlu slate gray
+  slateGray40: "#BDC5CF", // Daha koyu bir slate gray
+  slateGray50: "#DCE0E5", // Very light slate gray
+  slateGray90: "#B8BCC5", // Lightest slate gray
+  slateGray100: "#C2C8D0", // Light slate gray
+  slateGray200: "#A8AFBA", // Soft grayish slate
+  slateGray300: "#8E96A5", // Medium grayish slate
+  slateGray400: "#6A7D8A",
+  slateGray: "#708090", // Original slate gray
+  slateGray500: "#5A6A7A", // Darker slate gray
+  slateGray600: "#434E5A", // Very dark slate gray
 
   // White Tones
   white: "#FFFFFF", // White

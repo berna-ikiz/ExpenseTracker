@@ -1,12 +1,5 @@
-import {
-  Alert,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
-import React, { useDebugValue, useEffect, useState } from "react";
+import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import React, { useCallback, useState } from "react";
 import colors from "../theme/colors";
 import EmojiPickerSheet from "../components/EmojiPickerSheet";
 import {
@@ -15,6 +8,9 @@ import {
   useNavigation,
 } from "@react-navigation/native";
 import { CategoryItemType, ExpenseItemType } from "../types";
+import BackButton from "../components/BackButton";
+import { AddIcon, EmojiIcon } from "../utils/Icons";
+import EmojiInput from "../components/EmojiInput";
 
 type Props = StaticScreenProps<{
   data: { categories: CategoryItemType[]; expenses: ExpenseItemType[] };
@@ -22,58 +18,27 @@ type Props = StaticScreenProps<{
 
 const CategoryAddScreen = ({ route }: Props) => {
   const navigation = useNavigation();
-  const [selectedEmoji, setSelectedEmoji] = useState("");
-  const [categoryName, setCategoryName] = useState("");
+  const [categoryData, setCategoryData] = useState({
+    name: "",
+    emoji: "",
+  });
   const [showEmojiSheet, setShowEmojiSheet] = useState(false);
-  const [data, setData] = useState(route.params.data);
-
-  useEffect(() => {
-    navigation.setOptions({
-      headerLeft: () => (
-        <TouchableOpacity
-          onPress={() =>
-            navigation.navigate("CategoryList", {
-              data: {
-                expenses: data.expenses,
-                categories: data.categories,
-              },
-            })
-          }
-          style={{ paddingLeft: 15 }}
-        >
-          <Text
-            style={{
-              fontSize: 22,
-              color: colors.silver,
-              fontWeight: "bold",
-            }}
-          >
-            {"Back"}
-          </Text>
-        </TouchableOpacity>
-      ),
-      headerTitleAlign: "center",
-    });
-  }, [data]);
-
-  const handleEmojiSelect = (emoji: string) => {
-    setSelectedEmoji(emoji);
-    setShowEmojiSheet(false);
-  };
+  const { expenses, categories } = route.params.data;
 
   const handleSaveCategory = () => {
-    if (!selectedEmoji) {
+    if (!categoryData.emoji) {
       Alert.alert("Please Add Emoji");
       return;
     }
 
-    if (!categoryName.trim()) {
+    if (!categoryData.name.trim()) {
       Alert.alert("Please add category name.");
       return;
     }
 
-    const isDuplicate = data.categories.some(
-      (cat) => cat.title.toLowerCase() === categoryName.trim().toLowerCase()
+    const isDuplicate = categories.some(
+      (cat) =>
+        cat.title.toLowerCase() === categoryData.name.trim().toLowerCase()
     );
 
     if (isDuplicate) {
@@ -83,46 +48,77 @@ const CategoryAddScreen = ({ route }: Props) => {
 
     const category = {
       id: Date.now().toString(),
-      title: categoryName.trim(),
-      icon: selectedEmoji,
+      title: categoryData.name.trim(),
+      icon: categoryData.emoji,
     };
 
+    const updatedCategories = [...categories, category];
+
     navigation.dispatch(
-      StackActions.popTo("CategoryList", { category, data: data })
+      StackActions.popTo("CategoryList", {
+        category: category,
+        data: { categories: updatedCategories, expenses: expenses },
+      })
     );
+  };
+
+  const handleBack = () => {
+    navigation.dispatch(
+      StackActions.popTo("CategoryList", {
+        data: {
+          expenses: expenses,
+          categories: categories,
+        },
+      })
+    );
+  };
+
+  const handleEndEditing = (text: string) => {
+    console.log("here");
+    setCategoryData((prev) => ({ ...prev, name: text }));
+  };
+
+  const handleEmojiSelect = (emoji: string) => {
+    categoryData.emoji = emoji;
+    setShowEmojiSheet(false);
+  };
+
+  const handleCloseEmojiSheet = () => {
+    setShowEmojiSheet(false);
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>
-        {categoryName ? categoryName : "Choose a category name"}
-        {selectedEmoji && selectedEmoji}
-      </Text>
-      <View style={styles.categoryAddLayout}>
-        <TextInput
-          style={styles.input}
-          placeholder="Category name"
-          value={categoryName}
-          onChangeText={(text) => {
-            setCategoryName(text);
-          }}
-        />
-        <TouchableOpacity style={styles.button} onPress={handleSaveCategory}>
-          <Text style={styles.buttonText}>Add Category</Text>
-        </TouchableOpacity>
+      <View style={styles.categoryAddCard}>
+        <Text style={styles.subHeader}>
+          Track your spending easily and stay in control.
+        </Text>
+        <View style={styles.categoryAddLayout}>
+          <EmojiInput
+            emoji={categoryData.emoji}
+            onEndEditing={handleEndEditing}
+          />
+          <TouchableOpacity style={styles.button} onPress={handleSaveCategory}>
+            <Text style={styles.buttonText}>
+              <AddIcon size={24} color={colors.white} />
+            </Text>
+          </TouchableOpacity>
+        </View>
       </View>
       <TouchableOpacity
-        style={styles.addEmojiButtom}
+        style={styles.addButton}
         onPress={() => setShowEmojiSheet(true)}
       >
-        <Text style={styles.addEmojiButtomText}>+</Text>
+        <EmojiIcon size={24} color={colors.ghostWhite} />
       </TouchableOpacity>
-      <EmojiPickerSheet
-        visible={showEmojiSheet}
-        onClose={() => setShowEmojiSheet(false)}
-        onSelect={handleEmojiSelect}
-        snapPoints={["50%", "50%"]}
-      />
+      {showEmojiSheet && (
+        <EmojiPickerSheet
+          visible={showEmojiSheet}
+          onClose={handleCloseEmojiSheet}
+          onSelect={handleEmojiSelect}
+        />
+      )}
+      <BackButton onPress={handleBack} zIndex={-1} />
     </View>
   );
 };
@@ -132,8 +128,9 @@ export default CategoryAddScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 8,
-    paddingTop: "40%",
+    padding: 5,
+    paddingTop: 100,
+    zIndex: -1,
   },
   title: {
     fontSize: 22,
@@ -142,61 +139,46 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     color: colors.silver,
   },
+  categoryAddCard: {
+    marginVertical: 30,
+  },
+  subHeader: {
+    textAlign: "center",
+    fontSize: 16,
+    color: colors.slateGray300,
+    marginBottom: 8,
+  },
   categoryAddLayout: {
-    backgroundColor: colors.white,
     flexDirection: "row",
     alignItems: "center",
     gap: 10,
-    padding: 16,
+    padding: 10,
+    marginHorizontal: "1%",
     borderRadius: 10,
-  },
-  input: {
-    borderColor: colors.slateGray,
-    paddingHorizontal: 15,
-    paddingVertical: 10,
-    fontSize: 22,
-    borderRadius: 10,
-    backgroundColor: colors.ivory,
-    color: colors.slateGray,
-    shadowColor: colors.slateGray,
-    shadowOpacity: 0.7,
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    width: "50%",
   },
   button: {
-    backgroundColor: colors.slateGray,
+    flex: 1,
+    backgroundColor: colors.slateGray500,
     paddingHorizontal: 15,
     paddingVertical: 10,
     borderRadius: 10,
-    shadowColor: colors.slateGray,
-    shadowOpacity: 0.7,
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
   },
   buttonText: {
     fontSize: 22,
     color: colors.white,
+    textAlign: "center",
   },
-  addEmojiButtom: {
+  addButton: {
     position: "absolute",
-    right: "10%",
-    bottom: "5%",
-    backgroundColor: colors.gray,
-    width: "20%",
-    height: "8%",
-    borderRadius: 28,
+    right: 24,
+    bottom: 24,
     alignItems: "center",
     justifyContent: "center",
-    elevation: 3,
-  },
-  addEmojiButtomText: {
-    fontSize: 18,
-    color: colors.white,
-    marginBottom: "5%",
+    paddingVertical: 10,
+    paddingHorizontal: 16,
+    backgroundColor: colors.slateGray500,
+    borderRadius: 28,
+    width: 56,
+    height: 56,
   },
 });

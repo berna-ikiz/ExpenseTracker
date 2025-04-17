@@ -1,10 +1,16 @@
 import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import React, { useEffect, useState } from "react";
-import { StaticScreenProps, useNavigation } from "@react-navigation/native";
+import React from "react";
+import {
+  StackActions,
+  StaticScreenProps,
+  useNavigation,
+} from "@react-navigation/native";
 import { CategoryItemType, ExpenseItemType } from "../types";
 import colors from "../theme/colors";
 import { DeleteIcon } from "../utils/Icons";
 import { formatCurrency, formDate } from "../utils/GlobalFunctions";
+import Header from "../components/Header";
+import BackButton from "../components/BackButton";
 
 type Props = StaticScreenProps<{
   item: ExpenseItemType;
@@ -14,36 +20,7 @@ type Props = StaticScreenProps<{
 const ExpenseDetails = ({ route }: Props) => {
   const navigation = useNavigation();
   const expenseItem = route.params.item;
-  const [data, setData] = useState(route.params.data);
-
-  useEffect(() => {
-    navigation.setOptions({
-      headerLeft: () => (
-        <TouchableOpacity
-          onPress={() =>
-            navigation.navigate("Home", {
-              data: {
-                expenses: data.expenses,
-                categories: data.categories,
-              },
-            })
-          }
-          style={{ paddingLeft: 15 }}
-        >
-          <Text
-            style={{
-              fontSize: 22,
-              color: colors.silver,
-              fontWeight: "bold",
-            }}
-          >
-            {"Back"}
-          </Text>
-        </TouchableOpacity>
-      ),
-      headerTitleAlign: "center",
-    });
-  }, [data]);
+  const { data } = route.params;
 
   const handleDelete = () => {
     Alert.alert(
@@ -62,12 +39,14 @@ const ExpenseDetails = ({ route }: Props) => {
               const updatedExpenses = data.expenses.filter(
                 (item) => item.id !== expenseItem.id
               );
-              navigation.navigate("Home", {
-                data: {
-                  categories: data.categories,
-                  expenses: updatedExpenses,
-                },
-              });
+              navigation.dispatch(
+                StackActions.popTo("Home", {
+                  data: {
+                    expenses: data.categories,
+                    categories: updatedExpenses,
+                  },
+                })
+              );
             }
           },
         },
@@ -75,8 +54,20 @@ const ExpenseDetails = ({ route }: Props) => {
     );
   };
 
+  const handleBack = () => {
+    navigation.dispatch(
+      StackActions.popTo("Home", {
+        data: {
+          expenses: data.expenses,
+          categories: data.categories,
+        },
+      })
+    );
+  };
+
   return (
     <View style={styles.container}>
+      <Header title="Expense" />
       {expenseItem ? (
         <>
           <View style={styles.expenseCard}>
@@ -93,19 +84,13 @@ const ExpenseDetails = ({ route }: Props) => {
             <Text style={styles.label}> Date </Text>
             <Text style={styles.value}> {formDate(expenseItem.date)}</Text>
           </View>
-          <TouchableOpacity
-            onPress={handleDelete}
-            style={styles.addExpenseButton}
-          >
-            <Text style={styles.addExpenseButtonText}>
-              {" "}
-              <DeleteIcon color={colors.ghostWhite} size={20} />{" "}
-            </Text>
+          <TouchableOpacity onPress={handleDelete} style={styles.addButton}>
+            <DeleteIcon color={colors.ghostWhite} size={20} />
           </TouchableOpacity>
+          <BackButton onPress={handleBack} />
         </>
       ) : (
         <>
-          <Text style={styles.header}>Expense Details</Text>
           <Text>Expense not found</Text>
         </>
       )}
@@ -122,24 +107,14 @@ const styles = StyleSheet.create({
     backgroundColor: colors.whiteSmoke,
     marginTop: 32,
   },
-  header: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 20,
-    textAlign: "center",
-  },
   expenseCard: {
     marginBottom: 16,
     padding: 20,
     backgroundColor: colors.white,
     borderRadius: 10,
     elevation: 2,
-    shadowColor: colors.slateGray,
-    shadowOpacity: 0.8,
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
+    borderColor: colors.slateGray100,
+    borderWidth: 1,
     flexDirection: "row",
   },
   label: {
@@ -152,21 +127,18 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: colors.gray,
   },
-  addExpenseButton: {
+  addButton: {
     position: "absolute",
-    right: 20,
-    bottom: 20,
-    backgroundColor: colors.gray,
-    width: 70,
-    height: 70,
-    borderRadius: 35,
+    right: 24,
+    bottom: 24,
     alignItems: "center",
     justifyContent: "center",
-    elevation: 3,
-  },
-  addExpenseButtonText: {
-    fontSize: 18,
-    color: colors.white,
-    marginBottom: "5%",
+    paddingVertical: 10,
+    paddingHorizontal: 16,
+    backgroundColor: colors.slateGray500,
+    borderRadius: 28,
+    width: 56,
+    height: 56,
+    elevation: 5,
   },
 });
