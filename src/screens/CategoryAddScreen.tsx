@@ -1,5 +1,5 @@
 import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import React, { useCallback, useState } from "react";
+import React, { useState } from "react";
 import colors from "../theme/colors";
 import EmojiPickerSheet from "../components/EmojiPickerSheet";
 import {
@@ -74,7 +74,6 @@ const CategoryAddScreen = ({ route }: Props) => {
   };
 
   const handleEndEditing = (text: string) => {
-    console.log("here");
     setCategoryData((prev) => ({ ...prev, name: text }));
   };
 

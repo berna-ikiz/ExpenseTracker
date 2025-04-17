@@ -57,7 +57,6 @@ const CategorySelector = ({
   visible,
   onClose,
 }: Props) => {
-  console.log(categoriesData);
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.selectorButton} onPress={onPress}>
@@ -129,6 +128,6 @@ const styles = StyleSheet.create({
   },
   selectorText: {
     fontSize: 24,
-    color: colors.slateGray600,
+    color: colors.slateGray,
   },
 });

@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import {
   StackActions,
   StaticScreenProps,
@@ -15,7 +15,6 @@ import {
 import colors from "../theme/colors";
 import Calendar from "../components/Calendar";
 import CategorySelector from "../components/CategorySelector";
-import BottomSheet from "@gorhom/bottom-sheet";
 import { Category, CategoryItemType, ExpenseItemType } from "../types";
 import { AddIcon } from "../utils/Icons";
 import { formatCurrencyInput } from "../utils/GlobalFunctions";

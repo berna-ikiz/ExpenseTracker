@@ -23,7 +23,7 @@ const Home = ({ route }: Props) => {
   const [totalExpense, setTotalExpense] = useState(0);
   const navigation = useNavigation();
 
-  /*useEffect(() => {
+  useEffect(() => {
     const sortedExpenses = expenses.sort(
       (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
     );
@@ -34,7 +34,7 @@ const Home = ({ route }: Props) => {
       return sum + (isNaN(value) ? 0 : value);
     }, 0);
     setTotalExpense(calculatedTotal);
-  }, [expenses]);*/
+  }, [expenses]);
 
   useEffect(() => {
     const sortedExpenses = [...expenses].sort(
