@@ -57,7 +57,6 @@ const CategorySelector = ({
   visible,
   onClose,
 }: Props) => {
-  console.log(categoriesData);
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.selectorButton} onPress={onPress}>
