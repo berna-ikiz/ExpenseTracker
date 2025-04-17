@@ -128,6 +128,6 @@ const styles = StyleSheet.create({
   },
   selectorText: {
     fontSize: 24,
-    color: colors.slateGray600,
+    color: colors.slateGray,
   },
 });
