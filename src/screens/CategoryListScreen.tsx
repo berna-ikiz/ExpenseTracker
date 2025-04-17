@@ -99,17 +99,27 @@ const CategoryList = ({ route }: Props) => {
   return (
     <View style={styles.container}>
       <Header title="Categories" />
-
-      <FlatList
-        data={categories}
-        renderItem={({ item }) =>
-          renderItem({ item, navigation, data, categories })
-        }
-        keyExtractor={(item) => item.id}
-        contentContainerStyle={{ paddingBottom: "20%" }}
-        extraData={categories}
-      />
-
+      {categories.length > 0 ? (
+        <>
+          <FlatList
+            data={categories}
+            renderItem={({ item }) =>
+              renderItem({ item, navigation, data, categories })
+            }
+            keyExtractor={(item) => item.id}
+            contentContainerStyle={{ paddingBottom: "20%" }}
+            extraData={categories}
+          />
+        </>
+      ) : (
+        <>
+          <Text
+            style={{ textAlign: "center", fontSize: 18, color: colors.silver }}
+          >
+            No categories found. Please add a category.
+          </Text>
+        </>
+      )}
       <TouchableOpacity
         onPress={() =>
           navigation.navigate("CategoryAdd", {
@@ -123,7 +133,6 @@ const CategoryList = ({ route }: Props) => {
       >
         <AddIcon color={colors.ghostWhite} size={20} />
       </TouchableOpacity>
-
       <BackButton onPress={handleBack} />
     </View>
   );
