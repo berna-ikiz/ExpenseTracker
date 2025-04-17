@@ -4,9 +4,10 @@ import {
   TouchableOpacity,
   View,
   FlatList,
+  Modal,
+  Pressable,
 } from "react-native";
 import React from "react";
-import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
 import colors from "../theme/colors";
 
 type Category = {
@@ -18,30 +19,22 @@ type Category = {
 type Props = {
   selectedCategory: Category | null;
   onSelect: (emoji: string) => void;
-  snapPoints:
-    | [string]
-    | [number]
-    | [number, number]
-    | [number, string]
-    | [string, number]
-    | [string, string];
   categoriesData: Category[];
-  bottomSheetRef: React.RefObject<BottomSheet> | null;
   onPress: () => void;
+  visible: boolean;
+  onClose: () => void;
 };
 
 type RenderItemProps = {
   item: Category;
   onSelect: (emoji: string) => void;
-  bottomSheetRef: React.RefObject<BottomSheet> | null;
+  onClose: () => void;
 };
 
-const renderItem = ({ item, onSelect, bottomSheetRef }: RenderItemProps) => {
+const renderItem = ({ item, onSelect, onClose }: RenderItemProps) => {
   const handleSelect = (category: string) => {
     onSelect(category);
-    if (bottomSheetRef?.current) {
-      bottomSheetRef.current.close();
-    }
+    onClose();
   };
   return (
     <TouchableOpacity
@@ -59,11 +52,12 @@ const renderItem = ({ item, onSelect, bottomSheetRef }: RenderItemProps) => {
 const CategorySelector = ({
   selectedCategory,
   onSelect,
-  snapPoints,
   categoriesData,
-  bottomSheetRef,
   onPress,
+  visible,
+  onClose,
 }: Props) => {
+  console.log(categoriesData);
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.selectorButton} onPress={onPress}>
@@ -73,31 +67,27 @@ const CategorySelector = ({
             : "Select Category"}
         </Text>
       </TouchableOpacity>
-      <BottomSheet
-        snapPoints={snapPoints}
-        enablePanDownToClose={true}
-        ref={bottomSheetRef}
-        style={styles.bottomSheet}
-        detached={false}
-        index={-1}
+      <Modal
+        visible={visible}
+        transparent
+        animationType="slide"
+        onRequestClose={onClose}
       >
-        <BottomSheetView style={styles.sheetContainer}>
-          <FlatList
-            data={categoriesData}
-            renderItem={({ item }) =>
-              renderItem({ item, onSelect, bottomSheetRef })
-            }
-            keyExtractor={(item) => item.id}
-            contentContainerStyle={{
-              paddingBottom: "20%",
-            }}
-            style={{ flex: 1 }}
-            nestedScrollEnabled
-            extraData={categoriesData}
-            showsVerticalScrollIndicator={true}
-          />
-        </BottomSheetView>
-      </BottomSheet>
+        <Pressable style={styles.overlay} onPress={onClose}>
+          <View style={styles.sheet}>
+            <FlatList
+              data={categoriesData}
+              renderItem={({ item }) => renderItem({ item, onSelect, onClose })}
+              keyExtractor={(item) => item.id}
+              contentContainerStyle={{
+                paddingBottom: "20%",
+              }}
+              extraData={categoriesData}
+              showsVerticalScrollIndicator={true}
+            />
+          </View>
+        </Pressable>
+      </Modal>
     </View>
   );
 };
@@ -107,6 +97,19 @@ export default CategorySelector;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  overlay: {
+    flex: 1,
+    justifyContent: "flex-end",
+    backgroundColor: "rgba(0, 0, 0, 0.3)",
+  },
+  sheet: {
+    backgroundColor: colors.slateGray10,
+    paddingVertical: 20,
+    paddingHorizontal: 10,
+    borderTopLeftRadius: 16,
+    borderTopRightRadius: 16,
+    maxHeight: "50%",
   },
   sheetContent: {
     padding: 8,
@@ -126,14 +129,6 @@ const styles = StyleSheet.create({
   },
   selectorText: {
     fontSize: 24,
-    color: colors.slateGray400,
-  },
-  bottomSheet: {
-    marginBottom: 0,
-  },
-  sheetContainer: {
-    flex: 1,
-    backgroundColor: colors.white,
-    height: "100%",
+    color: colors.slateGray600,
   },
 });

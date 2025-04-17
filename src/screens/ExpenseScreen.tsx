@@ -35,11 +35,12 @@ const Expense = ({ route }: Props) => {
     null
   );
   const [isCalenderVisible, setCalenderVisible] = useState(false);
-  const bottomSheetRef = useRef<BottomSheet>(null!);
+  const [isCategorySelectorVisible, setCategorySelectorVisible] =
+    useState(false);
   const { expenses, categories } = route.params.data;
 
-  const openSheet = () => {
-    bottomSheetRef.current?.expand();
+  const openModal = () => {
+    setCategorySelectorVisible(true);
     setCalenderVisible(false);
   };
 
@@ -66,6 +67,10 @@ const Expense = ({ route }: Props) => {
     navigation.dispatch(
       StackActions.popTo("Home", { expense, data: route.params.data })
     );
+  };
+
+  const handleCloseCategorySelector = () => {
+    setCategorySelectorVisible(false);
   };
 
   const handleBack = () => {
@@ -108,20 +113,20 @@ const Expense = ({ route }: Props) => {
             isVisible={isCalenderVisible}
             onToggle={() => {
               setCalenderVisible((prev) => !prev);
-              bottomSheetRef.current?.close();
+              //TODO    bottomSheetRef.current?.close();
             }}
           />
           <CategorySelector
             selectedCategory={selectedCategory}
-            snapPoints={["60%", "90%"]}
             onSelect={(emoji: string) => {
               const category =
                 categories.find((cat) => cat.icon === emoji) || null;
               setSelectedCategory(category);
             }}
             categoriesData={categories}
-            onPress={openSheet}
-            bottomSheetRef={bottomSheetRef}
+            onPress={openModal}
+            visible={isCategorySelectorVisible}
+            onClose={handleCloseCategorySelector}
           />
           <TouchableOpacity onPress={handleAddExpense} style={styles.addButton}>
             <AddIcon color={colors.ghostWhite} size={20} />
