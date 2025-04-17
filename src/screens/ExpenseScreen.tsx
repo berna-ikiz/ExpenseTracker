@@ -130,7 +130,6 @@ const Expense = ({ route }: Props) => {
           <TouchableOpacity onPress={handleAddExpense} style={styles.addButton}>
             <AddIcon color={colors.ghostWhite} size={20} />
           </TouchableOpacity>
-          <BackButton onPress={handleBack} />
         </>
       ) : (
         <>
@@ -141,6 +140,7 @@ const Expense = ({ route }: Props) => {
           </Text>
         </>
       )}
+      <BackButton onPress={handleBack} />
     </View>
   );
 };
