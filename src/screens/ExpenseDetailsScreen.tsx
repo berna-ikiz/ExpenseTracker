@@ -11,16 +11,19 @@ import { DeleteIcon } from "../utils/Icons";
 import { formatCurrency, formDate } from "../utils/GlobalFunctions";
 import Header from "../components/Header";
 import BackButton from "../components/BackButton";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../store/store";
+import { deleteExpense } from "../features/expense/expenseSlice";
 
 type Props = StaticScreenProps<{
   item: ExpenseItemType;
-  data: { categories: CategoryItemType[]; expenses: ExpenseItemType[] };
 }>;
 
 const ExpenseDetails = ({ route }: Props) => {
   const navigation = useNavigation();
+  const expenses = useSelector((state: RootState) => state.expense);
+  const dispatch = useDispatch();
   const expenseItem = route.params.item;
-  const { data } = route.params;
 
   const handleDelete = () => {
     Alert.alert(
@@ -35,18 +38,9 @@ const ExpenseDetails = ({ route }: Props) => {
           text: "Delete",
           style: "destructive",
           onPress: () => {
-            if (data) {
-              const updatedExpenses = data.expenses.filter(
-                (item) => item.id !== expenseItem.id
-              );
-              navigation.dispatch(
-                StackActions.popTo("Home", {
-                  data: {
-                    expenses: data.categories,
-                    categories: updatedExpenses,
-                  },
-                })
-              );
+            if (expenses) {
+              dispatch(deleteExpense(expenseItem));
+              navigation.navigate("Home", {});
             }
           },
         },
@@ -55,14 +49,7 @@ const ExpenseDetails = ({ route }: Props) => {
   };
 
   const handleBack = () => {
-    navigation.dispatch(
-      StackActions.popTo("Home", {
-        data: {
-          expenses: data.expenses,
-          categories: data.categories,
-        },
-      })
-    );
+    navigation.goBack();
   };
 
   return (

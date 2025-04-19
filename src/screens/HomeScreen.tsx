@@ -9,34 +9,33 @@ import colors from "../theme/colors";
 import { formatCurrency } from "../utils/GlobalFunctions";
 import FloatingActionButton from "../components/FloatingActionButton";
 import Header from "../components/Header";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../store/store";
+import {
+  calculateTotalExpense,
+  sortExpenses,
+} from "../features/expense/expenseSlice";
+import { categories } from "rn-emoji-picker/dist/constants";
 
 type Props = StaticScreenProps<{
   expense?: ExpenseItemType;
-  data: { categories: CategoryItemType[]; expenses: ExpenseItemType[] };
 }>;
 
 //TODO : Add types for navigation and route
 const Home = ({ route }: Props) => {
-  const [expenses, setExpenses] = useState<ExpenseItemType[]>(ExpenseData);
-  const [categories, setCategories] =
-    useState<CategoryItemType[]>(CategoryData);
+  const expenses = useSelector((state: RootState) => state.expense.expenses);
+  const dispatch = useDispatch();
+
   const [totalExpense, setTotalExpense] = useState(0);
   const navigation = useNavigation();
 
   useEffect(() => {
-    const sortedExpenses = expenses.sort(
-      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-    );
-    setExpenses(sortedExpenses);
-
-    const calculatedTotal = sortedExpenses.reduce((sum, expense) => {
-      const value = parseFloat(expense.coast.toString());
-      return sum + (isNaN(value) ? 0 : value);
-    }, 0);
-    setTotalExpense(calculatedTotal);
+    dispatch(calculateTotalExpense());
   }, [expenses]);
 
+  /*
   useEffect(() => {
+    
     const sortedExpenses = [...expenses].sort(
       (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
     );
@@ -47,21 +46,20 @@ const Home = ({ route }: Props) => {
       return prevIds !== newIds ? sortedExpenses : prev;
     });
 
-    const calculatedTotal = sortedExpenses.reduce((sum, expense) => {
-      const value = parseFloat(expense.coast.toString());
-      return sum + (isNaN(value) ? 0 : value);
-    }, 0);
 
-    setTotalExpense(calculatedTotal);
   }, [expenses]);
+  */
 
+  /*
   useEffect(() => {
     if (route.params?.data) {
       setExpenses(route.params.data.expenses || []);
       setCategories(route.params.data.categories || []);
     }
   }, [route.params?.data]);
+  */
 
+  /*
   useEffect(() => {
     if (route.params?.expense) {
       setExpenses((prev) => {
@@ -69,6 +67,7 @@ const Home = ({ route }: Props) => {
       });
     }
   }, [route.params && route.params.expense]);
+*/
 
   return (
     <>
@@ -84,12 +83,11 @@ const Home = ({ route }: Props) => {
           onPress={(item) =>
             navigation.navigate("ExpenseDetails", {
               item,
-              data: { categories: categories, expenses: expenses },
             })
           }
           emptyDataText="No expenses found. Please add an expense."
         />
-        <FloatingActionButton data={{ categories, expenses }} />
+        <FloatingActionButton />
       </View>
     </>
   );

@@ -4,13 +4,8 @@ import { AddIcon, HomeIcon } from "../utils/Icons";
 
 import colors from "../theme/colors";
 import { useNavigation } from "@react-navigation/native";
-import { CategoryItemType, ExpenseItemType } from "../types";
 
-type Props = {
-  data: { categories: CategoryItemType[]; expenses: ExpenseItemType[] };
-};
-
-const FloatingActionButton = ({ data }: Props) => {
+const FloatingActionButton = () => {
   const [isOpen, setIsOpen] = useState(false);
   const navigation = useNavigation();
 
@@ -26,7 +21,7 @@ const FloatingActionButton = ({ data }: Props) => {
             style={[styles.optionButton, { bottom: 100 }]}
             onPress={() => {
               setIsOpen(false);
-              navigation.navigate("Expense", { data });
+              navigation.navigate("Expense", {});
             }}
           >
             <AddIcon size={20} color={colors.slateGray10} />
@@ -37,7 +32,7 @@ const FloatingActionButton = ({ data }: Props) => {
             style={[styles.optionButton, { bottom: 40 }]}
             onPress={() => {
               setIsOpen(false);
-              navigation.navigate("CategoryList", { data });
+              navigation.navigate("CategoryList", {});
             }}
           >
             <HomeIcon size={20} color={colors.slateGray10} />
