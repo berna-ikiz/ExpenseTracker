@@ -33,24 +33,6 @@ const Home = ({ route }: Props) => {
       const value = parseFloat(expense.coast.toString());
       return sum + (isNaN(value) ? 0 : value);
     }, 0);
-    setTotalExpense(calculatedTotal);
-  }, [expenses]);
-
-  useEffect(() => {
-    const sortedExpenses = [...expenses].sort(
-      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-    );
-
-    setExpenses((prev) => {
-      const prevIds = prev.map((e) => e.id).join(",");
-      const newIds = sortedExpenses.map((e) => e.id).join(",");
-      return prevIds !== newIds ? sortedExpenses : prev;
-    });
-
-    const calculatedTotal = sortedExpenses.reduce((sum, expense) => {
-      const value = parseFloat(expense.coast.toString());
-      return sum + (isNaN(value) ? 0 : value);
-    }, 0);
 
     setTotalExpense(calculatedTotal);
   }, [expenses]);
@@ -60,15 +42,12 @@ const Home = ({ route }: Props) => {
       setExpenses(route.params.data.expenses || []);
       setCategories(route.params.data.categories || []);
     }
-  }, [route.params?.data]);
-
-  useEffect(() => {
     if (route.params?.expense) {
       setExpenses((prev) => {
         return route.params.expense ? [...prev, route.params.expense] : prev;
       });
     }
-  }, [route.params && route.params.expense]);
+  }, [route.params && route.params.data, route.params && route.params.expense]);
 
   return (
     <>

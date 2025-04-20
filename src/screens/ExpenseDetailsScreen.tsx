@@ -42,8 +42,8 @@ const ExpenseDetails = ({ route }: Props) => {
               navigation.dispatch(
                 StackActions.popTo("Home", {
                   data: {
-                    expenses: data.categories,
-                    categories: updatedExpenses,
+                    categories: data.categories,
+                    expenses: updatedExpenses,
                   },
                 })
               );

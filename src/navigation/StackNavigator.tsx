@@ -9,7 +9,6 @@ import {
   createStaticNavigation,
   StaticParamList,
 } from "@react-navigation/native";
-import colors from "../theme/colors";
 import CategoryExpensesScreen from "../screens/CategoryExpensesScreen";
 
 const RootStack = createNativeStackNavigator({
