@@ -21,7 +21,6 @@ type Props = StaticScreenProps<{
 
 const ExpenseDetails = ({ route }: Props) => {
   const navigation = useNavigation();
-  const expenses = useSelector((state: RootState) => state.expense);
   const dispatch = useDispatch();
   const expenseItem = route.params.item;
 
@@ -38,10 +37,10 @@ const ExpenseDetails = ({ route }: Props) => {
           text: "Delete",
           style: "destructive",
           onPress: () => {
-            if (expenses) {
-              dispatch(deleteExpense(expenseItem));
-              navigation.navigate("Home", {});
-            }
+            dispatch(deleteExpense(expenseItem));
+            navigation.dispatch(
+              StackActions.popTo("Home", { deletedExpense: expenseItem })
+            );
           },
         },
       ]

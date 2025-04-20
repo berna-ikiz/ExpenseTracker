@@ -33,7 +33,7 @@ export const expenseSlice = createSlice({
     },
     deleteExpense: (state, action: PayloadAction<ExpenseItemType>) => {
       state.expenses = state.expenses.filter((item) => {
-        item.id !== action.payload.id;
+        return item.id !== action.payload.id;
       });
     },
     loadMockExpensesData: (state) => {

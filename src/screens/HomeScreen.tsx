@@ -17,20 +17,22 @@ import { loadMockCategoryData } from "../features/category/categorySlice";
 import { ExpenseItemType } from "../types";
 
 type Params = StaticScreenProps<{
-  expenseItem?: ExpenseItemType | undefined;
+  addedExpense?: ExpenseItemType | undefined;
+  deletedExpense?: ExpenseItemType | undefined;
 }>;
 
 const Home = ({ route }: Params) => {
   const expenses = useSelector((state: RootState) => state.expense.expenses);
   const total = useSelector((state: RootState) => state.expense.total);
   const dispatch = useDispatch();
-  const addedExpense = route?.params?.expenseItem;
+  const deletedExpense = route?.params?.deletedExpense;
+  const addedExpense = route?.params?.addedExpense;
   const navigation = useNavigation();
 
   useEffect(() => {
     dispatch(calculateTotalExpense());
     dispatch(sortExpenses());
-  }, [addedExpense]);
+  }, [addedExpense, deletedExpense]);
 
   useEffect(() => {
     dispatch(loadMockExpensesData());

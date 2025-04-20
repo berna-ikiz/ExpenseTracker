@@ -61,7 +61,7 @@ const Expense = () => {
       category: `${selectedCategory.icon}${selectedCategory.title}`,
     };
     dispatch(setExpense(expense));
-    navigation.dispatch(StackActions.popTo("Home", { expenseItem: expense }));
+    navigation.dispatch(StackActions.popTo("Home", { addedExpense: expense }));
   };
 
   const handleCloseCategorySelector = () => {
