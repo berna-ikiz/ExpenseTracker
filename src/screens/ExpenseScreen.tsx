@@ -7,26 +7,24 @@ import {
   View,
 } from "react-native";
 import React, { useState } from "react";
-import {
-  StackActions,
-  StaticScreenProps,
-  useNavigation,
-} from "@react-navigation/native";
+import { StackActions, useNavigation } from "@react-navigation/native";
 import colors from "../theme/colors";
 import Calendar from "../components/Calendar";
 import CategorySelector from "../components/CategorySelector";
-import { Category, CategoryItemType, ExpenseItemType } from "../types";
+import { Category } from "../types";
 import { AddIcon } from "../utils/Icons";
 import { formatCurrencyInput } from "../utils/GlobalFunctions";
 import Header from "../components/Header";
 import BackButton from "../components/BackButton";
-
-type Props = StaticScreenProps<{
-  data: { categories: CategoryItemType[]; expenses: ExpenseItemType[] };
-}>;
-
-const Expense = ({ route }: Props) => {
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../store/store";
+import { setExpense } from "../features/expense/expenseSlice";
+const Expense = () => {
   const navigation = useNavigation();
+  const categories = useSelector(
+    (state: RootState) => state.category.categories
+  );
+  const dispatch = useDispatch();
   const [title, setTitle] = useState("");
   const [coast, setCoast] = useState("");
   const [selectedDate, onSelectDate] = useState("");
@@ -36,7 +34,6 @@ const Expense = ({ route }: Props) => {
   const [isCalenderVisible, setCalenderVisible] = useState(false);
   const [isCategorySelectorVisible, setCategorySelectorVisible] =
     useState(false);
-  const { expenses, categories } = route.params.data;
 
   const openModal = () => {
     setCategorySelectorVisible(true);
@@ -63,9 +60,8 @@ const Expense = ({ route }: Props) => {
       date: selectedDate,
       category: `${selectedCategory.icon}${selectedCategory.title}`,
     };
-    navigation.dispatch(
-      StackActions.popTo("Home", { expense, data: route.params.data })
-    );
+    dispatch(setExpense(expense));
+    navigation.dispatch(StackActions.popTo("Home", { expenseItem: expense }));
   };
 
   const handleCloseCategorySelector = () => {
@@ -73,14 +69,7 @@ const Expense = ({ route }: Props) => {
   };
 
   const handleBack = () => {
-    navigation.dispatch(
-      StackActions.popTo("Home", {
-        data: {
-          expenses: expenses,
-          categories: categories,
-        },
-      })
-    );
+    navigation.dispatch(StackActions.popTo("Home", {}));
   };
 
   return (

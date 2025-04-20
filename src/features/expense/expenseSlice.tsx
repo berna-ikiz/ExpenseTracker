@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { ExpenseItemType } from "../../types";
+import ExpenseData from "../../data/ExpenseData";
 
 export interface ExpensesState {
   expenses: ExpenseItemType[];
@@ -24,11 +25,6 @@ export const expenseSlice = createSlice({
         (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
       );
     },
-    setExpenses: (state, action: PayloadAction<ExpenseItemType[]>) => {
-      state.expenses = action.payload.sort(
-        (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-      );
-    },
     calculateTotalExpense: (state) => {
       state.total = state.expenses.reduce((sum, expense) => {
         const value = parseFloat(expense.coast.toString());
@@ -40,6 +36,9 @@ export const expenseSlice = createSlice({
         item.id !== action.payload.id;
       });
     },
+    loadMockExpensesData: (state) => {
+      state.expenses = ExpenseData;
+    },
   },
 });
 
@@ -49,6 +48,7 @@ export const {
   sortExpenses,
   calculateTotalExpense,
   deleteExpense,
+  loadMockExpensesData,
 } = expenseSlice.actions;
 
 export default expenseSlice.reducer;

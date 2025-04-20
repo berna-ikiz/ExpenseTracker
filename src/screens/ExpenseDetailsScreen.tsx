@@ -5,7 +5,7 @@ import {
   StaticScreenProps,
   useNavigation,
 } from "@react-navigation/native";
-import { CategoryItemType, ExpenseItemType } from "../types";
+import { ExpenseItemType } from "../types";
 import colors from "../theme/colors";
 import { DeleteIcon } from "../utils/Icons";
 import { formatCurrency, formDate } from "../utils/GlobalFunctions";

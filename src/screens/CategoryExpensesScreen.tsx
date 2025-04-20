@@ -1,6 +1,6 @@
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import React, { useState } from "react";
-import { CategoryItemType, ExpenseItemType } from "../types";
+import { CategoryItemType } from "../types";
 import {
   StackActions,
   StaticScreenProps,
@@ -11,16 +11,18 @@ import ExpenseCardList from "../components/ExpenseCardList";
 import { HomeIcon } from "../utils/Icons";
 import Header from "../components/Header";
 import BackButton from "../components/BackButton";
+import { useSelector } from "react-redux";
+import { RootState } from "../store/store";
+import { categories } from "rn-emoji-picker/dist/constants";
 
 type Params = StaticScreenProps<{
   category: CategoryItemType;
-  data: { categories: CategoryItemType[]; expenses: ExpenseItemType[] };
 }>;
 
 const CategoryExpensesScreen = ({ route }: Params) => {
   const navigation = useNavigation();
+  const expenses = useSelector((state: RootState) => state.expense.expenses);
   const [category] = useState(route.params.category);
-  const { expenses, categories } = route.params.data;
 
   const [expensesByCategory] = useState(
     expenses.filter((expense) => {
@@ -29,14 +31,7 @@ const CategoryExpensesScreen = ({ route }: Params) => {
   );
 
   const handleBack = () => {
-    navigation.dispatch(
-      StackActions.popTo("CategoryList", {
-        data: {
-          expenses: expenses,
-          categories: categories,
-        },
-      })
-    );
+    navigation.dispatch(StackActions.popTo("CategoryList", {}));
   };
 
   return (

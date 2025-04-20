@@ -6,7 +6,7 @@ import {
   View,
 } from "react-native";
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 import colors from "../theme/colors";
 import {
   StackActions,
@@ -17,25 +17,26 @@ import { CategoryItemType, ExpenseItemType } from "../types";
 import { AddIcon } from "../utils/Icons";
 import Header from "../components/Header";
 import BackButton from "../components/BackButton";
+import { RootState } from "../store/store";
+import { useSelector } from "react-redux";
 
 type Props = StaticScreenProps<{
   category?: CategoryItemType;
-  data: { categories: CategoryItemType[]; expenses: ExpenseItemType[] };
 }>;
 
 type RenderItemProps = {
   item: CategoryItemType;
-  data: { categories: CategoryItemType[]; expenses: ExpenseItemType[] };
+  expenses: ExpenseItemType[];
   categories: CategoryItemType[];
   navigation: any;
 };
 
 const renderItem = (props: RenderItemProps) => {
-  const { item, navigation, data, categories } = props;
+  const { item, navigation, expenses } = props;
 
   const calculateTotalByCategory = (category: CategoryItemType) => {
-    if (!data.expenses || !Array.isArray(data.expenses)) return "0.00";
-    const total = data.expenses
+    if (!expenses || !Array.isArray(expenses)) return "0.00";
+    const total = expenses
       .filter((e) => e.category === `${category.icon}${category.title}`)
       .reduce((sum, e) => sum + Number(e.coast), 0);
     return total.toFixed(2);
@@ -49,7 +50,6 @@ const renderItem = (props: RenderItemProps) => {
           navigation.dispatch(
             StackActions.popTo("CategoryExpensesScreen", {
               category: item,
-              data: { categories: categories, expenses: data.expenses },
             })
           )
         }
@@ -72,28 +72,13 @@ const renderItem = (props: RenderItemProps) => {
 
 const CategoryList = ({ route }: Props) => {
   const navigation = useNavigation();
-  const { data } = route.params;
-  const [categories, setCategories] = useState<CategoryItemType[]>(
-    data.categories
+  const categories = useSelector(
+    (state: RootState) => state.category.categories
   );
-
-  useEffect(() => {
-    if (route.params && route.params.category) {
-      setCategories((prev) =>
-        route.params.category ? [...prev, route.params.category] : prev
-      );
-    }
-  }, [route.params && route.params.category]);
+  const expenses = useSelector((state: RootState) => state.expense.expenses);
 
   const handleBack = () => {
-    navigation.dispatch(
-      StackActions.popTo("Home", {
-        data: {
-          expenses: data.expenses,
-          categories: data.categories,
-        },
-      })
-    );
+    navigation.dispatch(StackActions.popTo("Home", {}));
   };
 
   return (
@@ -104,7 +89,7 @@ const CategoryList = ({ route }: Props) => {
           <FlatList
             data={categories}
             renderItem={({ item }) =>
-              renderItem({ item, navigation, data, categories })
+              renderItem({ item, navigation, expenses, categories })
             }
             keyExtractor={(item) => item.id}
             contentContainerStyle={{ paddingBottom: "20%" }}
@@ -121,14 +106,7 @@ const CategoryList = ({ route }: Props) => {
         </>
       )}
       <TouchableOpacity
-        onPress={() =>
-          navigation.navigate("CategoryAdd", {
-            data: {
-              expenses: data.expenses,
-              categories: categories,
-            },
-          })
-        }
+        onPress={() => navigation.navigate("CategoryAdd")}
         style={styles.addButton}
       >
         <AddIcon color={colors.ghostWhite} size={20} />

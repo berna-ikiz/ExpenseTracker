@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { CategoryItemType } from "../../types";
+import categoryData from "../../data/CategoryData";
 
 export interface CategoriesState {
   categories: CategoryItemType[];
@@ -17,10 +18,13 @@ export const categorySlice = createSlice({
     setCategory: (state, action: PayloadAction<CategoryItemType>) => {
       state.categories = [...state.categories, action.payload];
     },
+    loadMockCategoryData: (state) => {
+      state.categories = categoryData;
+    },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { setCategory } = categorySlice.actions;
+export const { setCategory, loadMockCategoryData } = categorySlice.actions;
 
 export default categorySlice.reducer;

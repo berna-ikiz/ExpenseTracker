@@ -21,7 +21,7 @@ const FloatingActionButton = () => {
             style={[styles.optionButton, { bottom: 100 }]}
             onPress={() => {
               setIsOpen(false);
-              navigation.navigate("Expense", {});
+              navigation.navigate("Expense");
             }}
           >
             <AddIcon size={20} color={colors.slateGray10} />

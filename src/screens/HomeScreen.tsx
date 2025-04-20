@@ -1,9 +1,6 @@
 import { StyleSheet, Text, View } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { StaticScreenProps, useNavigation } from "@react-navigation/native";
-import ExpenseData from "../data/ExpenseData";
-import CategoryData from "../data/CategoryData";
-import { CategoryItemType, ExpenseItemType } from "../types";
 import ExpenseCardList from "../components/ExpenseCardList";
 import colors from "../theme/colors";
 import { formatCurrency } from "../utils/GlobalFunctions";
@@ -13,61 +10,32 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store/store";
 import {
   calculateTotalExpense,
+  loadMockExpensesData,
   sortExpenses,
 } from "../features/expense/expenseSlice";
-import { categories } from "rn-emoji-picker/dist/constants";
+import { loadMockCategoryData } from "../features/category/categorySlice";
+import { ExpenseItemType } from "../types";
 
-type Props = StaticScreenProps<{
-  expense?: ExpenseItemType;
+type Params = StaticScreenProps<{
+  expenseItem?: ExpenseItemType | undefined;
 }>;
 
-//TODO : Add types for navigation and route
-const Home = ({ route }: Props) => {
+const Home = ({ route }: Params) => {
   const expenses = useSelector((state: RootState) => state.expense.expenses);
+  const total = useSelector((state: RootState) => state.expense.total);
   const dispatch = useDispatch();
-
-  const [totalExpense, setTotalExpense] = useState(0);
+  const addedExpense = route?.params?.expenseItem;
   const navigation = useNavigation();
 
   useEffect(() => {
     dispatch(calculateTotalExpense());
-  }, [expenses]);
+    dispatch(sortExpenses());
+  }, [addedExpense]);
 
-  /*
   useEffect(() => {
-    
-    const sortedExpenses = [...expenses].sort(
-      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-    );
-
-    setExpenses((prev) => {
-      const prevIds = prev.map((e) => e.id).join(",");
-      const newIds = sortedExpenses.map((e) => e.id).join(",");
-      return prevIds !== newIds ? sortedExpenses : prev;
-    });
-
-
-  }, [expenses]);
-  */
-
-  /*
-  useEffect(() => {
-    if (route.params?.data) {
-      setExpenses(route.params.data.expenses || []);
-      setCategories(route.params.data.categories || []);
-    }
-  }, [route.params?.data]);
-  */
-
-  /*
-  useEffect(() => {
-    if (route.params?.expense) {
-      setExpenses((prev) => {
-        return route.params.expense ? [...prev, route.params.expense] : prev;
-      });
-    }
-  }, [route.params && route.params.expense]);
-*/
+    dispatch(loadMockExpensesData());
+    dispatch(loadMockCategoryData());
+  }, []);
 
   return (
     <>
@@ -75,7 +43,7 @@ const Home = ({ route }: Props) => {
         <Header title="Expenses" />
         <View style={styles.totalContainer}>
           <Text style={styles.totalText}>
-            Total: {formatCurrency(totalExpense, "TRY")}
+            Total: {formatCurrency(total, "TRY")}
           </Text>
         </View>
         <ExpenseCardList

@@ -2,28 +2,25 @@ import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React, { useState } from "react";
 import colors from "../theme/colors";
 import EmojiPickerSheet from "../components/EmojiPickerSheet";
-import {
-  StackActions,
-  StaticScreenProps,
-  useNavigation,
-} from "@react-navigation/native";
-import { CategoryItemType, ExpenseItemType } from "../types";
+import { StackActions, useNavigation } from "@react-navigation/native";
 import BackButton from "../components/BackButton";
 import { AddIcon, EmojiIcon } from "../utils/Icons";
 import EmojiInput from "../components/EmojiInput";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../store/store";
+import { setCategory } from "../features/category/categorySlice";
 
-type Props = StaticScreenProps<{
-  data: { categories: CategoryItemType[]; expenses: ExpenseItemType[] };
-}>;
-
-const CategoryAddScreen = ({ route }: Props) => {
+const CategoryAddScreen = () => {
   const navigation = useNavigation();
+  const categories = useSelector(
+    (state: RootState) => state.category.categories || []
+  );
+  const dispatch = useDispatch();
   const [categoryData, setCategoryData] = useState({
     name: "",
     emoji: "",
   });
   const [showEmojiSheet, setShowEmojiSheet] = useState(false);
-  const { expenses, categories } = route.params.data;
 
   const handleSaveCategory = () => {
     if (!categoryData.emoji) {
@@ -52,25 +49,11 @@ const CategoryAddScreen = ({ route }: Props) => {
       icon: categoryData.emoji,
     };
 
-    const updatedCategories = [...categories, category];
-
-    navigation.dispatch(
-      StackActions.popTo("CategoryList", {
-        category: category,
-        data: { categories: updatedCategories, expenses: expenses },
-      })
-    );
+    dispatch(setCategory(category));
+    navigation.dispatch(StackActions.popTo("CategoryList", {}));
   };
-
   const handleBack = () => {
-    navigation.dispatch(
-      StackActions.popTo("CategoryList", {
-        data: {
-          expenses: expenses,
-          categories: categories,
-        },
-      })
-    );
+    navigation.dispatch(StackActions.popTo("CategoryList", {}));
   };
 
   const handleEndEditing = (text: string) => {
